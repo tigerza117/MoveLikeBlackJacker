@@ -11,7 +11,7 @@ public class Main {
         Deck d = new Deck();
         d.generateCards();
         ArrayList<Player> players = new ArrayList<>();
-        for (String name : new String[]{"Tiger", "Ing", "Top", "Kam", "Meg"}) {
+        for (String name : new String[]{"Tiger", "Ing", "Top", "Kaem", "Meg"}) {
             players.add(new Player(name, 1000));
         }
         for (int i = 0; i < 2; i++) {
