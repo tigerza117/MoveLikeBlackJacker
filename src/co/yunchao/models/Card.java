@@ -13,12 +13,12 @@ public class Card implements Serializable {
     public Card(int number, String suit){
         this.point = switch(number) {
             case 1 -> 101;
-            case 11,12,13 -> 10;
-            default -> number;
-        };
-        this.name = switch (number) {
-            case 1 -> "Ace";
-            case 2 -> "Two";
+                    case 11,12,13 -> 10;
+                    default -> number;
+                };
+                this.name = switch (number) {
+                    case 1 -> "Ace";
+                    case 2 -> "Two";
             case 3 -> "Three";
             case 4 -> "Four";
             case 5 -> "Five";
