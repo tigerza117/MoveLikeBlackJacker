@@ -42,8 +42,8 @@
     <orderEntry type="library" name="Maven: org.rxtx:rxtx:2.1.7" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport-sctp:4.1.69.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport-udt:4.1.69.Final" level="project" />
-    <orderEntry type="library" name="Maven: com.barchart.udt:barchart-udt-bundle:2.3.0" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport-native-epoll:4.1.69.Final" level="project" />
+    <orderEntry type="library" name="Maven: com.barchart.udt:barchart-udt-bundle:2.3.0" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport-native-unix-common:4.1.69.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport-native-kqueue:4.1.69.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-resolver-dns-native-macos:4.1.69.Final" level="project" />
