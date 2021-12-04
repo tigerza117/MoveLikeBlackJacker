@@ -29,7 +29,7 @@ public class Inventory {
     }
 
     //กูอยากได้แต้มแต่ละใบในมือมาเช็คว่า Split ได้มั้ย
-    public ArrayList<Integer> getEachCard(Deck deck){
+    /*public ArrayList<Integer> getEachCard(Deck deck){
         ArrayList<Integer> hand = new ArrayList<>();
         int firstCard = 0;
         int secondCard = 0;
@@ -39,7 +39,7 @@ public class Inventory {
             }
         }
         return hand;
-    }
+    }*/
 
     public int getPoint() {
         ArrayList<Card> aceStack = new ArrayList<>();
