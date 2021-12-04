@@ -2,7 +2,7 @@ package co.yunchao.base.models;
 
 public class Player {
     private final Inventory inventory;
-    private final int chips;
+    private int chips;
     private final String name;
 
     public Player(String name, int chips){
@@ -10,6 +10,12 @@ public class Player {
         this.chips = chips;
         this.inventory = new Inventory(this);
     }
+
+    public void pickUpCard(Deck deck) {
+        this.inventory.addCard(deck.pickTopCard());
+    }
+
+    public void setChips(int chip){this.chips = chip;}
 
     public int getChips() {
         return chips;
@@ -21,9 +27,5 @@ public class Player {
 
     public Inventory getInventory() {
         return inventory;
-    }
-
-    public void pickUpCard(Deck deck) {
-        this.inventory.addCard(deck.pickTopCard());
     }
 }

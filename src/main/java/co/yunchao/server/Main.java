@@ -29,7 +29,7 @@ public class Main {
             final EventLoopGroup ioGroup = new NioEventLoopGroup();
             final EventLoopGroup childGroup = new DefaultEventLoopGroup();
             final InetSocketAddress localhost = new InetSocketAddress("localhost", 31747);
-            final String helloWorld = "Hello world!";
+            final String helloWorld = "Hello Ing";
 
             final String[] resultStr = new String[1];
             final Channel serverChannel = new ServerBootstrap()
@@ -62,7 +62,7 @@ public class Main {
 
 
             JFrame f = new JFrame();
-            JButton btn = new JButton("Send");
+            JButton btn = new JButton("Sent By TIGER");
             btn.addActionListener(e -> {
                 try {
                     final ByteBuf helloWorldBuf = Unpooled.buffer();
