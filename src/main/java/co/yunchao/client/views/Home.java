@@ -1,54 +1,51 @@
 package co.yunchao.client.views;
 
-import com.almasb.fxgl.achievement.Achievement;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.MenuItem;
-import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
+import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.LoadingScene;
+import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.ui.UI;
+import com.almasb.fxgl.ui.UIController;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 
-public class Home extends GameApplication {
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAssetLoader;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+
+public class Home extends GameApplication  {
 
     @Override
     protected void initSettings(GameSettings settings) {
-        settings.setWidth(800);
-        settings.setHeight(600);
+        settings.setWidth(1080);
+        settings.setHeightFromRatio(16/9.0);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
-        settings.setFullScreenAllowed(true);
-        settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
-        settings.getCredits().addAll(Arrays.asList(
-                "Short Name - Lead Programmer",
-                "LongLongLongLongLongLongLong Name - Programmer",
-                "V Short - Artist",
-                "Medium-Hyphen Name - Designer",
-                "More Credits - 111",
-                "More Credits - 222",
-                "More Credits - 333",
-                "More Credits - 444",
-                "More Credits - 444",
-                "Example of a credit name that will definitely not fit on the screen using default font",
-                "More Credits - 444",
-                "More Credits - 444",
-                "More Credits - 555",
-                "More Credits - 666",
-                "More Credits - 777"
-        ));
 
-        settings.getAchievements().add(new Achievement("Name", "description", "", 0));
-        settings.getAchievements().add(new Achievement("Name2", "description2", "", 1));
-    }
+        settings.setSceneFactory(new SceneFactory() {
+            @NotNull
+            @Override
+            public FXGLMenu newMainMenu() {
+                return new MainMenu();
+            }
 
-    @Override
-    protected void initGame() {
+            @NotNull
+            @Override
+            public FXGLMenu newGameMenu() {
+                return new MainMenu();
+            }
+        });
     }
 
     public static void main(String[] args) {
+        System.out.println("RUNNN3");
         launch(args);
+        System.out.println("RUNNN2");
     }
 }
