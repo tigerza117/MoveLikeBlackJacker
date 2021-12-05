@@ -2,7 +2,6 @@ package co.yunchao.net.handler;
 
 import co.yunchao.net.Network;
 import co.yunchao.net.packets.Packet;
-import co.yunchao.server.net.Interface;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
