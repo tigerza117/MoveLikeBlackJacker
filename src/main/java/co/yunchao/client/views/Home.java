@@ -44,8 +44,6 @@ public class Home extends GameApplication  {
     }
 
     public static void main(String[] args) {
-        System.out.println("RUNNN3");
         launch(args);
-        System.out.println("RUNNN2");
     }
 }
