@@ -11,10 +11,6 @@ public class Table {
         this.deck = new Deck();
     }
 
-    public void Initial() {
-        this.deck.generateCards();
-    }
-
     public ArrayList<Player> getPlayers() {
         return players;
     }
