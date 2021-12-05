@@ -1,11 +1,10 @@
 package co.yunchao.client.views;
 
+import com.almasb.fxgl.animation.Animation;
 import com.almasb.fxgl.animation.Interpolators;
-import com.almasb.fxgl.app.GameApplication;
-import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
-import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.core.util.EmptyRunnable;
 import javafx.beans.binding.StringBinding;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -27,6 +26,7 @@ import static javafx.beans.binding.Bindings.when;
 
 public class MainMenu extends FXGLMenu {
     private List<Node> buttons = new ArrayList<>();
+    private List<Animation<?>> animations = new ArrayList<>();
 
     private int animIndex = 0;
 
@@ -43,27 +43,25 @@ public class MainMenu extends FXGLMenu {
         getContentRoot().getChildren().addAll(bg, titleView, body);
     }
 
+
+    @Override
+    protected void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+        animations.forEach(animation -> {
+            animation.onUpdate(tpf);
+        });
+    }
+
     @Override
     public void onCreate() {
         animIndex = 0;
 
         buttons.forEach(btn -> {
-            btn.setOpacity(0);
-
-            animationBuilder(this)
-                    .delay(Duration.seconds(animIndex * 0.1))
-                    .interpolator(Interpolators.BACK.EASE_OUT())
-                    .translate(btn)
-                    .from(new Point2D(-200, 0))
-                    .to(new Point2D(0, 0))
-                    .build().start();
-
-            animationBuilder(this)
-                    .delay(Duration.seconds(animIndex * 0.1))
-                    .fadeIn(btn)
-                    .build().start();
-
-            animIndex++;
+            //btn.setOpacity(1);
+        });
+        animations.forEach(animation -> {
+            animation.stop();
+            animation.start();
         });
     }
 
@@ -142,6 +140,17 @@ public class MainMenu extends FXGLMenu {
 
         // clipping
         buttons.add(btn);
+        animations.add(animationBuilder(this)
+                .delay(Duration.seconds(animIndex * 0.1))
+                .interpolator(Interpolators.BACK.EASE_OUT())
+                .translate(btn)
+                .from(new Point2D(-200, 0))
+                .to(new Point2D(0, 0))
+                .build());
+        animations.add(animationBuilder(this)
+                .delay(Duration.seconds(animIndex * 0.1))
+                .fadeIn(btn)
+                .build());
 
         Rectangle clip = new Rectangle(200, 50);
         clip.translateXProperty().bind(btn.translateXProperty().negate());
