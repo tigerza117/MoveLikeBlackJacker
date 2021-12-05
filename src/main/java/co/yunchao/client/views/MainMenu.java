@@ -4,7 +4,6 @@ import com.almasb.fxgl.animation.Animation;
 import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
-import com.almasb.fxgl.core.util.EmptyRunnable;
 import javafx.beans.binding.StringBinding;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -35,12 +34,13 @@ public class MainMenu extends FXGLMenu {
 
         var bg = texture("background.png", getAppWidth(), getAppHeight());
 
-        var titleView = getUIFactoryService().newText(getSettings().getTitle(), 48);
-        centerTextBind(titleView, getAppWidth() / 2.0, 100);
+        var homeLogo = texture("homeLogo.png", 280, 288.4);
+        homeLogo.setLayoutX(getAppWidth()-((getAppWidth()/2.0)+140));
+        homeLogo.setLayoutY(20);
 
         var body = createBody();
 
-        getContentRoot().getChildren().addAll(bg, titleView, body);
+        getContentRoot().getChildren().addAll(bg, homeLogo, body);
     }
 
 
