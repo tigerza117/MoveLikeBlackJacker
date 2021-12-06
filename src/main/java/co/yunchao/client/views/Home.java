@@ -2,22 +2,11 @@ package co.yunchao.client.views;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.app.MenuItem;
-import com.almasb.fxgl.app.scene.FXGLMenu;
-import com.almasb.fxgl.app.scene.LoadingScene;
-import com.almasb.fxgl.app.scene.SceneFactory;
-import com.almasb.fxgl.ui.UI;
-import com.almasb.fxgl.ui.UIController;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import com.almasb.fxgl.app.scene.*;
+import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.EnumSet;
-
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getAssetLoader;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class Home extends GameApplication  {
 
@@ -27,7 +16,6 @@ public class Home extends GameApplication  {
         settings.setHeightFromRatio(16/9.0);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
-
         settings.setSceneFactory(new SceneFactory() {
             @NotNull
             @Override
@@ -40,7 +28,58 @@ public class Home extends GameApplication  {
             public FXGLMenu newGameMenu() {
                 return new MainMenu();
             }
+
+            @NotNull
+            @Override
+            public LoadingScene newLoadingScene() {
+                return new Loading();
+            }
+
+            @NotNull
+            @Override
+            public StartupScene newStartup(int width, int height) {
+                return new Startup(width, height);
+            }
+
+            @NotNull
+            @Override
+            public IntroScene newIntro() {
+                return super.newIntro();
+            }
         });
+    }
+
+    @Override
+    protected void initInput() {
+        // Press F to trigger loading scene
+        onKeyDown(KeyCode.F, () -> {
+            getGameController().gotoLoading(() -> {
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            return null;
+        });
+    }
+
+    @Override
+    protected void initGame() {
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void initUI() {
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

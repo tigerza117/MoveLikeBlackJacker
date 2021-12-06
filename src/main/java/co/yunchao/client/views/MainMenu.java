@@ -1,6 +1,5 @@
 package co.yunchao.client.views;
 
-import com.almasb.fxgl.animation.Animation;
 import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
@@ -11,7 +10,6 @@ import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -21,9 +19,6 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class MainMenu extends FXGLMenu {
     private final List<Node> buttons = new ArrayList<>();
-    private final List<Animation<?>> animations = new ArrayList<>();
-
-    private int animIndex = 0;
 
     public MainMenu() {
         super(MenuType.GAME_MENU);
@@ -37,19 +32,27 @@ public class MainMenu extends FXGLMenu {
         getContentRoot().getChildren().addAll(bg, logo, body);
     }
 
-
-    @Override
-    protected void onUpdate(double tpf) {
-        super.onUpdate(tpf);
-        animations.forEach(animation -> animation.onUpdate(tpf));
-    }
+    private int animIndex = 0;
 
     @Override
     public void onCreate() {
-        animations.forEach(animation -> {
-            animation.stop();
-            animation.start();
+        int i = 0;
+        buttons.forEach(btn -> {
+            animationBuilder(this)
+                    .delay(Duration.seconds(i * 0.1))
+                    .interpolator(Interpolators.BACK.EASE_OUT())
+                    .translate(btn)
+                    .from(new Point2D(-200, 0))
+                    .to(new Point2D(0, 0))
+                    .buildAndPlay();
+            animationBuilder(this)
+                    .delay(Duration.seconds(i * 0.1))
+                    .fadeIn(btn)
+                    .buildAndPlay();
+
+            animIndex++;
         });
+        play("main_menu_bg.mp3");
     }
 
     private Node createBody() {
@@ -70,7 +73,6 @@ public class MainMenu extends FXGLMenu {
             );
             i++;
         }
-
 
         group.setLayoutY((getAppHeight() / 2.0)+(group.getBoundsInLocal().getHeight() / 3));
         group.setLayoutX((getAppWidth() / 2.0)-(group.getBoundsInLocal().getWidth() / 2));
@@ -93,19 +95,6 @@ public class MainMenu extends FXGLMenu {
         btn.setOnMouseClicked(e -> action.run());
 
         buttons.add(btn);
-        animations.add(animationBuilder(this)
-                .delay(Duration.seconds(animIndex * 0.1))
-                .interpolator(Interpolators.BACK.EASE_OUT())
-                .translate(btn)
-                .from(new Point2D(-200, 0))
-                .to(new Point2D(0, 0))
-                .build());
-        animations.add(animationBuilder(this)
-                .delay(Duration.seconds(animIndex * 0.1))
-                .fadeIn(btn)
-                .build());
-
-        animIndex++;
 
         btn.setTranslateX(-200);
         btn.setCache(true);
