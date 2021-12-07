@@ -80,11 +80,12 @@ public class MainController extends GameApplication {
 
     @Override
     protected void initUI() {
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Table table = new Table();
+        table.render(getGameScene());
+    }
+
+    public void CreateRoom() {
+        //Statement crate room call to server to create room
     }
 
     public void JoinByID() {
