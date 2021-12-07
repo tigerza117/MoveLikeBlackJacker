@@ -20,6 +20,7 @@ public class MainController extends GameApplication {
         settings.setHeightFromRatio(16/9.0);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
+        settings.setIntroEnabled(true);
         settings.setSceneFactory(new SceneFactory() {
             @NotNull
             @Override
