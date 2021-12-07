@@ -5,17 +5,15 @@ import co.yunchao.base.models.Inventory;
 import co.yunchao.base.models.Player;
 
 public class PlayerController {
-    private boolean playerStand = false;
-    private boolean playerDoubledown = false;
-    private boolean playerSplit = false;
-    private boolean playerHit = false;
-    private boolean playerBet = false;
     private Player player;
     private Inventory inv;
     private Deck deck;
-    PlayerController(Player player, Inventory inv){
+    private boolean playerStand = false;
+    private boolean playerDoubledown = false;
+    private boolean playerHit = false;
+    private boolean playerBet = false;
+    PlayerController(Player player){
         this.player = player;
-        this.inv = inv;
     }
 
     public void pickUpCard(Deck deck) {
@@ -23,45 +21,68 @@ public class PlayerController {
     }
 
     public int bet(int amount){ //get amount from view (set later)
-        this.player.setChips(player.getChips() - amount);
+        this.player.setChips(this.player.getChips() - amount);
         this.playerBet = true;
-        this.playerDoubledown = true;
-        this.playerHit = true;
-        this.playerStand = true;
-        return amount;
-        //change view (Enable some buttons)
+        return this.player.getChips();
     }
 
     public void hit(){
         if((this.playerHit && this.playerBet) == true){
             this.pickUpCard(deck);
-
         }
     }
 
-    public void stand() {
-        if((this.playerStand && this.playerBet) == true){
-            //winable
+    public void stand(){
+        if((this.player.getInventory().getPoint() <= 21)){
+            this.playerStand = true;
         }
     }
 
     public void doubleDown(int amount){ //same as bet
-        if((this.playerDoubledown && this.playerBet) == true){
-            this.bet(amount);
-            this.hit();
-            this.playerHit = false;
+        this.bet(amount);
+        if(this.player.getInventory().getPoint() <= 21){
             this.playerStand = true;
-            this.playerDoubledown = false;
         }
     }
 
-    public void split(){
-        if(this.playerSplit == true){
-            //action
+    public boolean actionControl(){
+        if((this.getPlayerDoubledown() || this.getPlayerHit()) == true){
+            return true;
         }
+        return false;
     }
 
+    public void setPlayerBet(boolean playerBet) {
+        this.playerBet = playerBet;
+    }
 
+    public void setPlayerDoubledown(boolean playerDoubledown) {
+        this.playerDoubledown = playerDoubledown;
+    }
+
+    public void setPlayerHit(boolean playerHit) {
+        this.playerHit = playerHit;
+    }
+
+    public void setPlayerStand(boolean playerStand) {
+        this.playerStand = playerStand;
+    }
+
+    public boolean getPlayerStand(){
+        return this.playerStand;
+    }
+
+    public boolean getPlayerHit(){
+        return this.playerHit;
+    }
+
+    public boolean getPlayerDoubledown(){
+        return this.playerDoubledown;
+    }
+
+    public boolean getPlayerBet(){
+        return this.playerBet;
+    }
 }
 
 

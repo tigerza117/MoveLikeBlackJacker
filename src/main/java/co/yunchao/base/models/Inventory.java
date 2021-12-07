@@ -15,6 +15,14 @@ public class Inventory {
         return cards;
     }
 
+    public Card getFirstCard(){
+        return cards.get(0);
+    }
+
+    public Card getSecondCard(){
+        return cards.get(1);
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -27,19 +35,6 @@ public class Inventory {
     public void clearCard() {
         this.cards.clear();
     }
-
-    //กูอยากได้แต้มแต่ละใบในมือมาเช็คว่า Split ได้มั้ย
-    /*public ArrayList<Integer> getEachCard(Deck deck){
-        ArrayList<Integer> hand = new ArrayList<>();
-        int firstCard = 0;
-        int secondCard = 0;
-        for(int i = 0; i < 2; i++){
-            if(i == 1){
-                firstCard = ;
-            }
-        }
-        return hand;
-    }*/
 
     public int getPoint() {
         ArrayList<Card> aceStack = new ArrayList<>();
