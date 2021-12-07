@@ -11,27 +11,27 @@ public class Card implements Serializable {
     private final int LOW_ACE_POINT = 1;
 
     public Card(int number, String suit){
-        this.point = switch(number) {
-            case 1 -> 101;
-            case 11,12,13 -> 10;
-            default -> number;
-        };
-        this.name = switch (number) {
-            case 1 -> "Ace";
-            case 2 -> "Two";
-            case 3 -> "Three";
-            case 4 -> "Four";
-            case 5 -> "Five";
-            case 6 -> "Six";
-            case 7 -> "Seven";
-            case 8 -> "Eight";
-            case 9 -> "Nine";
-            case 10 -> "Ten";
-            case 11 -> "Jack";
-            case 12 -> "Queen";
-            case 13 -> "King";
-            default -> "Unknown";
-        };
+        switch (number) {
+            case 1:
+                number = 101;
+                break;
+            case 11:
+            case 12:
+            case 13:
+                number = 10;
+                break;
+        }
+
+        String name = "Unknown";
+
+        String[] names = new String[]{"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"};
+
+        if (number <= names.length) {
+            name = names[number - 1];
+        }
+
+        this.name = name;
+        this.point = number;
         this.suit = suit;
     }
 
