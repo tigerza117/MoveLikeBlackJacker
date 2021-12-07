@@ -56,9 +56,9 @@ public class MainMenu extends FXGLMenu {
     }
 
     private Node createBody() {
-        var platBtn = createButton("Player", this::fireNewGame);
-        var optionBtn = createButton("Option", this::fireNewGame);
-        var quitBtn = createButton("Quit", this::fireExit);
+        var platBtn = createButton("play_btn", this::fireNewGame);
+        var optionBtn = createButton("option_btn", this::fireNewGame);
+        var quitBtn = createButton("quit_btn", this::fireExit);
 
         Group group = new Group(platBtn, optionBtn, quitBtn);
 
