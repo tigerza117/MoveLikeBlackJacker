@@ -1,5 +1,9 @@
-package co.yunchao.client.views;
+package co.yunchao.client.controllers;
 
+import co.yunchao.client.views.Loading;
+import co.yunchao.client.views.MainMenu;
+import co.yunchao.client.views.Startup;
+import co.yunchao.client.views.Table;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.*;
@@ -8,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
-public class Home extends GameApplication  {
+public class MainController extends GameApplication {
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -82,7 +86,7 @@ public class Home extends GameApplication  {
         }
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public void JoinByID() {
+
     }
 }
