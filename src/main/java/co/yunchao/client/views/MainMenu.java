@@ -3,6 +3,8 @@ package co.yunchao.client.views;
 import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
+import com.almasb.fxgl.audio.Music;
+import com.almasb.fxgl.core.asset.AssetType;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -16,9 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGL.getAudioPlayer;
 
 public class MainMenu extends FXGLMenu {
     private final List<Node> buttons = new ArrayList<>();
+    private Music music;
 
     public MainMenu() {
         super(MenuType.GAME_MENU);
@@ -52,13 +56,33 @@ public class MainMenu extends FXGLMenu {
 
             animIndex++;
         });
-        play("main_menu_bg.mp3");
+
+        music = getAssetLoader().load(AssetType.MUSIC, "main_menu_bg.mp3");
+
+        getAudioPlayer().playMusic(music);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getAudioPlayer().stopMusic(music);
     }
 
     private Node createBody() {
-        var platBtn = createButton("play_btn", this::fireNewGame);
-        var optionBtn = createButton("option_btn", this::fireNewGame);
-        var quitBtn = createButton("quit_btn", this::fireExit);
+        var platBtn = createButton("play_btn", () -> {
+            fireNewGame();
+            play("Play_Button.wav");
+        });
+        var optionBtn = createButton("option_btn", () -> {
+            fireNewGame();
+            play("Clicked.wav");
+        });
+        var quitBtn = createButton("quit_btn", () -> {
+            fireExit();
+            play("Clicked.wav");
+        });
+
+
 
         Group group = new Group(platBtn, optionBtn, quitBtn);
 
