@@ -32,6 +32,7 @@ public class Testing implements ActionListener {
         fr.add(btn.get("stand"));
         fr.add(btn.get("dbd"));
         fr.add(btn.get("bet"));
+        fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fr.setVisible(true);
         fr.pack();
     }

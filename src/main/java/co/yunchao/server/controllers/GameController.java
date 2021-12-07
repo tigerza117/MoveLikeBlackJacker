@@ -26,7 +26,14 @@ public class GameController implements ActionListener, Runnable {
     GameController(ArrayList<Player> players) {
         this.players = players;
         for(Player player : players){
-            playerCon = new PlayerController(player);
+            boolean first = true;
+            if(first){
+                dealerCon = new DealerController(player);
+                first = false;
+            }
+            else {
+                playerCon = new PlayerController(player);
+            }
         }
         this.Initial();
     }
@@ -44,6 +51,7 @@ public class GameController implements ActionListener, Runnable {
         for(Player player: this.players){
             System.out.println(player.getInventory().getPoint());
         }
+
         for(Player player: this.players){
             if(dealerCon.CheckDealerBlackJack() == true) {
                 if (playerCon.CheckPlayerBlackJack() == true) {
@@ -53,6 +61,13 @@ public class GameController implements ActionListener, Runnable {
                 }
             }
         }
+
+        for(Player player: this.players){
+            Thread t = new Thread(player);
+            t.start();
+            System.out.println(player.getInventory().getPoint());
+        }
+
     }
 
     public void checkRound(){
@@ -92,7 +107,21 @@ public class GameController implements ActionListener, Runnable {
 
     @Override
     public void run() {
-
+        int time = playerTimer;
+        try{
+            while(time != 0){
+                if(playerCon.IsPlayerAlreadyAction() == true){
+                    this.wait();
+                }
+                Thread.sleep(1000);
+                time--;
+                System.out.println(time);
+            }
+            this.wait();
+        }
+        catch (Exception i){
+            i.printStackTrace();
+        }
     }
 }
 

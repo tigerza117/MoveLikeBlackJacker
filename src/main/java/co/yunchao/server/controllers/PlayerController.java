@@ -12,6 +12,7 @@ public class PlayerController {
     private boolean playerDoubledown = false;
     private boolean playerHit = false;
     private boolean playerBet = false;
+    private boolean playerAlreadyAction = false;
     PlayerController(Player player){
         this.player = player;
     }
@@ -53,6 +54,13 @@ public class PlayerController {
     }
     public boolean CheckPlayerBlackJack(){
         if(this.player.getInventory().getPoint() == 21){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean IsPlayerAlreadyAction(){
+        if((this.playerStand || this.playerHit) == true){
             return true;
         }
         return false;
