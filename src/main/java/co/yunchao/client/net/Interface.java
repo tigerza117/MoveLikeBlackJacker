@@ -1,5 +1,6 @@
 package co.yunchao.client.net;
 
+import co.yunchao.base.models.Player;
 import co.yunchao.net.handler.*;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -13,7 +14,7 @@ public class Interface {
     final EventLoopGroup ioGroup = new NioEventLoopGroup();
     final Channel channel;
 
-    public Interface(InetSocketAddress adder) throws InterruptedException {
+    public Interface(Player player, InetSocketAddress adder) throws InterruptedException {
         channel = new Bootstrap()
                 .group(ioGroup)
                 .channel(RakNetClient.CHANNEL)
@@ -24,7 +25,7 @@ public class Interface {
                         ch.pipeline()
                                 .addLast(new PacketEncoder())
                                 .addLast(new PacketDecoder())
-                                .addLast(new NetworkHandler());
+                                .addLast(new NetworkHandler(player));
                     }
                 }).connect(adder).sync().channel();
     }

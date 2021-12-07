@@ -1,5 +1,9 @@
-package co.yunchao.client.views;
+package co.yunchao.client.controllers;
 
+import co.yunchao.client.views.Loading;
+import co.yunchao.client.views.MainMenu;
+import co.yunchao.client.views.Startup;
+import co.yunchao.client.views.Table;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.*;
@@ -8,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
-public class Home extends GameApplication  {
+public class MainController extends GameApplication {
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -16,6 +20,7 @@ public class Home extends GameApplication  {
         settings.setHeightFromRatio(16/9.0);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
+        settings.setIntroEnabled(true);
         settings.setSceneFactory(new SceneFactory() {
             @NotNull
             @Override
@@ -75,14 +80,15 @@ public class Home extends GameApplication  {
 
     @Override
     protected void initUI() {
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Table table = new Table();
+        table.render(getGameScene());
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public void CreateRoom() {
+        //Statement crate room call to server to create room
+    }
+
+    public void JoinByID() {
+
     }
 }
