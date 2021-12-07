@@ -20,7 +20,7 @@ public class GameController implements ActionListener, Runnable {
     private PlayerController playerCon;
     private DealerController dealerCon;
     private final int playerTimer = 20;
-    GameController(Player player){
+    public GameController(Player player){
         this.dealer = player;
     }
     GameController(ArrayList<Player> players) {
@@ -105,23 +105,13 @@ public class GameController implements ActionListener, Runnable {
         //...
     }
 
+    public int getPlayerTimer() {
+        return playerTimer;
+    }
+
     @Override
     public void run() {
-        int time = playerTimer;
-        try{
-            while(time != 0){
-                if(playerCon.IsPlayerAlreadyAction() == true){
-                    this.wait();
-                }
-                Thread.sleep(1000);
-                time--;
-                System.out.println(time);
-            }
-            this.wait();
-        }
-        catch (Exception i){
-            i.printStackTrace();
-        }
+
     }
 }
 

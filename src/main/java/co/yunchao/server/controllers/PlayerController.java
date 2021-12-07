@@ -4,16 +4,18 @@ import co.yunchao.base.models.Deck;
 import co.yunchao.base.models.Inventory;
 import co.yunchao.base.models.Player;
 
-public class PlayerController {
+public class PlayerController{
     private Player player;
     private Inventory inv;
     private Deck deck;
+    private GameController gamecon;
     private boolean playerStand = false;
     private boolean playerDoubledown = false;
     private boolean playerHit = false;
     private boolean playerBet = false;
     private boolean playerAlreadyAction = false;
-    PlayerController(Player player){
+    private PlayerController playerCon;
+    public PlayerController(Player player){
         this.player = player;
     }
 
@@ -97,6 +99,8 @@ public class PlayerController {
     public boolean getPlayerBet(){
         return this.playerBet;
     }
+
+
 }
 
 
