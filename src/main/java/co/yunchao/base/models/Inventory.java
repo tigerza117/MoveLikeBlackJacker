@@ -46,7 +46,8 @@ public class Inventory {
                 points += card.getPoint();
             }
         }
-        for (Card card: aceStack.stream().toList()) {
+        for (Object obj: aceStack.toArray()) {
+            Card card = (Card) obj;
             if (points + 10 + aceStack.size() > 21) {
                 points++;
             } else {

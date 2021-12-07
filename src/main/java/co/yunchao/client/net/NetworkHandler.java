@@ -11,7 +11,8 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Packet packet) throws Exception {
-        if (packet instanceof JoinRoomResponse joinRoomResponse) {
+        if (packet instanceof JoinRoomResponse) {
+            JoinRoomResponse joinRoomResponse = (JoinRoomResponse) packet;
             System.out.println("Join Room > " + joinRoomResponse.getId());
         }
     }
