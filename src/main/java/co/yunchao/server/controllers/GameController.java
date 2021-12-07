@@ -41,8 +41,17 @@ public class GameController implements ActionListener, Runnable {
                 }
             }
         }
-        for(Player player: players){
+        for(Player player: this.players){
             System.out.println(player.getInventory().getPoint());
+        }
+        for(Player player: this.players){
+            if(dealerCon.CheckDealerBlackJack() == true) {
+                if (playerCon.CheckPlayerBlackJack() == true) {
+                    playerWinable = true;
+                } else {
+                    playerWinable = false;
+                }
+            }
         }
     }
 
@@ -51,15 +60,15 @@ public class GameController implements ActionListener, Runnable {
     }
 
     public void checkHit(){
-        for(Player player: players){
-            if(player.getInventory().getPoint() != 21 || player.getInventory().getPoint() < 21){
+        for(Player player: this.players){
+            if(player.getInventory().getPoint() != 21 && player.getInventory().getPoint() < 21){
                 this.playerCon.setPlayerHit(true);
             }
         }
     }
 
     public void checkDoubleDown(){
-        for(Player player: players){
+        for(Player player: this.players){
             if(player.getInventory().getPoint() != 21){
                 this.playerCon.setPlayerDoubledown(true);
             }
@@ -67,7 +76,7 @@ public class GameController implements ActionListener, Runnable {
     }
 
     public boolean playerCheckWin() {
-        for(Player player: players){
+        for(Player player: this.players){
             if(player.getInventory().getPoint() <= 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand() == true){
                 return playerWinable = true;
             }

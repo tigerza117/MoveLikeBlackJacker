@@ -22,4 +22,10 @@ public class DealerController {
     public int getPoint(){
         return this.player.getInventory().getPoint();
     }
+    public boolean CheckDealerBlackJack(){
+        if(this.player.getInventory().getPoint() == 21){
+            return true;
+        }
+        return false;
+    }
 }

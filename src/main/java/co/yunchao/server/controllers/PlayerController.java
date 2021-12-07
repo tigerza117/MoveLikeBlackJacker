@@ -51,6 +51,12 @@ public class PlayerController {
         }
         return false;
     }
+    public boolean CheckPlayerBlackJack(){
+        if(this.player.getInventory().getPoint() == 21){
+            return true;
+        }
+        return false;
+    }
 
     public void setPlayerBet(boolean playerBet) {
         this.playerBet = playerBet;
