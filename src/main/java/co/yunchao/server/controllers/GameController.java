@@ -22,13 +22,15 @@ public class GameController implements ActionListener, Runnable {
     private PlayerController playerCon;
     private DealerController dealerCon;
     private final int playerTimer = 20;
+
     public GameController(Player player){
         this.dealer = player;
     }
+
     GameController(ArrayList<Player> players) {
         this.players = players;
+        boolean first = true;
         for(Player player : players){
-            boolean first = true;
             if(first){
                 dealerCon = new DealerController(player);
                 first = false;
@@ -44,7 +46,7 @@ public class GameController implements ActionListener, Runnable {
         this.deck.generateCards();
         for(Player player : this.players){
             playerCon = new PlayerController(player);
-            if(this.playerCon.getPlayerBet() == false){
+            if(!this.playerCon.getPlayerBet()){
                 for (int i = 0; i < 2; i++) {
                     player.pickUpCard(this.deck);
                 }
@@ -56,25 +58,20 @@ public class GameController implements ActionListener, Runnable {
 
         //อาจจะไม่ใช้ไปใช้ playerCheckWin เเทน เก็บไว้เผิ่อเฉยๆ
         for(Player player: this.players){
-            if(dealerCon.CheckDealerBlackJack() == true) {
-                if (playerCon.CheckPlayerBlackJack() == true) {
+            if(dealerCon.CheckDealerBlackJack()) {
+                if (playerCon.CheckPlayerBlackJack()) {
                     playerWinable = true;
                     playerGotBlackJack = true;
                 } else {
                     playerWinable = false;
                 }
             }
-            else if(dealerCon.CheckDealer5Card() == true){
-                if (playerCon.CheckPlayerBlackJack() == true){
+            else if(dealerCon.CheckDealer5Card()){
+                if (playerCon.CheckPlayerBlackJack()){
                     playerWinable = true;
                     playerGotBlackJack = true;
                 }
-                else if (playerCon.CheckPlayer5Card() == true){
-                    playerWinable = true;
-                }
-                else {
-                    playerWinable = false;
-                }
+                else playerWinable = playerCon.CheckPlayer5Card();
             }
             else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand() == true){
                 playerWinable = true;
@@ -99,13 +96,13 @@ public class GameController implements ActionListener, Runnable {
     public void endResult(){
         for(Player player: this.players){
             playerCheckWin(player);
-            if(playerWinable == true){
+            if (playerWinable){
                 //ชนะปกติ
             }
-            else if(playerGotBlackJack == true){
+            else if (playerGotBlackJack){
                 //ชนะเเบบได้ Bonus
             }
-            else if(playerDraw == true){
+            else if (playerDraw){
                 //ได้เงินที่ลงคืน
             }
             else{
@@ -138,23 +135,26 @@ public class GameController implements ActionListener, Runnable {
     }
 
     public boolean playerCheckWin(Player player) {
-            if(dealerCon.CheckDealer5Card() == true){
-                if(playerCon.CheckPlayer5Card() == true){
-                    return playerWinable = true;
+            if(dealerCon.CheckDealer5Card()){
+                if(playerCon.CheckPlayer5Card()){
+                    playerWinable = true;
+                    return true;
                 }
-                else if(playerCon.CheckPlayerBlackJack() == true){
-                    return playerGotBlackJack = true;
+                else if(playerCon.CheckPlayerBlackJack()){
+                    playerGotBlackJack = true;
+                    return true;
                 }
             }
-            else if(dealerCon.CheckDealerBlackJack() == true) {
-                if (playerCon.CheckPlayerBlackJack() == true) {
-                    return playerGotBlackJack = true;
+            else if(dealerCon.CheckDealerBlackJack()) {
+                if (playerCon.CheckPlayerBlackJack()) {
+                    playerGotBlackJack = true;
+                    return true;
                 }
         }
-            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand() == true){
+            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand()){
                 return playerWinable = true;
             }
-            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() == player.getInventory().getPoint() && playerCon.getPlayerStand() == true){
+            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() == player.getInventory().getPoint() && playerCon.getPlayerStand()){
                 return playerDraw = true;
             }
         return playerWinable = false;

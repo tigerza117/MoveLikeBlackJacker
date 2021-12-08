@@ -4,7 +4,7 @@ import co.yunchao.base.models.Deck;
 import co.yunchao.base.models.Inventory;
 import co.yunchao.base.models.Player;
 
-public class PlayerController{
+public class PlayerController {
     private Player player;
     private Inventory inv;
     private Deck deck;
@@ -15,6 +15,7 @@ public class PlayerController{
     private boolean playerBet = false;
     private boolean playerAlreadyAction = false;
     private PlayerController playerCon;
+
     public PlayerController(Player player){
         this.player = player;
     }
@@ -30,7 +31,7 @@ public class PlayerController{
     }
 
     public void hit(){
-        if((this.playerHit && this.playerBet) == true){
+        if(this.playerHit && this.playerBet){
             this.pickUpCard(deck);
         }
     }
@@ -49,30 +50,18 @@ public class PlayerController{
     }
 
     public boolean actionControl(){
-        if((this.getPlayerDoubledown() || this.getPlayerHit()) == true){
-            return true;
-        }
-        return false;
+        return this.getPlayerDoubledown() || this.getPlayerHit();
     }
     public boolean CheckPlayerBlackJack(){
-        if(this.player.getInventory().getPoint() == 21){
-            return true;
-        }
-        return false;
+        return this.player.getInventory().getPoint() == 21;
     }
 
     public boolean IsPlayerAlreadyAction(){
-        if((this.playerStand || this.playerHit) == true){
-            return true;
-        }
-        return false;
+        return this.playerStand || this.playerHit;
     }
 
     public boolean CheckPlayer5Card(){
-        if(this.player.getInventory().getCards().size() == 5 && this.player.getInventory().getPoint() < 21){
-            return true;
-        }
-        return false;
+        return this.player.getInventory().getCards().size() == 5 && this.player.getInventory().getPoint() < 21;
     }
 
 

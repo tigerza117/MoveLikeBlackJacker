@@ -10,9 +10,11 @@ public class DealerController {
     private Inventory inv;
     private int hitPoint;
     private int round = 0;
+
     DealerController(Player player){
         this.player = player;
     }
+
     public void hit(){
         if(this.player.getInventory().getPoint() <= 16 && round % 4 == 0){
             this.inv.addCard(this.deck.pickTopCard());
@@ -22,6 +24,7 @@ public class DealerController {
     public int getPoint(){
         return this.player.getInventory().getPoint();
     }
+
     public boolean CheckDealerBlackJack(){
         if(this.player.getInventory().getPoint() == 21){
             return true;
@@ -30,9 +33,6 @@ public class DealerController {
     }
 
     public boolean CheckDealer5Card(){
-        if(this.player.getInventory().getCards().size() == 5 && this.player.getInventory().getPoint() < 21){
-            return true;
-        }
-        return false;
+        return this.player.getInventory().getCards().size() == 5 && this.player.getInventory().getPoint() < 21;
     }
 }
