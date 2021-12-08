@@ -6,15 +6,13 @@ import co.yunchao.base.models.Player;
 
 public class PlayerController {
     private Player player;
-    private Inventory inv;
     private Deck deck;
-    private GameController gamecon;
+    private Inventory inv;
     private boolean playerStand = false;
     private boolean playerDoubledown = false;
     private boolean playerHit = false;
     private boolean playerBet = false;
-    private boolean playerAlreadyAction = false;
-    private PlayerController playerCon;
+    private boolean playerEndround = false;
 
     public PlayerController(Player player){
         this.player = player;
@@ -37,7 +35,8 @@ public class PlayerController {
     }
 
     public void stand(){
-        if((this.player.getInventory().getPoint() <= 21)){
+        if((this.player.getInventory().getPoint() <= 21 && this.playerEndround)){
+            //click btn
             this.playerStand = true;
         }
     }
@@ -101,7 +100,9 @@ public class PlayerController {
         return this.playerBet;
     }
 
-
+    public Player getPlayer() {
+        return this.player;
+    }
 }
 
 

@@ -1,33 +1,28 @@
 package co.yunchao.server.controllers;
 
-import co.yunchao.base.models.Card;
 import co.yunchao.base.models.Deck;
 import co.yunchao.base.models.Player;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.lang.annotation.Native;
 import java.util.ArrayList;
 
-public class GameController implements ActionListener, Runnable {
+public class GameController implements Runnable {
     private ArrayList<Player> players;
     private Player dealer;
-    private Card card;
     private Deck deck = new Deck();
+    private PlayerController playerCon;
+    private DealerController dealerCon;
     private int amount; //get from view
     private boolean playerWinable = false;
     private boolean playerGotBlackJack = false;
     private boolean playerDraw = false;
-    private int roundCount = 0;
-    private PlayerController playerCon;
-    private DealerController dealerCon;
-    private final int playerTimer = 20;
-
+    private int playerTimer = 20;
+    private int playRound = 0;
+    private Thread thread;
     public GameController(Player player){
         this.dealer = player;
     }
 
-    GameController(ArrayList<Player> players) {
+    public GameController(ArrayList<Player> players) {
         this.players = players;
         boolean first = true;
         for(Player player : players){
@@ -43,6 +38,9 @@ public class GameController implements ActionListener, Runnable {
     }
 
     public void Initial() {
+        for(Player player: this.players){
+            player.getInventory().clearCard();
+        }
         this.deck.generateCards();
         for(Player player : this.players){
             playerCon = new PlayerController(player);
@@ -52,6 +50,7 @@ public class GameController implements ActionListener, Runnable {
                 }
             }
         }
+
         for(Player player: this.players){
             System.out.println(player.getInventory().getPoint());
         }
@@ -73,10 +72,10 @@ public class GameController implements ActionListener, Runnable {
                 }
                 else playerWinable = playerCon.CheckPlayer5Card();
             }
-            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand() == true){
+            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand()){
                 playerWinable = true;
             }
-            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() == player.getInventory().getPoint() && playerCon.getPlayerStand() == true){
+            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() == player.getInventory().getPoint() && playerCon.getPlayerStand()){
                 playerDraw = true;
                 playerWinable = false;
             }
@@ -84,14 +83,19 @@ public class GameController implements ActionListener, Runnable {
                 playerWinable = false;
             }
         }
-
-        for(Player player: this.players){
-            Thread t = new Thread(player);
-            t.start();
-            System.out.println(player.getInventory().getPoint());
-        }
-
+        thread = new Thread(this);
+        thread.start();
     }
+
+    public void checkRound(){
+        for(int i = 0; i < 4; i++){
+            if(this.playerCon.IsPlayerAlreadyAction()){
+                playRound++;
+                this.playerTimer = 20;
+            }
+        }
+    }
+
     // สรุปสุดท้ายใครชนะไม่ชนะ
     public void endResult(){
         for(Player player: this.players){
@@ -114,10 +118,6 @@ public class GameController implements ActionListener, Runnable {
         }
     }
 
-    public void checkRound(){
-
-    }
-
     public void checkHit(){
         for(Player player: this.players){
             if(player.getInventory().getPoint() != 21 && player.getInventory().getPoint() < 21){
@@ -134,7 +134,13 @@ public class GameController implements ActionListener, Runnable {
         }
     }
 
-    public boolean playerCheckWin(Player player) {
+    public void checkStand(){
+        if(this.getPlayer().getInventory().getPoint() <= 21){
+            this.playerCon.getPlayer();
+        }
+    }
+
+    public void playerCheckWin(Player player) {
             if(playerCon.CheckPlayerBust()){
                 return true;
         }
@@ -146,41 +152,65 @@ public class GameController implements ActionListener, Runnable {
             else if(dealerCon.CheckDealer5Card()){
                 if(playerCon.CheckPlayer5Card()){
                     playerWinable = true;
-                    return true;
+                    return;
                 }
                 else if(playerCon.CheckPlayerBlackJack()){
                     playerGotBlackJack = true;
-                    return true;
+                    return;
                 }
             }
             else if(dealerCon.CheckDealerBlackJack()) {
                 if (playerCon.CheckPlayerBlackJack()) {
                     playerGotBlackJack = true;
-                    return true;
+                    return;
                 }
         }
             else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand()){
-                return playerWinable = true;
+                playerWinable = true;
+                return;
             }
             else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() == player.getInventory().getPoint() && playerCon.getPlayerStand()){
-                return playerDraw = true;
+                playerDraw = true;
+                return;
             }
-        return playerWinable = false;
+        playerWinable = false;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        //ingame control
-        //...
+    public void setPlayerTimer(int time){
+        this.playerTimer = time;
     }
 
     public int getPlayerTimer() {
         return playerTimer;
     }
 
+    public int getPlayRound(){
+        return this.playRound;
+    }
+
+    public Player getPlayer(){
+        return this.players.get(this.playRound);
+    }
+
+    public PlayerController getPlayerController(){
+        return this.playerCon;
+    }
+
     @Override
     public void run() {
+        try{
+            while (this.playerTimer != 0 && !this.playerCon.IsPlayerAlreadyAction()){
+                System.out.println(this.playerTimer);
+                this.playerTimer--;
+                Thread.sleep(1000);
+            }
+            thread.wait();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        } {
 
+        }
     }
 }
 

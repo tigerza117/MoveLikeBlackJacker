@@ -43,10 +43,15 @@ public class Testing implements ActionListener {
             for (String name : names) {
                 players.add(new Player(name, 1000));
             }
-            gm = new GameController(players);
+            this.gm = new GameController(players);
         }
-        else if(e.getSource().equals(btn.get("bet"))){
-            pc.setPlayerBet(true);
+        else if(e.getSource().equals(btn.get("hit"))){
+            this.gm.checkHit();
+        }
+        else if(e.getSource().equals(btn.get("stand"))){
+            this.gm.checkStand();
+            this.gm.getPlayerController().setPlayerStand(true);
+            this.gm.getPlayer();
         }
     }
 
