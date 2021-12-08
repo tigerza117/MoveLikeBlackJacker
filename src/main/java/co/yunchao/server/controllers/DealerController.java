@@ -26,13 +26,16 @@ public class DealerController {
     }
 
     public boolean CheckDealerBlackJack(){
-        if(this.player.getInventory().getPoint() == 21){
+        if(this.player.getInventory().getPoint() == 21 && this.player.getInventory().getCards().size() == 2){
             return true;
         }
         return false;
     }
 
     public boolean CheckDealer5Card(){
-        return this.player.getInventory().getCards().size() == 5 && this.player.getInventory().getPoint() < 21;
+        return this.player.getInventory().getCards().size() == 5 && this.player.getInventory().getPoint() <= 21;
+    }
+    public boolean CheckDealerBust(){
+        return this.player.getInventory().getPoint() > 21;
     }
 }

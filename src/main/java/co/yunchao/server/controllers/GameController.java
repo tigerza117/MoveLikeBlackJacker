@@ -135,7 +135,15 @@ public class GameController implements ActionListener, Runnable {
     }
 
     public boolean playerCheckWin(Player player) {
-            if(dealerCon.CheckDealer5Card()){
+            if(playerCon.CheckPlayerBust()){
+                return true;
+        }
+            else if(dealerCon.CheckDealerBust()){
+                if(!playerCon.CheckPlayerBust())
+                    playerWinable = true;
+                    return true;
+        }
+            else if(dealerCon.CheckDealer5Card()){
                 if(playerCon.CheckPlayer5Card()){
                     playerWinable = true;
                     return true;

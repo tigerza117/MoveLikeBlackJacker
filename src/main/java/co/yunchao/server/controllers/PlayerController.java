@@ -44,7 +44,7 @@ public class PlayerController {
 
     public void doubleDown(int amount){ //same as bet
         this.bet(amount);
-        if(this.player.getInventory().getPoint() <= 21){
+        if(this.player.getInventory().getPoint() <= 21 && this.player.getInventory().getCards().size() == 2){
             this.playerStand = true;
         }
     }
@@ -53,7 +53,7 @@ public class PlayerController {
         return this.getPlayerDoubledown() || this.getPlayerHit();
     }
     public boolean CheckPlayerBlackJack(){
-        return this.player.getInventory().getPoint() == 21;
+        return this.player.getInventory().getPoint() == 21 && this.player.getInventory().getCards().size() == 2;
     }
 
     public boolean IsPlayerAlreadyAction(){
@@ -61,7 +61,11 @@ public class PlayerController {
     }
 
     public boolean CheckPlayer5Card(){
-        return this.player.getInventory().getCards().size() == 5 && this.player.getInventory().getPoint() < 21;
+        return this.player.getInventory().getCards().size() == 5 && this.player.getInventory().getPoint() <= 21;
+    }
+
+    public boolean CheckPlayerBust(){
+        return this.player.getInventory().getPoint() > 21;
     }
 
 
