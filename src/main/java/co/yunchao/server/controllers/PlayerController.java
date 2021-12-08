@@ -68,6 +68,14 @@ public class PlayerController{
         return false;
     }
 
+    public boolean CheckPlayer5Card(){
+        if(this.player.getInventory().getCards().size() == 5 && this.player.getInventory().getPoint() < 21){
+            return true;
+        }
+        return false;
+    }
+
+
     public void setPlayerBet(boolean playerBet) {
         this.playerBet = playerBet;
     }

@@ -28,4 +28,11 @@ public class DealerController {
         }
         return false;
     }
+
+    public boolean CheckDealer5Card(){
+        if(this.player.getInventory().getCards().size() == 5 && this.player.getInventory().getPoint() < 21){
+            return true;
+        }
+        return false;
+    }
 }

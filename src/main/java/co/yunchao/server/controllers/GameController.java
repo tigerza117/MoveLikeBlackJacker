@@ -15,7 +15,9 @@ public class GameController implements ActionListener, Runnable {
     private Card card;
     private Deck deck = new Deck();
     private int amount; //get from view
-    private boolean playerWinable = true;
+    private boolean playerWinable = false;
+    private boolean playerGotBlackJack = false;
+    private boolean playerDraw = false;
     private int roundCount = 0;
     private PlayerController playerCon;
     private DealerController dealerCon;
@@ -52,13 +54,37 @@ public class GameController implements ActionListener, Runnable {
             System.out.println(player.getInventory().getPoint());
         }
 
+        //อาจจะไม่ใช้ไปใช้ playerCheckWin เเทน เก็บไว้เผิ่อเฉยๆ
         for(Player player: this.players){
             if(dealerCon.CheckDealerBlackJack() == true) {
                 if (playerCon.CheckPlayerBlackJack() == true) {
                     playerWinable = true;
+                    playerGotBlackJack = true;
                 } else {
                     playerWinable = false;
                 }
+            }
+            else if(dealerCon.CheckDealer5Card() == true){
+                if (playerCon.CheckPlayerBlackJack() == true){
+                    playerWinable = true;
+                    playerGotBlackJack = true;
+                }
+                else if (playerCon.CheckPlayer5Card() == true){
+                    playerWinable = true;
+                }
+                else {
+                    playerWinable = false;
+                }
+            }
+            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand() == true){
+                playerWinable = true;
+            }
+            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() == player.getInventory().getPoint() && playerCon.getPlayerStand() == true){
+                playerDraw = true;
+                playerWinable = false;
+            }
+            else{
+                playerWinable = false;
             }
         }
 
@@ -68,6 +94,27 @@ public class GameController implements ActionListener, Runnable {
             System.out.println(player.getInventory().getPoint());
         }
 
+    }
+    // สรุปสุดท้ายใครชนะไม่ชนะ
+    public void endResult(){
+        for(Player player: this.players){
+            playerCheckWin(player);
+            if(playerWinable == true){
+                //ชนะปกติ
+            }
+            else if(playerGotBlackJack == true){
+                //ชนะเเบบได้ Bonus
+            }
+            else if(playerDraw == true){
+                //ได้เงินที่ลงคืน
+            }
+            else{
+                //โดนกิน
+            }
+            playerWinable = false;
+            playerDraw = false;
+            playerGotBlackJack = false;
+        }
     }
 
     public void checkRound(){
@@ -90,12 +137,26 @@ public class GameController implements ActionListener, Runnable {
         }
     }
 
-    public boolean playerCheckWin() {
-        for(Player player: this.players){
-            if(player.getInventory().getPoint() <= 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand() == true){
+    public boolean playerCheckWin(Player player) {
+            if(dealerCon.CheckDealer5Card() == true){
+                if(playerCon.CheckPlayer5Card() == true){
+                    return playerWinable = true;
+                }
+                else if(playerCon.CheckPlayerBlackJack() == true){
+                    return playerGotBlackJack = true;
+                }
+            }
+            else if(dealerCon.CheckDealerBlackJack() == true) {
+                if (playerCon.CheckPlayerBlackJack() == true) {
+                    return playerGotBlackJack = true;
+                }
+        }
+            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand() == true){
                 return playerWinable = true;
             }
-        }
+            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() == player.getInventory().getPoint() && playerCon.getPlayerStand() == true){
+                return playerDraw = true;
+            }
         return playerWinable = false;
     }
 
