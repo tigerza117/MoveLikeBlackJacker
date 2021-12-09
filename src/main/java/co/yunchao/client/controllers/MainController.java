@@ -1,9 +1,6 @@
 package co.yunchao.client.controllers;
 
-import co.yunchao.client.views.Loading;
-import co.yunchao.client.views.MainMenu;
-import co.yunchao.client.views.Startup;
-import co.yunchao.client.views.Table;
+import co.yunchao.client.views.*;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.*;
