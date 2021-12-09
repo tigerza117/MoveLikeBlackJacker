@@ -1,7 +1,7 @@
 package co.yunchao.client.views;
 
 import com.almasb.fxgl.animation.Interpolators;
-import com.almasb.fxgl.app.scene.GameScene;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.util.Duration;
@@ -18,11 +18,22 @@ public class Card {
         var front = texture("card/Card_Deck-" + name + ".png", width, height);
         var back = texture("card/Card_Back.png", width, height);
         group = new Group(front, back);
-        group.setOnMouseClicked(e -> toggleFlip());
+        group.setVisible(false);
+        getGameScene().getContentRoot().getChildren().add(group);
+        toggleFlip();
     }
 
     public void spawn() {
+        var animation = animationBuilder(getGameScene())
+                .interpolator(Interpolators.LINEAR.EASE_OUT())
+                .duration(Duration.seconds(1))
+                .translate(group)
+                .from(new Point2D((getAppWidth() / 2.0 + group.getBoundsInLocal().getWidth() /2) - group.getLayoutX(), -(group.getLayoutY() + group.getBoundsInLocal().getHeight())))
+                .to(new Point2D(group.getTranslateX(), group.getTranslateY()));
+
         group.setVisible(true);
+        animation.buildAndPlay();
+        play("Cards_Action.wav");
     }
 
     public void toggleFlip() {

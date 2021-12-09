@@ -22,7 +22,7 @@ public class Card implements Serializable {
                 break;
         }
 
-        String name = "Unknown";
+        String name = "Ace";
 
         String[] names = new String[]{"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"};
 

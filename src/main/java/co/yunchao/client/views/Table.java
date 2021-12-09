@@ -2,34 +2,58 @@ package co.yunchao.client.views;
 
 import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.core.asset.AssetType;
-import javafx.scene.Node;
+import com.almasb.fxgl.texture.Texture;
+import javafx.scene.Group;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class Table {
-    private ArrayList<Node> players = new ArrayList<Node>();
     private final Music music;
+    private final Texture bg;
+    private final BetSection betSection;
+    private final Group group;
+    private final HashMap<String, Seat> seats;
 
     public Table() {
+        group = new Group();
         music = getAssetLoader().load(AssetType.MUSIC, "in-game_bg.mp3");
+        bg = texture("game_background.png", getAppWidth(), getAppHeight());
+        bg.setVisible(false);
+        group.getChildren().add(bg);
+        seats = new HashMap<>(){{
+            put("dealer", new Seat(876, 40));
+            put("player1", new Seat( 432,294));
+            put("player2", new Seat( 729,377));
+            put("player3", new Seat( 1024,375));
+            put("player4", new Seat( 1319,293));
+        }};
+        seats.get("dealer").setIsDealer(true);
+
+        getGameScene().getContentRoot().getChildren().add(group);
+
+        betSection = new BetSection();
     }
 
     public void render() {
-        var bg = texture("/mainResources/game_background.png", getAppWidth(), getAppHeight());
-        var seat = new Seat( 432,293);
-        for (String c : new String[]{"03", "04", "05", "55"}) {
-            var card = new Card(c);
-            seat.addCard(card);
-        }
-        getAudioPlayer().loopMusic(music);
-        play("Cards_Shuffle.wav");
-        play("Checked_Button.wav");
-        getGameScene().addUINodes(bg);
+        bg.setVisible(true);
     }
 
     public void close() {
         getAudioPlayer().stopMusic(music);
+        getAudioPlayer().onMainLoopPausing();
+    }
+
+    public BetSection getBetSection() {
+        return betSection;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public HashMap<String, Seat> getSeats() {
+        return seats;
     }
 }

@@ -7,12 +7,13 @@ import java.util.ArrayList;
 
 public class GameController implements Runnable {
     private ArrayList<Player> players;
+    private ArrayList<PlayerController> playerControls = new ArrayList<PlayerController>();
     private Player dealer;
     private Deck deck = new Deck();
     private PlayerController playerCon;
     private DealerController dealerCon;
     private int amount; //get from view
-    private boolean playerWinable = false;
+    private boolean playerWinnable = false;
     private boolean playerGotBlackJack = false;
     private boolean playerDraw = false;
     private int playerTimer = 20;
@@ -31,7 +32,7 @@ public class GameController implements Runnable {
                 first = false;
             }
             else {
-                playerCon = new PlayerController(player);
+                this.playerControls.add(new PlayerController(player));
             }
         }
         this.Initial();
@@ -59,28 +60,28 @@ public class GameController implements Runnable {
         for(Player player: this.players){
             if(dealerCon.CheckDealerBlackJack()) {
                 if (playerCon.CheckPlayerBlackJack()) {
-                    playerWinable = true;
+                    playerWinnable = true;
                     playerGotBlackJack = true;
                 } else {
-                    playerWinable = false;
+                    playerWinnable = false;
                 }
             }
             else if(dealerCon.CheckDealer5Card()){
                 if (playerCon.CheckPlayerBlackJack()){
-                    playerWinable = true;
+                    playerWinnable = true;
                     playerGotBlackJack = true;
                 }
-                else playerWinable = playerCon.CheckPlayer5Card();
+                else playerWinnable = playerCon.CheckPlayer5Card();
             }
             else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand()){
-                playerWinable = true;
+                playerWinnable = true;
             }
             else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() == player.getInventory().getPoint() && playerCon.getPlayerStand()){
                 playerDraw = true;
-                playerWinable = false;
+                playerWinnable = false;
             }
             else{
-                playerWinable = false;
+                playerWinnable = false;
             }
         }
         thread = new Thread(this);
@@ -100,7 +101,7 @@ public class GameController implements Runnable {
     public void endResult(){
         for(Player player: this.players){
             playerCheckWin(player);
-            if (playerWinable){
+            if (playerWinnable){
                 //ชนะปกติ
             }
             else if (playerGotBlackJack){
@@ -112,7 +113,7 @@ public class GameController implements Runnable {
             else{
                 //โดนกิน
             }
-            playerWinable = false;
+            playerWinnable = false;
             playerDraw = false;
             playerGotBlackJack = false;
         }
@@ -136,44 +137,50 @@ public class GameController implements Runnable {
 
     public void checkStand(){
         if(this.getPlayer().getInventory().getPoint() <= 21){
-            this.playerCon.getPlayer();
+            this.getPlayerController().setPlayerStand(true);
+            this.setPlayerTimer(20);
+            this.playRound++;
         }
     }
 
     public void playerCheckWin(Player player) {
-            if(playerCon.CheckPlayerBust()){
-                return;
+        if(playerCon.CheckPlayerBust()){
+            this.playerWinnable = false;
         }
-            else if(dealerCon.CheckDealerBust()){
-                if(!playerCon.CheckPlayerBust())
-                    playerWinable = true;
-                    return;
+        else if(dealerCon.CheckDealerBust()){
+            if(!playerCon.CheckPlayerBust())
+                playerWinnable = true;
         }
-            else if(dealerCon.CheckDealer5Card()){
-                if(playerCon.CheckPlayer5Card()){
-                    playerWinable = true;
-                    return;
-                }
-                else if(playerCon.CheckPlayerBlackJack()){
-                    playerGotBlackJack = true;
-                    return;
-                }
+        else if(dealerCon.CheckDealer5Card()){
+            if(playerCon.CheckPlayer5Card()){
+                playerWinnable = true;
             }
-            else if(dealerCon.CheckDealerBlackJack()) {
-                if (playerCon.CheckPlayerBlackJack()) {
-                    playerGotBlackJack = true;
-                    return;
-                }
+            else if(playerCon.CheckPlayerBlackJack()){
+                playerGotBlackJack = true;
+            }
         }
-            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand()){
-                playerWinable = true;
-                return;
+        else if(dealerCon.CheckDealerBlackJack()) {
+            if (playerCon.CheckPlayerBlackJack()) {
+                playerGotBlackJack = true;
             }
-            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() == player.getInventory().getPoint() && playerCon.getPlayerStand()){
-                playerDraw = true;
-                return;
-            }
-        playerWinable = false;
+        }
+        else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand()){
+            playerWinnable = true;
+        }
+        else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() == player.getInventory().getPoint() && playerCon.getPlayerStand()){
+            playerDraw = true;
+        }
+        playerWinnable = false;
+    }
+
+    public void nextRound(){
+        if(this.playerControls.get(playRound).getPlayerStand()){
+            this.playerControls.get(playRound).setPlayerHit(false);
+            this.playerControls.get(playRound).setPlayerDoubledown(false);
+            this.playerControls.get(playRound).setPlayerBet(false);
+            this.playRound++;
+            //this.thread.start();
+        }
     }
 
     public void setPlayerTimer(int time){
@@ -186,6 +193,10 @@ public class GameController implements Runnable {
 
     public int getPlayRound(){
         return this.playRound;
+    }
+
+    public Deck getDeck(){
+        return this.deck;
     }
 
     public Player getPlayer(){
@@ -203,8 +214,9 @@ public class GameController implements Runnable {
                 System.out.println(this.playerTimer);
                 this.playerTimer--;
                 Thread.sleep(1000);
+                this.nextRound();
+                this.thread.wait();
             }
-            thread.wait();
         }
         catch (InterruptedException e) {
             e.printStackTrace();

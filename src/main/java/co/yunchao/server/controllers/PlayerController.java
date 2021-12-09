@@ -12,7 +12,6 @@ public class PlayerController {
     private boolean playerDoubledown = false;
     private boolean playerHit = false;
     private boolean playerBet = false;
-    private boolean playerEndround = false;
 
     public PlayerController(Player player){
         this.player = player;
@@ -35,8 +34,7 @@ public class PlayerController {
     }
 
     public void stand(){
-        if((this.player.getInventory().getPoint() <= 21 && this.playerEndround)){
-            //click btn
+        if((this.player.getInventory().getPoint() <= 21)){
             this.playerStand = true;
         }
     }
