@@ -28,9 +28,9 @@ public class MainMenu extends FXGLMenu {
         super(MenuType.MAIN_MENU);
 
         var bg = texture("background.png", getAppWidth(), getAppHeight());
-        var logo = texture("homeLogo.png", 280, 288.4);
-        logo.setLayoutX((getAppWidth() / 2.0)-(logo.getWidth() / 2));
-        logo.setLayoutY(20);
+        var logo = texture("homeLogo.png", 400, 412);
+        logo.setLayoutX(759);
+        logo.setLayoutY(71);
         var body = createBody();
 
         getContentRoot().getChildren().addAll(bg, logo, body);
@@ -111,7 +111,7 @@ public class MainMenu extends FXGLMenu {
      * @return new button
      */
     private Node createButton(String file, Runnable action) {
-        var bg = texture(file+".png", 674.54/2, 83/2);
+        var bg = texture(file+".png", 674.54, 83);
 
         var btn = new StackPane(bg);
 
