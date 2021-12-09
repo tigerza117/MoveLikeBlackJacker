@@ -84,7 +84,7 @@ public class MainController extends GameApplication {
     @Override
     protected void initUI() {
         Table table = new Table();
-        table.render(getGameScene());
+        table.render();
     }
 
     public void CreateRoom() {
