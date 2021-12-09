@@ -95,30 +95,18 @@ public class MainMenu extends FXGLMenu {
             play("Play_Button.wav");
         });
         var optionBtn = createButton("option_btn", () -> {
-            var banner = texture("optionPane.png", getAppWidth(), 684);
-
-            Text res = new Text("RESOLUTIONS");
-            Text fullScreenText = new Text("FULL SCREEN");
-            Text masText = new Text("MASTER VOL.");
-            Text mscText = new Text("MUSIC VOL.");
-            Text sfxText = new Text("SFX VOL0.");
-            res.getStyleClass().add("#textLabel");
-
-            Group text = new Group(res, fullScreenText, masText, mscText, sfxText);
-            text.setLayoutY((getAppHeight() / 2.0)+(text.getBoundsInLocal().getHeight() / 4));
-            text.setLayoutX((getAppWidth() / 2.0)-(text.getBoundsInLocal().getWidth() / 2));
+            var banner = texture("/options/optionPane.png", getAppWidth(), 684);
 
             banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
-            var saveBtn = createModalButton("saveBtn", () -> play("Clicked.wav"));
-            var fullHD = createModalButton("Full_HDRes", () -> play("Clicked.wav"));
-            var HD = createModalButton("HDRes", () -> play("Clicked.wav"));
-            var SD = createModalButton("SDRes", () -> play("Clicked.wav"));
+            var saveBtn = createModalButton("/options/saveBtn", this::fireSave);
+            var fullHD = createModalButton("/options/Full_HDRes", () -> play("Clicked.wav"));
+            var HD = createModalButton("/options/HDRes", () -> play("Clicked.wav"));
+            var SD = createModalButton("/options/SDRes", () -> play("Clicked.wav"));
             CheckBox fullScreen = new CheckBox();
             Slider masterVol = new Slider(0, 100, 0);
             Slider mscVol = new Slider(0, 100, 0);
             Slider sfxVol = new Slider(0, 100, 0);
-            var tick = texture("sliderPicker.png");
             fullScreen.getStyleClass().add("big-check-box");
 
             fullHD.setTranslateX(100);
@@ -138,6 +126,25 @@ public class MainMenu extends FXGLMenu {
             sfxVol.setTranslateY(120);
             sfxVol.setPrefWidth(630);
 
+            var resolutionText = texture("/options/resolution.png");
+            resolutionText.setLayoutY(-220);
+            var fullScreenText = texture("/options/fullText.png");
+            fullScreenText.setLayoutY(-120);
+            var masText = texture("/options/masterText.png");
+            masText.setLayoutY(-40);
+            var mscText = texture("/options/musicText.png");
+            mscText.setLayoutY(40);
+            var sfxText = texture("/options/sfxV.png");
+            sfxText.setLayoutY(120);
+
+            var separateLine = texture("/options/sepLine.png");
+            separateLine.setLayoutX((getAppWidth()/2.0)-250);
+            separateLine.setLayoutY(310);
+
+            Group text = new Group(resolutionText, fullScreenText, masText, mscText, sfxText);
+            text.setLayoutY((getAppHeight() / 3.0)+(text.getBoundsInLocal().getHeight() / 1.8));
+            text.setLayoutX((getAppWidth() / 4.0)-(text.getBoundsInLocal().getWidth() / 2.0));
+
             Group sliders = new Group(masterVol, mscVol, sfxVol);
             sliders.setTranslateX(110);
 
@@ -155,7 +162,7 @@ public class MainMenu extends FXGLMenu {
             sliders.setLayoutY((getAppHeight() / 2.0)+(options.getBoundsInLocal().getHeight() / 3));
             sliders.setLayoutX((getAppWidth() / 2.0)-(options.getBoundsInLocal().getWidth() / 2));
 
-            getContentRoot().getChildren().addAll(banner, options, text, fullScreen, sliders, saveBtn);
+            getContentRoot().getChildren().addAll(banner, options, text, fullScreen, sliders, saveBtn, separateLine);
 
             play("Clicked.wav");
         });
