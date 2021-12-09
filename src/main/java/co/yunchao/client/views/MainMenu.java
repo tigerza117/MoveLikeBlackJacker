@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.almasb.fxgl.dsl.FXGL.getAudioPlayer;
 
 public class MainMenu extends FXGLMenu {
     private final List<Node> buttons = new ArrayList<>();
