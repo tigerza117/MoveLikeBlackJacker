@@ -40,17 +40,16 @@ public class MainMenu extends FXGLMenu {
 
     @Override
     public void onCreate() {
-        int i = 0;
         buttons.forEach(btn -> {
             animationBuilder(this)
-                    .delay(Duration.seconds(i * 0.1))
+                    .delay(Duration.seconds(animIndex * 0.1))
                     .interpolator(Interpolators.BACK.EASE_OUT())
                     .translate(btn)
                     .from(new Point2D(-200, 0))
                     .to(new Point2D(0, 0))
                     .buildAndPlay();
             animationBuilder(this)
-                    .delay(Duration.seconds(i * 0.1))
+                    .delay(Duration.seconds(animIndex * 0.1))
                     .fadeIn(btn)
                     .buildAndPlay();
 
