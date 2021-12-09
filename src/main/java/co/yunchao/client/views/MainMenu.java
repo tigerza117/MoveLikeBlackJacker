@@ -29,8 +29,8 @@ public class MainMenu extends FXGLMenu {
     public MainMenu() {
         super(MenuType.MAIN_MENU);
 
-        var bg = texture("background.png", getAppWidth(), getAppHeight());
-        var logo = texture("homeLogo.png", 400, 412);
+        var bg = texture("/mainResources/background.png", getAppWidth(), getAppHeight());
+        var logo = texture("/mainResources/homeLogo.png", 400, 412);
         logo.setLayoutX(759);
         logo.setLayoutY(71);
         var body = createBody();
@@ -72,15 +72,15 @@ public class MainMenu extends FXGLMenu {
     }
 
     private Node createBody() {
-        var playBtn = createButton("play_btn", () -> {
-            var banner = texture("yellow_banner.png", getAppWidth(), 500);
+        var playBtn = createButton("/mainResources/play_btn", () -> {
+            var banner = texture("/enterRoom/yellow_banner.png", getAppWidth(), 500);
             banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
-            var createBtn = createModalButton("createRoom", this::fireNewGame);
+            var createBtn = createModalButton("/enterRoom/createRoom", this::fireNewGame);
             createBtn.setTranslateY(-300);
-            var orSep = texture("Or.png");
+            var orSep = texture("/enterRoom/Or.png");
             orSep.setLayoutY(-180);
-            var enterCodeBtn = createModalButton("enterNum", this::fireResume);
+            var enterCodeBtn = createModalButton("/enterRoom/enterNum", this::fireResume);
             enterCodeBtn.setTranslateY(-50);
 
             Group modal = new Group(createBtn, orSep, enterCodeBtn);
@@ -91,12 +91,12 @@ public class MainMenu extends FXGLMenu {
             getContentRoot().getChildren().addAll(banner, modal);
             play("Play_Button.wav");
         });
-        var optionBtn = createButton("option_btn", () -> {
+        var optionBtn = createButton("/mainResources/option_btn", () -> {
             var banner = texture("/options/optionPane.png", getAppWidth(), 684);
 
             banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
-            var saveBtn = createModalButton("/options/saveBtn", this::fireSave);
+            var saveBtn = createModalButton("/options/saveBtn", this::fireNewGame);
             var fullHD = createModalButton("/options/Full_HDRes", () -> play("Clicked.wav"));
             var HD = createModalButton("/options/HDRes", () -> play("Clicked.wav"));
             var SD = createModalButton("/options/SDRes", () -> play("Clicked.wav"));
@@ -163,7 +163,7 @@ public class MainMenu extends FXGLMenu {
 
             play("Clicked.wav");
         });
-        var quitBtn = createButton("quit_btn", () -> {
+        var quitBtn = createButton("/mainResources/quit_btn", () -> {
             fireExit();
             play("Clicked.wav");
         });

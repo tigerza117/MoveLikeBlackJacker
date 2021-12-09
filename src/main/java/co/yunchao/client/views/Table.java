@@ -17,7 +17,7 @@ public class Table {
     }
 
     public void render() {
-        var bg = texture("game_background.png", getAppWidth(), getAppHeight());
+        var bg = texture("/mainResources/game_background.png", getAppWidth(), getAppHeight());
         var seat = new Seat( 432,293);
         for (String c : new String[]{"03", "04", "05", "55"}) {
             var card = new Card(c);
