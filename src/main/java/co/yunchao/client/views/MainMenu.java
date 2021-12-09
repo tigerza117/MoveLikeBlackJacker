@@ -96,10 +96,20 @@ public class MainMenu extends FXGLMenu {
 
             banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
-            var saveBtn = createModalButton("/options/saveBtn", this::fireNewGame);
-            var fullHD = createModalButton("/options/Full_HDRes", () -> play("Clicked.wav"));
-            var HD = createModalButton("/options/HDRes", () -> play("Clicked.wav"));
-            var SD = createModalButton("/options/SDRes", () -> play("Clicked.wav"));
+            var fullHD = createModalButton("/options/Full_HDRes", () -> {
+                System.out.println("FULL HD RESOLUTION SELECTED!");
+                play("Clicked.wav");
+            });
+
+            var HD = createModalButton("/options/HDRes", () -> {
+                System.out.println("HD RESOLUTION SELECTED!");
+                play("Clicked.wav");
+            });
+            var SD = createModalButton("/options/SDRes", () -> {
+                System.out.println("SD RESOLUTION SELECTED!");
+                play("Clicked.wav");
+            });
+
             CheckBox fullScreen = new CheckBox();
             Slider masterVol = new Slider(0, 100, 0);
             Slider mscVol = new Slider(0, 100, 0);
@@ -122,6 +132,7 @@ public class MainMenu extends FXGLMenu {
             mscVol.setPrefWidth(630);
             sfxVol.setTranslateY(120);
             sfxVol.setPrefWidth(630);
+
 
             var resolutionText = texture("/options/resolution.png");
             resolutionText.setLayoutY(-220);
@@ -149,6 +160,14 @@ public class MainMenu extends FXGLMenu {
 
             fullScreen.getStylesheets().add("/css/style.css");
 
+            var saveBtn = createModalButton("/options/saveBtn", () -> {
+                System.out.println("master vol. : " + (int) masterVol.getValue());
+                System.out.println("music vol. : " + (int) mscVol.getValue());
+                System.out.println("sfx vol. : " + (int) sfxVol.getValue());
+                System.out.println("Full screen toggle : " + fullScreen.isSelected());
+                play("Clicked.wav");
+            });
+
             saveBtn.setLayoutY((getAppHeight() / 2.0)+(saveBtn.getBoundsInLocal().getHeight() / 2)+180);
             saveBtn.setLayoutX((getAppWidth() / 2.0)-(saveBtn.getBoundsInLocal().getWidth() / 3));
 
@@ -167,9 +186,7 @@ public class MainMenu extends FXGLMenu {
             var quitPane = texture("/leaveGame/leavePane.png", getAppWidth(), 290);
             quitPane.setLayoutY((getAppHeight() / 2.0)-(quitPane.getHeight() / 2));
 
-            var yesBtn = createModalButton("/leaveGame/yesBtn", () -> {
-                System.exit(0);
-            });
+            var yesBtn = createModalButton("/leaveGame/yesBtn", () -> System.exit(0));
 
             var noBtn = createModalButton("/leaveGame/noBtn", quitPane::dispose);
             noBtn.setLayoutX(200);
