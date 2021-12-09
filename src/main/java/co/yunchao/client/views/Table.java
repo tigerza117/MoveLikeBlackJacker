@@ -18,16 +18,19 @@ public class Table {
         music = getAssetLoader().load(AssetType.MUSIC, "in-game_bg.mp3");
     }
 
-    public void render(GameScene scene) {
-        var bg = texture("game_background.png", scene.getAppWidth(), scene.getAppHeight());
-
-        scene.getContentRoot().getChildren().addAll(bg);
-        getAudioPlayer().playMusic(music);
+    public void render() {
+        var bg = texture("game_background.png", getAppWidth(), getAppHeight());
+        var seat = new Seat( 432,293);
+        for (String c : new String[]{"03", "04", "05", "55"}) {
+            var card = new Card(c);
+            seat.addCard(card);
+        }
+        getAudioPlayer().loopMusic(music);
         play("Cards_Shuffle.wav");
         play("Checked_Button.wav");
     }
 
-    public void close(GameScene scene) {
+    public void close() {
         getAudioPlayer().stopMusic(music);
     }
 }
