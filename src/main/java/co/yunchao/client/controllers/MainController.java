@@ -11,6 +11,12 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class MainController extends GameApplication {
 
+    private GameController gameController;
+    private MainMenuController mainMenuController;
+    private GameMenuController gameMenuController;
+    private LoadingController loadingController;
+    private StartupController startupController;
+
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setWidth(1920);
@@ -24,29 +30,34 @@ public class MainController extends GameApplication {
         settings.setFontGame("Graduate.ttf");
         settings.setFontText("Graduate.ttf");
         settings.setFontMono("Graduate.ttf");
+        gameController = new GameController();
+        mainMenuController = new MainMenuController();
+        gameMenuController = new GameMenuController();
+        loadingController = new LoadingController();
+        startupController = new StartupController();
         settings.setSceneFactory(new SceneFactory() {
             @NotNull
             @Override
             public FXGLMenu newMainMenu() {
-                return new MainMenu();
+                return mainMenuController.getView();
             }
 
             @NotNull
             @Override
             public FXGLMenu newGameMenu() {
-                return new GameMenu();
+                return gameMenuController.getView();
             }
 
             @NotNull
             @Override
             public LoadingScene newLoadingScene() {
-                return new Loading();
+                return loadingController.getView();
             }
 
             @NotNull
             @Override
             public StartupScene newStartup(int width, int height) {
-                return new Startup(width, height);
+                return startupController.getView();
             }
 
             @NotNull
@@ -76,22 +87,9 @@ public class MainController extends GameApplication {
     protected void initGame() {
         try {
             Thread.sleep(1000);
+            gameController.Start();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void initUI() {
-        Table table = new Table();
-        table.render();
-    }
-
-    public void CreateRoom() {
-        //Statement crate room call to server to create room
-    }
-
-    public void JoinByID() {
-
     }
 }
