@@ -25,12 +25,12 @@ public class MainMenu extends FXGLMenu {
     private Music music;
 
     public MainMenu() {
-        super(MenuType.GAME_MENU);
+        super(MenuType.MAIN_MENU);
 
         var bg = texture("background.png", getAppWidth(), getAppHeight());
-        var logo = texture("homeLogo.png", 280, 288.4);
-        logo.setLayoutX((getAppWidth() / 2.0)-(logo.getWidth() / 2));
-        logo.setLayoutY(20);
+        var logo = texture("homeLogo.png", 400, 412);
+        logo.setLayoutX(759);
+        logo.setLayoutY(71);
         var body = createBody();
 
         getContentRoot().getChildren().addAll(bg, logo, body);
@@ -40,17 +40,16 @@ public class MainMenu extends FXGLMenu {
 
     @Override
     public void onCreate() {
-        int i = 0;
         buttons.forEach(btn -> {
             animationBuilder(this)
-                    .delay(Duration.seconds(i * 0.1))
+                    .delay(Duration.seconds(animIndex * 0.1))
                     .interpolator(Interpolators.BACK.EASE_OUT())
                     .translate(btn)
                     .from(new Point2D(-200, 0))
                     .to(new Point2D(0, 0))
                     .buildAndPlay();
             animationBuilder(this)
-                    .delay(Duration.seconds(i * 0.1))
+                    .delay(Duration.seconds(animIndex * 0.1))
                     .fadeIn(btn)
                     .buildAndPlay();
 
@@ -59,13 +58,15 @@ public class MainMenu extends FXGLMenu {
 
         music = getAssetLoader().load(AssetType.MUSIC, "main_menu_bg.mp3");
 
-        getAudioPlayer().playMusic(music);
+        getAudioPlayer().loopMusic(music);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getAudioPlayer().stopMusic(music);
+        getAudioPlayer().stopAllSoundsAndMusic();
+        getAudioPlayer().onMainLoopPausing();
+        getGameScene().clearEffect();
     }
 
     private Node createBody() {
@@ -81,8 +82,6 @@ public class MainMenu extends FXGLMenu {
             fireExit();
             play("Clicked.wav");
         });
-
-
 
         Group group = new Group(platBtn, optionBtn, quitBtn);
 
@@ -111,13 +110,13 @@ public class MainMenu extends FXGLMenu {
      * @return new button
      */
     private Node createButton(String file, Runnable action) {
-        var bg = texture(file+".png", 674.54/2, 83/2);
+        var bg = texture(file+".png", 674.54, 83);
 
         var btn = new StackPane(bg);
 
         btn.setAlignment(Pos.CENTER_LEFT);
         btn.setOnMouseClicked(e -> action.run());
-
+        
         buttons.add(btn);
 
         btn.setTranslateX(-200);

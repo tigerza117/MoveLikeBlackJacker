@@ -16,11 +16,17 @@ public class MainController extends GameApplication {
 
     @Override
     protected void initSettings(GameSettings settings) {
-        settings.setWidth(1080);
+        settings.setWidth(1920);
         settings.setHeightFromRatio(16/9.0);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
-        settings.setIntroEnabled(true);
+        settings.setIntroEnabled(false);
+        settings.setFullScreenAllowed(true);
+        settings.setDeveloperMenuEnabled(true);
+        settings.set3D(true);
+        settings.setFontGame("Graduate.ttf");
+        settings.setFontText("Graduate.ttf");
+        settings.setFontMono("Graduate.ttf");
         settings.setSceneFactory(new SceneFactory() {
             @NotNull
             @Override
@@ -31,7 +37,7 @@ public class MainController extends GameApplication {
             @NotNull
             @Override
             public FXGLMenu newGameMenu() {
-                return new MainMenu();
+                return new GameMenu();
             }
 
             @NotNull
@@ -60,7 +66,7 @@ public class MainController extends GameApplication {
         onKeyDown(KeyCode.F, () -> {
             getGameController().gotoLoading(() -> {
                 try {
-                    Thread.sleep(4000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -72,7 +78,7 @@ public class MainController extends GameApplication {
     @Override
     protected void initGame() {
         try {
-            Thread.sleep(4000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
