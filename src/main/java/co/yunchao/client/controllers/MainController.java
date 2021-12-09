@@ -16,7 +16,7 @@ public class MainController extends GameApplication {
 
     @Override
     protected void initSettings(GameSettings settings) {
-        settings.setWidth(1080);
+        settings.setWidth(1920);
         settings.setHeightFromRatio(16/9.0);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
