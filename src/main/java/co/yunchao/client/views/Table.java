@@ -1,7 +1,5 @@
 package co.yunchao.client.views;
 
-import com.almasb.fxgl.app.GameApplication;
-import com.almasb.fxgl.app.scene.GameScene;
 import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.core.asset.AssetType;
 import javafx.scene.Node;
@@ -28,6 +26,7 @@ public class Table {
         getAudioPlayer().loopMusic(music);
         play("Cards_Shuffle.wav");
         play("Checked_Button.wav");
+        getGameScene().addUINodes(bg);
     }
 
     public void close() {
