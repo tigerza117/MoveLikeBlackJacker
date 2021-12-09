@@ -11,15 +11,19 @@ import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Slider;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.almasb.fxgl.dsl.FXGL.getAudioPlayer;
 
 public class MainMenu extends FXGLMenu {
     private final List<Node> buttons = new ArrayList<>();
@@ -91,7 +95,68 @@ public class MainMenu extends FXGLMenu {
             play("Play_Button.wav");
         });
         var optionBtn = createButton("option_btn", () -> {
-            fireNewGame();
+            var banner = texture("optionPane.png", getAppWidth(), 684);
+
+            Text res = new Text("RESOLUTIONS");
+            Text fullScreenText = new Text("FULL SCREEN");
+            Text masText = new Text("MASTER VOL.");
+            Text mscText = new Text("MUSIC VOL.");
+            Text sfxText = new Text("SFX VOL0.");
+            res.getStyleClass().add("#textLabel");
+
+            Group text = new Group(res, fullScreenText, masText, mscText, sfxText);
+            text.setLayoutY((getAppHeight() / 2.0)+(text.getBoundsInLocal().getHeight() / 4));
+            text.setLayoutX((getAppWidth() / 2.0)-(text.getBoundsInLocal().getWidth() / 2));
+
+            banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
+
+            var saveBtn = createModalButton("saveBtn", () -> play("Clicked.wav"));
+            var fullHD = createModalButton("Full_HDRes", () -> play("Clicked.wav"));
+            var HD = createModalButton("HDRes", () -> play("Clicked.wav"));
+            var SD = createModalButton("SDRes", () -> play("Clicked.wav"));
+            CheckBox fullScreen = new CheckBox();
+            Slider masterVol = new Slider(0, 100, 0);
+            Slider mscVol = new Slider(0, 100, 0);
+            Slider sfxVol = new Slider(0, 100, 0);
+            var tick = texture("sliderPicker.png");
+            fullScreen.getStyleClass().add("big-check-box");
+
+            fullHD.setTranslateX(100);
+            HD.setTranslateX(340);
+            SD.setTranslateX(550);
+            fullHD.setTranslateY(-242);
+            HD.setTranslateY(-230);
+            SD.setTranslateY(-230);
+
+            fullScreen.setTranslateY((getAppHeight()/2.0) - 120);
+            fullScreen.setTranslateX((getAppWidth()/2.0) - 200);
+
+            masterVol.setTranslateY(-40);
+            masterVol.setPrefWidth(630);
+            mscVol.setTranslateY(40);
+            mscVol.setPrefWidth(630);
+            sfxVol.setTranslateY(120);
+            sfxVol.setPrefWidth(630);
+
+            Group sliders = new Group(masterVol, mscVol, sfxVol);
+            sliders.setTranslateX(110);
+
+            Group options = new Group(fullHD, HD, SD);
+
+            fullScreen.getStylesheets().add("/css/style.css");
+
+            saveBtn.setLayoutY((getAppHeight() / 2.0)+(saveBtn.getBoundsInLocal().getHeight() / 2)+180);
+            saveBtn.setLayoutX((getAppWidth() / 2.0)-(saveBtn.getBoundsInLocal().getWidth() / 3));
+
+            getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
+            options.setLayoutY((getAppHeight() / 2.0)+(options.getBoundsInLocal().getHeight() / 3));
+            options.setLayoutX((getAppWidth() / 2.0)-(options.getBoundsInLocal().getWidth() / 2));
+
+            sliders.setLayoutY((getAppHeight() / 2.0)+(options.getBoundsInLocal().getHeight() / 3));
+            sliders.setLayoutX((getAppWidth() / 2.0)-(options.getBoundsInLocal().getWidth() / 2));
+
+            getContentRoot().getChildren().addAll(banner, options, text, fullScreen, sliders, saveBtn);
+
             play("Clicked.wav");
         });
         var quitBtn = createButton("quit_btn", () -> {
