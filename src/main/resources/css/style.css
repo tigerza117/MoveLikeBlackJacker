@@ -1,0 +1,26 @@
+.big-check-box > .box {
+    -fx-padding: .8em ;
+    -fx-background-color: transparent;
+    -fx-border-color: #EFEFEF;
+    -fx-border-radius: 5px;
+    -fx-border-width: 3px;
+}
+.big-check-box > .box > .mark {
+    -fx-padding: 1.5em;
+}
+.big-check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+.big-check-box:selected .box {
+    -fx-background-color: #EFB820;
+    -fx-border-color: transparent;
+    -fx-border-width: 3px;
+}
+
+.textLabel{
+    -fx-font: 100px Tahoma;
+    -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, red 50%);
+    -fx-stroke: black;
+    -fx-stroke-width: 1;
+}

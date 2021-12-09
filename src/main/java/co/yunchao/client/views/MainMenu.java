@@ -11,6 +11,8 @@ import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Slider;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
@@ -27,8 +29,8 @@ public class MainMenu extends FXGLMenu {
     public MainMenu() {
         super(MenuType.MAIN_MENU);
 
-        var bg = texture("background.png", getAppWidth(), getAppHeight());
-        var logo = texture("homeLogo.png", 400, 412);
+        var bg = texture("/mainResources/background.png", getAppWidth(), getAppHeight());
+        var logo = texture("/mainResources/homeLogo.png", 400, 412);
         logo.setLayoutX(759);
         logo.setLayoutY(71);
         var body = createBody();
@@ -70,31 +72,114 @@ public class MainMenu extends FXGLMenu {
     }
 
     private Node createBody() {
-        var playBtn = createButton("play_btn", () -> {
-            var banner = texture("yellow_banner.png", getAppWidth(), 500);
+        var playBtn = createButton("/mainResources/play_btn", () -> {
+            var banner = texture("/enterRoom/yellow_banner.png", getAppWidth(), 500);
             banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
-            var createBtn = createModalButton("createRoom", this::fireNewGame);
+            var createBtn = createModalButton("/enterRoom/createRoom", this::fireNewGame);
             createBtn.setTranslateY(-300);
-            var orSep = texture("Or.png");
+            var orSep = texture("/enterRoom/Or.png");
             orSep.setLayoutY(-180);
-            var enterCodeBtn = createModalButton("enterNum", this::fireResume);
+            var enterCodeBtn = createModalButton("/enterRoom/enterNum", this::fireResume);
             enterCodeBtn.setTranslateY(-50);
 
-            Group modal = new Group(createBtn, orSep, enterCodeBtn);
+            Group playMenu = new Group(createBtn, orSep, enterCodeBtn);
 
             getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
-            modal.setLayoutY((getAppHeight() / 2.0)+(modal.getBoundsInLocal().getHeight() / 3));
-            modal.setLayoutX((getAppWidth() / 2.0)-(modal.getBoundsInLocal().getWidth() / 2));
-            getContentRoot().getChildren().addAll(banner, modal);
+            playMenu.setLayoutY((getAppHeight() / 2.0)+(playMenu.getBoundsInLocal().getHeight() / 3));
+            playMenu.setLayoutX((getAppWidth() / 2.0)-(playMenu.getBoundsInLocal().getWidth() / 2));
+            getContentRoot().getChildren().addAll(banner, playMenu);
             play("Play_Button.wav");
         });
-        var optionBtn = createButton("option_btn", () -> {
-            fireNewGame();
+        var optionBtn = createButton("/mainResources/option_btn", () -> {
+            var banner = texture("/options/optionPane.png", getAppWidth(), 684);
+
+            banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
+
+            var saveBtn = createModalButton("/options/saveBtn", this::fireNewGame);
+            var fullHD = createModalButton("/options/Full_HDRes", () -> play("Clicked.wav"));
+            var HD = createModalButton("/options/HDRes", () -> play("Clicked.wav"));
+            var SD = createModalButton("/options/SDRes", () -> play("Clicked.wav"));
+            CheckBox fullScreen = new CheckBox();
+            Slider masterVol = new Slider(0, 100, 0);
+            Slider mscVol = new Slider(0, 100, 0);
+            Slider sfxVol = new Slider(0, 100, 0);
+            fullScreen.getStyleClass().add("big-check-box");
+
+            fullHD.setTranslateX(100);
+            HD.setTranslateX(340);
+            SD.setTranslateX(550);
+            fullHD.setTranslateY(-242);
+            HD.setTranslateY(-230);
+            SD.setTranslateY(-230);
+
+            fullScreen.setTranslateY((getAppHeight()/2.0) - 120);
+            fullScreen.setTranslateX((getAppWidth()/2.0) - 200);
+
+            masterVol.setTranslateY(-40);
+            masterVol.setPrefWidth(630);
+            mscVol.setTranslateY(40);
+            mscVol.setPrefWidth(630);
+            sfxVol.setTranslateY(120);
+            sfxVol.setPrefWidth(630);
+
+            var resolutionText = texture("/options/resolution.png");
+            resolutionText.setLayoutY(-220);
+            var fullScreenText = texture("/options/fullText.png");
+            fullScreenText.setLayoutY(-120);
+            var masText = texture("/options/masterText.png");
+            masText.setLayoutY(-40);
+            var mscText = texture("/options/musicText.png");
+            mscText.setLayoutY(40);
+            var sfxText = texture("/options/sfxV.png");
+            sfxText.setLayoutY(120);
+
+            var separateLine = texture("/options/sepLine.png");
+            separateLine.setLayoutX((getAppWidth()/2.0)-250);
+            separateLine.setLayoutY(310);
+
+            Group text = new Group(resolutionText, fullScreenText, masText, mscText, sfxText);
+            text.setLayoutY((getAppHeight() / 3.0)+(text.getBoundsInLocal().getHeight() / 1.8));
+            text.setLayoutX((getAppWidth() / 4.0)-(text.getBoundsInLocal().getWidth() / 2.0));
+
+            Group sliders = new Group(masterVol, mscVol, sfxVol);
+            sliders.setTranslateX(110);
+
+            Group options = new Group(fullHD, HD, SD);
+
+            fullScreen.getStylesheets().add("/css/style.css");
+
+            saveBtn.setLayoutY((getAppHeight() / 2.0)+(saveBtn.getBoundsInLocal().getHeight() / 2)+180);
+            saveBtn.setLayoutX((getAppWidth() / 2.0)-(saveBtn.getBoundsInLocal().getWidth() / 3));
+
+            getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
+            options.setLayoutY((getAppHeight() / 2.0)+(options.getBoundsInLocal().getHeight() / 3));
+            options.setLayoutX((getAppWidth() / 2.0)-(options.getBoundsInLocal().getWidth() / 2));
+
+            sliders.setLayoutY((getAppHeight() / 2.0)+(options.getBoundsInLocal().getHeight() / 3));
+            sliders.setLayoutX((getAppWidth() / 2.0)-(options.getBoundsInLocal().getWidth() / 2));
+
+            getContentRoot().getChildren().addAll(banner, options, text, fullScreen, sliders, saveBtn, separateLine);
+
             play("Clicked.wav");
         });
-        var quitBtn = createButton("quit_btn", () -> {
-            fireExit();
+        var quitBtn = createButton("/mainResources/quit_btn", () -> {
+            var quitPane = texture("/leaveGame/leavePane.png", getAppWidth(), 290);
+            quitPane.setLayoutY((getAppHeight() / 2.0)-(quitPane.getHeight() / 2));
+
+            var yesBtn = createModalButton("/leaveGame/yesBtn", () -> {
+                System.exit(0);
+            });
+
+            var noBtn = createModalButton("/leaveGame/noBtn", quitPane::dispose);
+            noBtn.setLayoutX(200);
+
+            Group leaveMenu = new Group(yesBtn, noBtn);
+
+            getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
+            leaveMenu.setLayoutY((getAppHeight() / 2.0)+(leaveMenu.getBoundsInLocal().getHeight() / 3.5));
+            leaveMenu.setLayoutX((getAppWidth() / 2.0)-(leaveMenu.getBoundsInLocal().getWidth() / 2));
+            getContentRoot().getChildren().addAll(quitPane, leaveMenu);
             play("Clicked.wav");
         });
 
