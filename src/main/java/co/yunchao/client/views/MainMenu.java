@@ -58,13 +58,15 @@ public class MainMenu extends FXGLMenu {
 
         music = getAssetLoader().load(AssetType.MUSIC, "main_menu_bg.mp3");
 
-        getAudioPlayer().playMusic(music);
+        getAudioPlayer().loopMusic(music);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getAudioPlayer().stopMusic(music);
+        getAudioPlayer().stopAllSoundsAndMusic();
+        getAudioPlayer().onMainLoopPausing();
+        getGameScene().clearEffect();
     }
 
     private Node createBody() {
