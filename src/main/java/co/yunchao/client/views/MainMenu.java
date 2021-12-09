@@ -25,7 +25,7 @@ public class MainMenu extends FXGLMenu {
     private Music music;
 
     public MainMenu() {
-        super(MenuType.GAME_MENU);
+        super(MenuType.MAIN_MENU);
 
         var bg = texture("background.png", getAppWidth(), getAppHeight());
         var logo = texture("homeLogo.png", 280, 288.4);
