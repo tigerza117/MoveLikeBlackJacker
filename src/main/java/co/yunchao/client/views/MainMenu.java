@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
@@ -70,8 +71,23 @@ public class MainMenu extends FXGLMenu {
     }
 
     private Node createBody() {
-        var platBtn = createButton("play_btn", () -> {
-            fireNewGame();
+        var playBtn = createButton("play_btn", () -> {
+            var banner = texture("yellow_banner.png", getAppWidth(), 500);
+            banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
+
+            var createBtn = createModalButton("createRoom", this::fireNewGame);
+            createBtn.setTranslateY(-300);
+            var orSep = texture("Or.png");
+            orSep.setLayoutY(-180);
+            var enterCodeBtn = createModalButton("enterNum", this::fireResume);
+            enterCodeBtn.setTranslateY(-50);
+
+            Group modal = new Group(createBtn, orSep, enterCodeBtn);
+
+            getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
+            modal.setLayoutY((getAppHeight() / 2.0)+(modal.getBoundsInLocal().getHeight() / 3));
+            modal.setLayoutX((getAppWidth() / 2.0)-(modal.getBoundsInLocal().getWidth() / 2));
+            getContentRoot().getChildren().addAll(banner, modal);
             play("Play_Button.wav");
         });
         var optionBtn = createButton("option_btn", () -> {
@@ -83,7 +99,7 @@ public class MainMenu extends FXGLMenu {
             play("Clicked.wav");
         });
 
-        Group group = new Group(platBtn, optionBtn, quitBtn);
+        Group group = new Group(playBtn, optionBtn, quitBtn);
 
         int i = 0;
         for (Node n : group.getChildren()) {
@@ -124,5 +140,20 @@ public class MainMenu extends FXGLMenu {
         btn.setCacheHint(CacheHint.SPEED);
 
         return btn;
+    }
+    protected Node createModalButton(String file, Runnable action) {
+        var bg = texture(file+".png");
+
+        var modalBtn = new StackPane(bg);
+
+        modalBtn.setAlignment(Pos.CENTER_LEFT);
+        modalBtn.setOnMouseClicked(e -> action.run());
+
+        buttons.add(modalBtn);
+
+        modalBtn.setCache(true);
+        modalBtn.setCacheHint(CacheHint.SPEED);
+
+        return modalBtn;
     }
 }
