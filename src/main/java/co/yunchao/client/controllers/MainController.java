@@ -66,7 +66,7 @@ public class MainController extends GameApplication {
         onKeyDown(KeyCode.F, () -> {
             getGameController().gotoLoading(() -> {
                 try {
-                    Thread.sleep(4000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -78,7 +78,7 @@ public class MainController extends GameApplication {
     @Override
     protected void initGame() {
         try {
-            Thread.sleep(4000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
