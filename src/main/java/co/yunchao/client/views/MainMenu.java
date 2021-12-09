@@ -83,12 +83,12 @@ public class MainMenu extends FXGLMenu {
             var enterCodeBtn = createModalButton("/enterRoom/enterNum", this::fireResume);
             enterCodeBtn.setTranslateY(-50);
 
-            Group modal = new Group(createBtn, orSep, enterCodeBtn);
+            Group playMenu = new Group(createBtn, orSep, enterCodeBtn);
 
             getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
-            modal.setLayoutY((getAppHeight() / 2.0)+(modal.getBoundsInLocal().getHeight() / 3));
-            modal.setLayoutX((getAppWidth() / 2.0)-(modal.getBoundsInLocal().getWidth() / 2));
-            getContentRoot().getChildren().addAll(banner, modal);
+            playMenu.setLayoutY((getAppHeight() / 2.0)+(playMenu.getBoundsInLocal().getHeight() / 3));
+            playMenu.setLayoutX((getAppWidth() / 2.0)-(playMenu.getBoundsInLocal().getWidth() / 2));
+            getContentRoot().getChildren().addAll(banner, playMenu);
             play("Play_Button.wav");
         });
         var optionBtn = createButton("/mainResources/option_btn", () -> {
@@ -164,7 +164,22 @@ public class MainMenu extends FXGLMenu {
             play("Clicked.wav");
         });
         var quitBtn = createButton("/mainResources/quit_btn", () -> {
-            fireExit();
+            var quitPane = texture("/leaveGame/leavePane.png", getAppWidth(), 290);
+            quitPane.setLayoutY((getAppHeight() / 2.0)-(quitPane.getHeight() / 2));
+
+            var yesBtn = createModalButton("/leaveGame/yesBtn", () -> {
+                System.exit(0);
+            });
+
+            var noBtn = createModalButton("/leaveGame/noBtn", quitPane::dispose);
+            noBtn.setLayoutX(200);
+
+            Group leaveMenu = new Group(yesBtn, noBtn);
+
+            getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
+            leaveMenu.setLayoutY((getAppHeight() / 2.0)+(leaveMenu.getBoundsInLocal().getHeight() / 3.5));
+            leaveMenu.setLayoutX((getAppWidth() / 2.0)-(leaveMenu.getBoundsInLocal().getWidth() / 2));
+            getContentRoot().getChildren().addAll(quitPane, leaveMenu);
             play("Clicked.wav");
         });
 
