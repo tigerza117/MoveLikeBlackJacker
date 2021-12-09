@@ -83,8 +83,6 @@ public class MainMenu extends FXGLMenu {
             play("Clicked.wav");
         });
 
-
-
         Group group = new Group(platBtn, optionBtn, quitBtn);
 
         int i = 0;
@@ -118,7 +116,7 @@ public class MainMenu extends FXGLMenu {
 
         btn.setAlignment(Pos.CENTER_LEFT);
         btn.setOnMouseClicked(e -> action.run());
-
+        
         buttons.add(btn);
 
         btn.setTranslateX(-200);
