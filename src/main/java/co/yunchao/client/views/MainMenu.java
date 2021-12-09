@@ -109,7 +109,7 @@ public class MainMenu extends FXGLMenu {
      * @param action button action
      * @return new button
      */
-    private Node createButton(String file, Runnable action) {
+    protected Node createButton(String file, Runnable action) {
         var bg = texture(file+".png", 674.54, 83);
 
         var btn = new StackPane(bg);
