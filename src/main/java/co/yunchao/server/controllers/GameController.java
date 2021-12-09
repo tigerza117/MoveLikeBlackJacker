@@ -140,7 +140,7 @@ public class GameController implements Runnable {
         }
     }
 
-    public void playerCheckWin(Player player) {
+    public boolean playerCheckWin(Player player) {
             if(playerCon.CheckPlayerBust()){
                 return true;
         }
