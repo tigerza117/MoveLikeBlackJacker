@@ -37,7 +37,7 @@ public class MainController extends GameApplication {
             @NotNull
             @Override
             public FXGLMenu newGameMenu() {
-                return new MainMenu();
+                return new GameMenu();
             }
 
             @NotNull
