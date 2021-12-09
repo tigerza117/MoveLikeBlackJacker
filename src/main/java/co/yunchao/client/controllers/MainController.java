@@ -30,33 +30,32 @@ public class MainController extends GameApplication {
         settings.setFontGame("Graduate.ttf");
         settings.setFontText("Graduate.ttf");
         settings.setFontMono("Graduate.ttf");
-        gameController = new GameController();
-        mainMenuController = new MainMenuController();
-        gameMenuController = new GameMenuController();
-        loadingController = new LoadingController();
-        startupController = new StartupController();
         settings.setSceneFactory(new SceneFactory() {
             @NotNull
             @Override
             public FXGLMenu newMainMenu() {
+                mainMenuController = new MainMenuController();
                 return mainMenuController.getView();
             }
 
             @NotNull
             @Override
             public FXGLMenu newGameMenu() {
+                gameMenuController = new GameMenuController();
                 return gameMenuController.getView();
             }
 
             @NotNull
             @Override
             public LoadingScene newLoadingScene() {
+                loadingController = new LoadingController();
                 return loadingController.getView();
             }
 
             @NotNull
             @Override
             public StartupScene newStartup(int width, int height) {
+                startupController = new StartupController();
                 return startupController.getView();
             }
 
@@ -85,6 +84,8 @@ public class MainController extends GameApplication {
 
     @Override
     protected void initGame() {
+
+        gameController = new GameController();
         try {
             Thread.sleep(1000);
             gameController.Start();
