@@ -20,7 +20,13 @@ public class MainController extends GameApplication {
         settings.setHeightFromRatio(16/9.0);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
-        settings.setIntroEnabled(true);
+        settings.setIntroEnabled(false);
+        settings.setFullScreenAllowed(true);
+        settings.setDeveloperMenuEnabled(true);
+        settings.set3D(true);
+        settings.setFontGame("Graduate.ttf");
+        settings.setFontText("Graduate.ttf");
+        settings.setFontMono("Graduate.ttf");
         settings.setSceneFactory(new SceneFactory() {
             @NotNull
             @Override
