@@ -2,7 +2,7 @@
     -fx-padding: .8em ;
     -fx-background-color: transparent;
     -fx-border-color: #EFEFEF;
-    -fx-border-radius: 10px;
+    -fx-border-radius: 5px;
     -fx-border-width: 3px;
 }
 .big-check-box > .box > .mark {
