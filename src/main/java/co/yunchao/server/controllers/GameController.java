@@ -142,12 +142,12 @@ public class GameController implements Runnable {
 
     public void playerCheckWin(Player player) {
             if(playerCon.CheckPlayerBust()){
-                return true;
+                return;
         }
             else if(dealerCon.CheckDealerBust()){
                 if(!playerCon.CheckPlayerBust())
                     playerWinable = true;
-                    return true;
+                    return;
         }
             else if(dealerCon.CheckDealer5Card()){
                 if(playerCon.CheckPlayer5Card()){
