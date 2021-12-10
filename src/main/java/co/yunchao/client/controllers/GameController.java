@@ -1,5 +1,7 @@
 package co.yunchao.client.controllers;
 
+import co.yunchao.client.views.Card;
+import co.yunchao.client.views.Chip;
 import co.yunchao.client.views.Table;
 
 public class GameController {
