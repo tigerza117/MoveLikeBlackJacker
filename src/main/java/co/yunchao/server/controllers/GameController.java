@@ -220,17 +220,37 @@ public class GameController implements Runnable {
         try{
             if(this.playerTimer != 0 && !this.playerCon.getPlayerStand() && !this.playerControls.get(this.getPlayRound()).CheckPlayerBust()){
                 while (true){
-                    if(this.playerTimer != 0 && !this.playerControls.get(this.getPlayRound()).CheckPlayerBust()){
+                    if(this.playerControls.get(this.getPlayRound()).CheckPlayerBlackJack()){
+                        System.out.println("This Player got BlackJack.");
+                        this.getPlayerController().setPlayerStand(true);
+                        this.setPlayerTimer(20);
+                        this.playRound++;
+                        System.out.println(this.getPlayer().getName() + " Turn.");
+                    }
+                    else if(this.CheckLast() && this.playerControls.get(this.getPlayRound()).CheckPlayerBlackJack()){
+                        System.out.println("This Player got BlackJack.");
+                        this.getPlayerController().setPlayerStand(true);
+                        System.out.println("Break");
+                        break;
+                    }
+                    else if(this.playerTimer != 0 && !this.playerControls.get(this.getPlayRound()).CheckPlayerBust() && !this.playerControls.get(this.getPlayRound()).CheckPlayer5Card()){
                         System.out.println(this.playerControls.get(this.getPlayRound()).getPlayer().getName() + " point " + this.playerControls.get(this.getPlayRound()).getPlayer().getInventory().getPoint());
                     System.out.println(this.playerTimer);
                     this.playerTimer--;
                     Thread.sleep(1000);
                     this.nextRound();
                     }
-                    else if(this.CheckLast() && (this.playerTimer == 0 || this.playerControls.get(this.getPlayRound()).CheckPlayerBust())){
+                    else if(this.CheckLast() && (this.playerTimer == 0 || this.playerControls.get(this.getPlayRound()).CheckPlayerBust() || this.playerControls.get(this.getPlayRound()).CheckPlayer5Card())){
                         this.getPlayerController().setPlayerStand(true);
                         System.out.println("Break");
                         break;
+                    }
+                    else if(!this.CheckLast() && this.playerControls.get(this.getPlayRound()).CheckPlayer5Card()){
+                        System.out.println("This Player got 5 cards.");
+                        this.getPlayerController().setPlayerStand(true);
+                        this.setPlayerTimer(20);
+                        this.playRound++;
+                        System.out.println(this.getPlayer().getName() + " Turn.");
                     }
                     else if(!this.CheckLast()){
                         System.out.println("This Player Bust or Time out!");

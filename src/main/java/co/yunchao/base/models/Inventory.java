@@ -48,10 +48,10 @@ public class Inventory {
         }
         for (Object obj: aceStack.toArray()) {
             Card card = (Card) obj;
-            if (points + 10 + aceStack.size() > 21) {
+            if (points + 11 + aceStack.size() > 21) {
                 points++;
             } else {
-                points+=10;
+                points+=11;
             }
             aceStack.remove(card);
         }
