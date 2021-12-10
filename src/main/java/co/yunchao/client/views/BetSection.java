@@ -5,7 +5,6 @@ import com.almasb.fxgl.ui.FontType;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -17,12 +16,14 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class BetSection {
     private final Group group;
     private final Text balanceText;
-
+    private final LeaveButtonAction leaveAction = new LeaveButtonAction();
     private final HashMap<String, Node> buttons;
 
     BetSection() {
         group = new Group();
         balanceText = FXGL.getUIFactoryService().newText("0$", Color.WHITE, FontType.GAME, 52);
+
+        getGameScene().getContentRoot().getChildren().addAll(leaveAction.getGroup());
 
         var optionBtn = texture("in_game_option_btn.png");
         var leaveBtn = texture("leave_btn.png");
@@ -55,22 +56,8 @@ public class BetSection {
         }};
 
         leaveBtn.setOnMouseClicked(event ->{
-            var quitPane = texture("/leaveGame/leavePane.png", getAppWidth(), 290);
-            quitPane.setLayoutY((getAppHeight() / 2.0)-(quitPane.getHeight() / 2));
-
-            var yesBtn = texture("/leaveGame/yesBtn.png");
-            yesBtn.setOnMouseClicked(yes -> System.exit(0));
-
-            var noBtn = texture("/leaveGame/noBtn.png");
-            noBtn.setOnMouseClicked(no -> quitPane.dispose());
-            noBtn.setLayoutX(200);
-
-            Group leaveMenu = new Group(yesBtn, noBtn);
-
-            getGameScene().getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
-            leaveMenu.setLayoutY((getAppHeight() / 2.0)+(leaveMenu.getBoundsInLocal().getHeight() / 3.5));
-            leaveMenu.setLayoutX((getAppWidth() / 2.0)-(leaveMenu.getBoundsInLocal().getWidth() / 2));
-            getGameScene().getContentRoot().getChildren().addAll(quitPane, leaveMenu);
+            System.out.println("Leave Game");
+            leaveAction.render();
             play("Clicked.wav");
             }
         );
