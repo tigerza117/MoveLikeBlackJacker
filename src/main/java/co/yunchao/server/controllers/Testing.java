@@ -87,15 +87,25 @@ public class Testing implements ActionListener {
         }
         else if(e.getSource().equals(btn.get("dbd"))){
             this.gm.getPlayer().pickUpCard(this.gm.getDeck());
-            this.gm.checkDoubleDown();
-            this.gm.nextRound();
-            System.out.println((this.gm.getPlayer().getName()));
-
+            if(!this.gm.CheckLast()) {
+                System.out.println("PlayRound" + this.gm.getPlayRound());
+                this.gm.checkDoubleDown();
+                this.gm.nextRound();
+                System.out.println((this.gm.getPlayer().getName()));
+            }
+            else{
+                this.gm.LastStand();
+            }
         }
         else if(e.getSource().equals(btn.get("stand"))){
-            this.gm.checkStand();
-            this.gm.nextRound();
-            System.out.println("Player before you have stand. Now it's your turn " + this.gm.getPlayer().getName());
+            if(!this.gm.CheckLast()) {
+                this.gm.checkStand();
+                this.gm.nextRound();
+                System.out.println("Player before you have stand. Now it's your turn " + this.gm.getPlayer().getName());
+            }
+            else{
+                this.gm.LastStand();
+            }
         }
     }
 

@@ -129,12 +129,16 @@ public class GameController implements Runnable {
         }
     }
 
-    public void checkStand(){
+    public synchronized void checkStand(){
         if(this.getPlayer().getInventory().getPoint() <= 21){
             this.getPlayerController().setPlayerStand(true);
             this.setPlayerTimer(20);
             this.playRound++;
         }
+    }
+    public synchronized void LastStand(){
+        this.getPlayerController().setPlayerStand(true);
+        this.setPlayerTimer(0);
     }
 
     public void playerCheckWin(Player player) {
@@ -175,6 +179,14 @@ public class GameController implements Runnable {
         }
     }
 
+    public synchronized boolean CheckLast(){
+        if(this.playRound + 1 == this.players.size()){
+            return true;
+        }
+        return false;
+    }
+
+
     public void setPlayerTimer(int time){
         this.playerTimer = time;
     }
@@ -208,10 +220,18 @@ public class GameController implements Runnable {
         try{
             if(this.playerTimer != 0 && !this.playerCon.getPlayerStand()){
                 while (true){
+                    if(this.playerTimer != 0){
                     System.out.println(this.playerTimer);
                     this.playerTimer--;
                     Thread.sleep(1000);
-                    this.nextRound();}
+                    this.nextRound();
+                    }
+                    else{
+                        System.out.println("Break");
+                        break;
+                    }
+                }
+
             }
             else{
                 this.thread.wait();
