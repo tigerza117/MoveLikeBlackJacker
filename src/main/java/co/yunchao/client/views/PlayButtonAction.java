@@ -28,7 +28,7 @@ public class PlayButtonAction {
         var enterCodeBtn = texture("/enterRoom/enterNum.png");
         enterCodeBtn.setTranslateY(-50);
 
-        createBtn.setOnMouseClicked( e-> FXGL.getGameController().gotoPlay());
+        createBtn.setOnMouseClicked( e -> FXGL.getGameController().gotoPlay());
 
         Group playMenu = new Group(createBtn, orSep, enterCodeBtn);
 
