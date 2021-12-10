@@ -36,6 +36,7 @@ public class Table {
 
     public void render() {
         group.setVisible(true);
+        betSection.getGroup().setVisible(true);
     }
 
     public void close() {
