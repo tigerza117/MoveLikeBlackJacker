@@ -1,6 +1,5 @@
 package co.yunchao.client.controllers;
 
-import co.yunchao.client.views.*;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.*;
@@ -84,7 +83,6 @@ public class MainController extends GameApplication {
 
     @Override
     protected void initGame() {
-
         gameController = new GameController();
         try {
             Thread.sleep(1000);
