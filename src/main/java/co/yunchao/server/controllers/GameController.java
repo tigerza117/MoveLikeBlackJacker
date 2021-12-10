@@ -29,13 +29,7 @@ public class GameController implements Runnable {
         this.players = players;
         boolean first = true;
         for(Player player : players){
-            if(first){
-                dealerCon = new DealerController(player);
-                first = false;
-            }
-            else {
-                this.playerControls.add(new PlayerController(player));
-;            }
+            this.playerControls.add(new PlayerController(player));
         }
         this.Initial();
     }
@@ -59,7 +53,7 @@ public class GameController implements Runnable {
         }
 
         //อาจจะไม่ใช้ไปใช้ playerCheckWin เเทน เก็บไว้เผิ่อเฉยๆ
-        for(Player player: this.players){
+        /*for(Player player: this.players){
             if(dealerCon.CheckDealerBlackJack()) {
                 if (playerCon.CheckPlayerBlackJack()) {
                     playerWinnable = true;
@@ -85,10 +79,10 @@ public class GameController implements Runnable {
             else{
                 playerWinnable = false;
             }
-        }
+        }*/
 
         thread = new Thread(this);
-        //thread.start();
+        thread.start();
 
         /*while(!gameEnd){
             if(this.getPlayerControls().get(this.getPlayRound()).CheckPlayerBust()){
@@ -121,18 +115,17 @@ public class GameController implements Runnable {
     }
 
     public void checkHit(){
-        for(Player player: this.players){
-            if(player.getInventory().getPoint() != 21 && player.getInventory().getPoint() < 21){
-                this.playerCon.setPlayerHit(true);
-            }
+        if(this.getPlayer().getInventory().getPoint() != 21 && this.getPlayer().getInventory().getPoint() < 21){
+            this.playerCon.setPlayerHit(true);
         }
     }
 
-    public void checkDoubleDown(){
-        for(Player player: this.players){
-            if(player.getInventory().getPoint() != 21){
-                this.playerCon.setPlayerDoubledown(true);
-            }
+    public synchronized void checkDoubleDown(){
+        if(this.getPlayer().getInventory().getPoint() != 21){
+            this.getPlayerController().setPlayerDoubledown(true);
+            this.getPlayerController().setPlayerStand(true);
+            this.setPlayerTimer(20);
+            this.playRound++;
         }
     }
 
@@ -174,12 +167,11 @@ public class GameController implements Runnable {
         playerWinnable = false;
     }
 
-    public void nextRound(){
-        if(this.playerControls.get(playRound-1).getPlayerStand()){
+    public synchronized void nextRound (){
+        if(this.playerControls.get(playRound).getPlayerStand()){
             this.playerControls.get(playRound).setPlayerHit(false);
             this.playerControls.get(playRound).setPlayerDoubledown(false);
             this.playerControls.get(playRound).setPlayerBet(false);
-            this.playRound++;
         }
     }
 
@@ -214,13 +206,16 @@ public class GameController implements Runnable {
     @Override
     public void run() {
         try{
-            while (this.playerTimer != 0 && !this.playerCon.getPlayerStand()){
-                System.out.println(this.playerTimer);
-                this.playerTimer--;
-                Thread.sleep(1000);
-                this.nextRound();
+            if(this.playerTimer != 0 && !this.playerCon.getPlayerStand()){
+                while (true){
+                    System.out.println(this.playerTimer);
+                    this.playerTimer--;
+                    Thread.sleep(1000);
+                    this.nextRound();}
             }
-            this.thread.wait();
+            else{
+                this.thread.wait();
+            }
         }
         catch (InterruptedException e) {
             e.printStackTrace();
