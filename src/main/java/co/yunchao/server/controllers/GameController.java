@@ -30,6 +30,9 @@ public class GameController implements Runnable {
         boolean first = true;
         for(Player player : players){
             this.playerControls.add(new PlayerController(player));
+            if(players.indexOf(player) == 4){
+                this.dealerCon = new DealerController(player);
+            }
         }
         this.Initial();
     }
@@ -46,71 +49,44 @@ public class GameController implements Runnable {
                     player.pickUpCard(this.deck);
                 }
             }
+            this.playerCon.setCurrentBetStage(50);
+            this.playerCon.bet();
         }
 
         for(Player player: this.players){
             System.out.println(player.getInventory().getPoint());
         }
-
-        //อาจจะไม่ใช้ไปใช้ playerCheckWin เเทน เก็บไว้เผิ่อเฉยๆ
-        /*for(Player player: this.players){
-            if(dealerCon.CheckDealerBlackJack()) {
-                if (playerCon.CheckPlayerBlackJack()) {
-                    playerWinnable = true;
-                    playerGotBlackJack = true;
-                } else {
-                    playerWinnable = false;
-                }
-            }
-            else if(dealerCon.CheckDealer5Card()){
-                if (playerCon.CheckPlayerBlackJack()){
-                    playerWinnable = true;
-                    playerGotBlackJack = true;
-                }
-                else playerWinnable = playerCon.CheckPlayer5Card();
-            }
-            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand()){
-                playerWinnable = true;
-            }
-            else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() == player.getInventory().getPoint() && playerCon.getPlayerStand()){
-                playerDraw = true;
-                playerWinnable = false;
-            }
-            else{
-                playerWinnable = false;
-            }
-        }*/
-
         thread = new Thread(this);
         thread.start();
-
-        /*while(!gameEnd){
-            if(this.getPlayerControls().get(this.getPlayRound()).CheckPlayerBust()){
-                this.playerWinnable = false;
-                //disable ทุกฟังก์ชั่น
-            }
-        }*/
     }
 
     // สรุปสุดท้ายใครชนะไม่ชนะ
     public void endResult(){
+        this.setPlayRound(0);
         for(Player player: this.players){
-            playerCheckWin(player);
             if (playerWinnable){
                 //ชนะปกติ
+                this.getPlayerControls().get(this.getPlayRound()).getPlayer().setChips(this.getPlayerFromPlayerCon().getChips() +
+                        (this.getPlayerControls().get(this.getPlayRound()).getCurrentBetStage() * 2));
             }
             else if (playerGotBlackJack){
                 //ชนะเเบบได้ Bonus
+                this.getPlayerControls().get(this.getPlayRound()).getPlayer().setChips(this.getPlayerFromPlayerCon().getChips() +
+                        (this.getPlayerControls().get(this.getPlayRound()).getCurrentBetStage() * 2.5));
             }
             else if (playerDraw){
-                //ได้เงินที่ลงคืน
+                //เสมอ
+                this.getPlayerControls().get(this.getPlayRound()).getPlayer().setChips(this.getPlayerFromPlayerCon().getChips() +
+                        (this.getPlayerControls().get(this.getPlayRound()).getCurrentBetStage()));
             }
             else{
-                //โดนกิน
+                //แพ้
+                this.getPlayerControls().get(this.getPlayRound()).getPlayer().setChips(this.getPlayerFromPlayerCon().getChips());
             }
             playerWinnable = false;
             playerDraw = false;
             playerGotBlackJack = false;
+            this.playRound++;
         }
     }
 
@@ -121,7 +97,7 @@ public class GameController implements Runnable {
     }
 
     public synchronized void checkDoubleDown(){
-        if(this.getPlayer().getInventory().getPoint() != 21){
+        if(this.getPlayer().getInventory().getPoint() != 21 && this.getPlayer().getInventory().getPoint() < 21){
             this.getPlayerController().setPlayerDoubledown(true);
             this.getPlayerController().setPlayerStand(true);
             this.setPlayerTimer(20);
@@ -147,11 +123,11 @@ public class GameController implements Runnable {
         }
         else if(dealerCon.CheckDealerBust()){
             if(!playerCon.CheckPlayerBust())
-                playerWinnable = true;
+                this.playerWinnable = true;
         }
         else if(dealerCon.CheckDealer5Card()){
             if(playerCon.CheckPlayer5Card()){
-                playerWinnable = true;
+                this.playerWinnable = true;
             }
             else if(playerCon.CheckPlayerBlackJack()){
                 playerGotBlackJack = true;
@@ -159,16 +135,16 @@ public class GameController implements Runnable {
         }
         else if(dealerCon.CheckDealerBlackJack()) {
             if (playerCon.CheckPlayerBlackJack()) {
-                playerGotBlackJack = true;
+                this.playerGotBlackJack = true;
             }
         }
         else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() < player.getInventory().getPoint() && playerCon.getPlayerStand()){
-            playerWinnable = true;
+            this.playerWinnable = true;
         }
         else if(player.getInventory().getPoint() < 21 && dealerCon.getPoint() == player.getInventory().getPoint() && playerCon.getPlayerStand()){
             playerDraw = true;
         }
-        playerWinnable = false;
+        this.playerWinnable = false;
     }
 
     public synchronized void nextRound (){
@@ -180,12 +156,16 @@ public class GameController implements Runnable {
     }
 
     public synchronized boolean CheckLast(){
-        if(this.playRound + 1 == this.players.size()){
+        if(this.playRound + 1 == this.players.size() - 1){
             return true;
         }
+        this.gameEnd = true;
         return false;
     }
 
+    public void setPlayRound(int playRound){
+        this.playRound = playRound;
+    }
 
     public void setPlayerTimer(int time){
         this.playerTimer = time;
@@ -193,6 +173,10 @@ public class GameController implements Runnable {
 
     public int getPlayerTimer() {
         return playerTimer;
+    }
+
+    public boolean getPlayerWinnable(){
+        return playerWinnable;
     }
 
     public int getPlayRound(){
@@ -207,12 +191,20 @@ public class GameController implements Runnable {
         return this.players.get(this.playRound);
     }
 
+    public Player getPlayerFromPlayerCon(){
+        return this.playerControls.get(this.getPlayRound()).getPlayer();
+    }
+
     public PlayerController getPlayerController(){
         return this.playerCon;
     }
 
     public ArrayList<PlayerController> getPlayerControls(){
         return this.playerControls;
+    }
+
+    public void addChip(double ratio){
+        this.getPlayerFromPlayerCon().setChips(this.getPlayerFromPlayerCon().getChips() + (int) (this.getPlayerControls().get(this.getPlayRound()).getCurrentBetStage() * ratio));
     }
 
     @Override
@@ -231,6 +223,7 @@ public class GameController implements Runnable {
                         System.out.println("This Player got BlackJack.");
                         this.getPlayerController().setPlayerStand(true);
                         System.out.println("Break");
+                        this.endResult();
                         break;
                     }
                     else if(this.playerTimer != 0 && !this.playerControls.get(this.getPlayRound()).CheckPlayerBust() && !this.playerControls.get(this.getPlayRound()).CheckPlayer5Card()){
@@ -240,9 +233,14 @@ public class GameController implements Runnable {
                     Thread.sleep(1000);
                     this.nextRound();
                     }
-                    else if(this.CheckLast() && (this.playerTimer == 0 || this.playerControls.get(this.getPlayRound()).CheckPlayerBust() || this.playerControls.get(this.getPlayRound()).CheckPlayer5Card())){
+                    else if(this.CheckLast() && (this.playerTimer == 0 || this.playerControls.get(this.getPlayRound()).CheckPlayerBust()
+                            || this.playerControls.get(this.getPlayRound()).CheckPlayer5Card())){
                         this.getPlayerController().setPlayerStand(true);
+                        for(Player player: players){
+                            System.out.println(player.getChips());
+                        }
                         System.out.println("Break");
+                        this.endResult();
                         break;
                     }
                     else if(!this.CheckLast() && this.playerControls.get(this.getPlayRound()).CheckPlayer5Card()){

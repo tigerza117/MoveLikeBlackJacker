@@ -5,10 +5,8 @@ import co.yunchao.server.controllers.PlayerController;
 
 public class Player{
     private final Inventory inventory;
-    private int chips;
+    private double chips;
     private final String name;
-    private GameController gamecon;
-    private PlayerController playerCon;
 
     public Player(String name, int chips){
         this.name = name;
@@ -20,9 +18,9 @@ public class Player{
         this.inventory.addCard(deck.pickTopCard());
     }
 
-    public void setChips(int chip){this.chips = chip;}
+    public void setChips(double chip){this.chips = chip;}
 
-    public int getChips() {
+    public double getChips() {
         return chips;
     }
 

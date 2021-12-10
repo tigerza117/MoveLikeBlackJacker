@@ -46,7 +46,6 @@ public class PlayerController {
 
     public void doubleDown(Deck deck){ //same as bet
         if(this.player.getInventory().getPoint() <= 21 && this.player.getInventory().getCards().size() == 2){
-            this.bet();
             this.player.pickUpCard(deck);
             this.playerStand = true;
         }
@@ -118,6 +117,10 @@ public class PlayerController {
 
     public void stackCurrentBetStage(int amount){
         this.currentBetStage += amount;
+    }
+
+    public void addChip(double ratio){
+        this.player.setChips(this.player.getChips() + (int) (this.getCurrentBetStage() * ratio));
     }
 }
 
