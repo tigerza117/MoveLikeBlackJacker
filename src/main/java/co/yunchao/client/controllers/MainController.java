@@ -87,6 +87,11 @@ public class MainController extends GameApplication {
 
     @Override
     protected void initGame() {
+
+    }
+
+    @Override
+    protected void initUI() {
         gameController = new GameController();
         try {
             Thread.sleep(1000);
