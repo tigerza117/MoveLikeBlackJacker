@@ -18,6 +18,8 @@ public class GameController implements Runnable {
     private boolean playerDraw = false;
     private int playerTimer = 20;
     private int playRound = 0;
+    private int betStage = 0;
+    private boolean gameEnd = false;
     private Thread thread;
     public GameController(Player player){
         this.dealer = player;
@@ -33,7 +35,7 @@ public class GameController implements Runnable {
             }
             else {
                 this.playerControls.add(new PlayerController(player));
-            }
+;            }
         }
         this.Initial();
     }
@@ -84,17 +86,16 @@ public class GameController implements Runnable {
                 playerWinnable = false;
             }
         }
-        thread = new Thread(this);
-        thread.start();
-    }
 
-    public void checkRound(){
-        for(int i = 0; i < 4; i++){
-            if(this.playerCon.IsPlayerAlreadyAction()){
-                playRound++;
-                this.playerTimer = 20;
+        thread = new Thread(this);
+        //thread.start();
+
+        /*while(!gameEnd){
+            if(this.getPlayerControls().get(this.getPlayRound()).CheckPlayerBust()){
+                this.playerWinnable = false;
+                //disable ทุกฟังก์ชั่น
             }
-        }
+        }*/
     }
 
     // สรุปสุดท้ายใครชนะไม่ชนะ
@@ -207,16 +208,20 @@ public class GameController implements Runnable {
         return this.playerCon;
     }
 
+    public ArrayList<PlayerController> getPlayerControls(){
+        return this.playerControls;
+    }
+
     @Override
     public void run() {
         try{
-            while (this.playerTimer != 0 && !this.playerCon.IsPlayerAlreadyAction()){
+            while (this.playerTimer != 0 && !this.playerCon.getPlayerStand()){
                 System.out.println(this.playerTimer);
                 this.playerTimer--;
                 Thread.sleep(1000);
                 this.nextRound();
-                this.thread.wait();
             }
+            this.thread.wait();
         }
         catch (InterruptedException e) {
             e.printStackTrace();
