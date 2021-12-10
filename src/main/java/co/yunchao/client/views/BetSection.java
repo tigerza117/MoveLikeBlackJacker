@@ -4,6 +4,8 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FontType;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -52,6 +54,28 @@ public class BetSection {
             put("bet_chip_3", chip3BetBtn);
         }};
 
+        leaveBtn.setOnMouseClicked(event ->{
+            var quitPane = texture("/leaveGame/leavePane.png", getAppWidth(), 290);
+            quitPane.setLayoutY((getAppHeight() / 2.0)-(quitPane.getHeight() / 2));
+
+            var yesBtn = texture("/leaveGame/yesBtn.png");
+            yesBtn.setOnMouseClicked(yes -> System.exit(0));
+
+            var noBtn = texture("/leaveGame/noBtn.png");
+            noBtn.setOnMouseClicked(no -> quitPane.dispose());
+            noBtn.setLayoutX(200);
+
+            Group leaveMenu = new Group(yesBtn, noBtn);
+
+            getGameScene().getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
+            leaveMenu.setLayoutY((getAppHeight() / 2.0)+(leaveMenu.getBoundsInLocal().getHeight() / 3.5));
+            leaveMenu.setLayoutX((getAppWidth() / 2.0)-(leaveMenu.getBoundsInLocal().getWidth() / 2));
+            getGameScene().getContentRoot().getChildren().addAll(quitPane, leaveMenu);
+            play("Clicked.wav");
+            }
+        );
+
+        var disableGroup = new Group();
         var topGroup = new Group();
         var bottomGroup = new Group();
         var chipSection = new Group();
@@ -81,8 +105,15 @@ public class BetSection {
         chipSection.getChildren().addAll(textureChipSection, chip1BetBtn, chip2BetBtn, chip3BetBtn);
         topGroup.getChildren().addAll(minBtn, maxBtn, clearBtn);
         bottomGroup.getChildren().addAll(optionBtn, leaveBtn, textureBalance, confirmBtn, chipSection, standBtn, hitBtn, doubleBtn, balanceText);
+        disableGroup.getChildren().addAll(topGroup, chipSection, standBtn, hitBtn, doubleBtn);
 
-        group.getChildren().addAll(topGroup, bottomGroup);
+        topGroup.setTranslateY(-80); //set to show grayscale test
+        ColorAdjust desaturate = new ColorAdjust();
+        desaturate.setSaturation(-1);
+        disableGroup.setEffect(desaturate);
+        disableGroup.setTranslateY(62);
+
+        group.getChildren().addAll(bottomGroup, disableGroup); //remove and add something to test
         group.setLayoutX(32);
         group.setLayoutY(842);
         group.prefWidth(1855);
