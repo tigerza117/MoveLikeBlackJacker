@@ -11,8 +11,6 @@ import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Slider;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
@@ -25,6 +23,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class MainMenu extends FXGLMenu {
     private final List<Node> buttons = new ArrayList<>();
     private Music music;
+    private final Options options = new Options();
+    private final LeaveButtonAction leaveAction = new LeaveButtonAction();
+    private final PlayButtonAction playAction = new PlayButtonAction();
 
     public MainMenu() {
         super(MenuType.MAIN_MENU);
@@ -35,7 +36,8 @@ public class MainMenu extends FXGLMenu {
         logo.setLayoutY(71);
         var body = createBody();
 
-        getContentRoot().getChildren().addAll(bg, logo, body);
+        getContentRoot().getChildren().addAll(bg, logo, body, options.getGroup(),
+                leaveAction.getGroup(), playAction.getGroup());
     }
 
     private int animIndex = 0;
@@ -73,130 +75,18 @@ public class MainMenu extends FXGLMenu {
 
     private Node createBody() {
         var playBtn = createButton("/mainResources/play_btn", () -> {
-            var banner = texture("/enterRoom/yellow_banner.png", getAppWidth(), 500);
-            banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
-
-            var createBtn = createModalButton("/enterRoom/createRoom", this::fireNewGame);
-            createBtn.setTranslateY(-300);
-            var orSep = texture("/enterRoom/Or.png");
-            orSep.setLayoutY(-180);
-            var enterCodeBtn = createModalButton("/enterRoom/enterNum", this::fireResume);
-            enterCodeBtn.setTranslateY(-50);
-
-            Group playMenu = new Group(createBtn, orSep, enterCodeBtn);
-
-            getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
-            playMenu.setLayoutY((getAppHeight() / 2.0)+(playMenu.getBoundsInLocal().getHeight() / 3));
-            playMenu.setLayoutX((getAppWidth() / 2.0)-(playMenu.getBoundsInLocal().getWidth() / 2));
-            getContentRoot().getChildren().addAll(banner, playMenu);
+            System.out.println("Play");
+            playAction.render();
             play("Play_Button.wav");
         });
         var optionBtn = createButton("/mainResources/option_btn", () -> {
-            var banner = texture("/options/optionPane.png", getAppWidth(), 684);
-
-            banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
-
-            var fullHD = createModalButton("/options/Full_HDRes", () -> {
-                System.out.println("FULL HD RESOLUTION SELECTED!");
-                play("Clicked.wav");
-            });
-
-            var HD = createModalButton("/options/HDRes", () -> {
-                System.out.println("HD RESOLUTION SELECTED!");
-                play("Clicked.wav");
-            });
-            var SD = createModalButton("/options/SDRes", () -> {
-                System.out.println("SD RESOLUTION SELECTED!");
-                play("Clicked.wav");
-            });
-
-            CheckBox fullScreen = new CheckBox();
-            Slider masterVol = new Slider(0, 100, 0);
-            Slider mscVol = new Slider(0, 100, 0);
-            Slider sfxVol = new Slider(0, 100, 0);
-            fullScreen.getStyleClass().add("big-check-box");
-
-            fullHD.setTranslateX(100);
-            HD.setTranslateX(340);
-            SD.setTranslateX(550);
-            fullHD.setTranslateY(-242);
-            HD.setTranslateY(-230);
-            SD.setTranslateY(-230);
-
-            fullScreen.setTranslateY((getAppHeight()/2.0) - 120);
-            fullScreen.setTranslateX((getAppWidth()/2.0) - 200);
-
-            masterVol.setTranslateY(-40);
-            masterVol.setPrefWidth(630);
-            mscVol.setTranslateY(40);
-            mscVol.setPrefWidth(630);
-            sfxVol.setTranslateY(120);
-            sfxVol.setPrefWidth(630);
-
-
-            var resolutionText = texture("/options/resolution.png");
-            resolutionText.setLayoutY(-220);
-            var fullScreenText = texture("/options/fullText.png");
-            fullScreenText.setLayoutY(-120);
-            var masText = texture("/options/masterText.png");
-            masText.setLayoutY(-40);
-            var mscText = texture("/options/musicText.png");
-            mscText.setLayoutY(40);
-            var sfxText = texture("/options/sfxV.png");
-            sfxText.setLayoutY(120);
-
-            var separateLine = texture("/options/sepLine.png");
-            separateLine.setLayoutX((getAppWidth()/2.0)-250);
-            separateLine.setLayoutY(310);
-
-            Group text = new Group(resolutionText, fullScreenText, masText, mscText, sfxText);
-            text.setLayoutY((getAppHeight() / 3.0)+(text.getBoundsInLocal().getHeight() / 1.8));
-            text.setLayoutX((getAppWidth() / 4.0)-(text.getBoundsInLocal().getWidth() / 2.0));
-
-            Group sliders = new Group(masterVol, mscVol, sfxVol);
-            sliders.setTranslateX(110);
-
-            Group options = new Group(fullHD, HD, SD);
-
-            fullScreen.getStylesheets().add("/css/style.css");
-
-            var saveBtn = createModalButton("/options/saveBtn", () -> {
-                System.out.println("master vol. : " + (int) masterVol.getValue());
-                System.out.println("music vol. : " + (int) mscVol.getValue());
-                System.out.println("sfx vol. : " + (int) sfxVol.getValue());
-                System.out.println("Full screen toggle : " + fullScreen.isSelected());
-                play("Clicked.wav");
-            });
-
-            saveBtn.setLayoutY((getAppHeight() / 2.0)+(saveBtn.getBoundsInLocal().getHeight() / 2)+180);
-            saveBtn.setLayoutX((getAppWidth() / 2.0)-(saveBtn.getBoundsInLocal().getWidth() / 3));
-
-            getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
-            options.setLayoutY((getAppHeight() / 2.0)+(options.getBoundsInLocal().getHeight() / 3));
-            options.setLayoutX((getAppWidth() / 2.0)-(options.getBoundsInLocal().getWidth() / 2));
-
-            sliders.setLayoutY((getAppHeight() / 2.0)+(options.getBoundsInLocal().getHeight() / 3));
-            sliders.setLayoutX((getAppWidth() / 2.0)-(options.getBoundsInLocal().getWidth() / 2));
-
-            getContentRoot().getChildren().addAll(banner, options, text, fullScreen, sliders, saveBtn, separateLine);
-
+            System.out.println("Options");
+            options.render();
             play("Clicked.wav");
         });
         var quitBtn = createButton("/mainResources/quit_btn", () -> {
-            var quitPane = texture("/leaveGame/leavePane.png", getAppWidth(), 290);
-            quitPane.setLayoutY((getAppHeight() / 2.0)-(quitPane.getHeight() / 2));
-
-            var yesBtn = createModalButton("/leaveGame/yesBtn", () -> System.exit(0));
-
-            var noBtn = createModalButton("/leaveGame/noBtn", quitPane::dispose);
-            noBtn.setLayoutX(200);
-
-            Group leaveMenu = new Group(yesBtn, noBtn);
-
-            getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
-            leaveMenu.setLayoutY((getAppHeight() / 2.0)+(leaveMenu.getBoundsInLocal().getHeight() / 3.5));
-            leaveMenu.setLayoutX((getAppWidth() / 2.0)-(leaveMenu.getBoundsInLocal().getWidth() / 2));
-            getContentRoot().getChildren().addAll(quitPane, leaveMenu);
+            System.out.println("Leave Game");
+            leaveAction.render();
             play("Clicked.wav");
         });
 
