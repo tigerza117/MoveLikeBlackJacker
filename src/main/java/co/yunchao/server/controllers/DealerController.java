@@ -16,13 +16,20 @@ public class DealerController {
     }
 
     public void hit(){
-        if(this.player.getInventory().getPoint() <= 16 && round % 4 == 0){
+        if(this.player.getInventory().getPoint() < 16){
             this.inv.addCard(this.deck.pickTopCard());
         }
     }
 
     public int getPoint(){
         return this.player.getInventory().getPoint();
+    }
+
+    public boolean CheckDealerOverSixteen(){
+        if(this.inv.getPoint() >= 16){
+            return false;
+        }
+        return true;
     }
 
     public boolean CheckDealerBlackJack(){
