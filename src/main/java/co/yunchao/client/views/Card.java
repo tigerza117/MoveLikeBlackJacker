@@ -11,8 +11,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class Card {
     private final Group group;
 
-
-    Card(String name) {
+    public Card(String name) {
         double width = 84;
         double height = 122;
         var front = texture("card/Card_Deck-" + name + ".png", width, height);
