@@ -18,9 +18,9 @@ public class Table {
 
     public Table() {
         group = new Group();
+        getGameScene().getContentRoot().getChildren().add(group);
         music = getAssetLoader().load(AssetType.MUSIC, "in-game_bg.mp3");
         bg = texture("game_background.png", getAppWidth(), getAppHeight());
-        bg.setVisible(false);
         group.getChildren().add(bg);
         seats = new HashMap<>(){{
             put("dealer", new Seat(876, 40));
@@ -31,13 +31,11 @@ public class Table {
         }};
         seats.get("dealer").setIsDealer(true);
 
-        getGameScene().getContentRoot().getChildren().add(group);
-
         betSection = new BetSection();
     }
 
     public void render() {
-        bg.setVisible(true);
+        group.setVisible(true);
     }
 
     public void close() {
