@@ -37,12 +37,12 @@ public class GameMenu extends FXGLMenu {
     }
 
     private Node createBody() {
-        var platBtn = createButton("/mainResources/play_btn", () -> {
+        var playBtn = createButton("/mainResources/play_btn", () -> {
             fireNewGame();
             play("Play_Button.wav");
         });
 
-        Group group = new Group(platBtn);
+        Group group = new Group(playBtn);
         return group;
     }
 
