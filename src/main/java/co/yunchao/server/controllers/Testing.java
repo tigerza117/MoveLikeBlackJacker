@@ -10,10 +10,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Testing implements ActionListener {
-    ArrayList<Player> players = new ArrayList<>();
+    ArrayList<Player> players = new ArrayList<>(4);
     String[] names = new String[]{"Tiger", "Ing", "Top", "Kaem"};
     private GameController gm;
     private PlayerController pc;
+    private int betStage;
     private HashMap<String ,JButton> btn = new HashMap<String, JButton>(){{
         put("start", new JButton("Start"));
         put("hit", new JButton("Hit"));
@@ -32,8 +33,8 @@ public class Testing implements ActionListener {
         for(JButton b: btn.values()){
             b.addActionListener(this);
         }
-        for(JButton bet: betbtn.values()){
-            bet.addActionListener(this);
+        for(JButton b: betbtn.values()){
+            b.addActionListener(this);
         }
         fr.setLayout(new GridLayout(3,3));
         fr.add(btn.get("start"));
@@ -64,24 +65,29 @@ public class Testing implements ActionListener {
             this.gm.checkHit();
             this.gm.getPlayer().pickUpCard(this.gm.getDeck());
         }
-        else if(e.getSource().equals(betbtn.get(1000))){
+        else if(e.getSource().equals(betbtn.get("1000"))){
             this.gm.getPlayerControls().get(this.gm.getPlayRound()).stackCurrentBetStage(1000);
+            System.out.println("Player will bet = " + this.gm.getPlayerControls().get(this.gm.getPlayRound()).getCurrentBetStage());
         }
-        else if(e.getSource().equals(betbtn.get(250))){
+        else if(e.getSource().equals(betbtn.get("250"))){
             this.gm.getPlayerControls().get(this.gm.getPlayRound()).stackCurrentBetStage(250);
+            System.out.println("Player will bet = " + this.gm.getPlayerControls().get(this.gm.getPlayRound()).getCurrentBetStage());
         }
-        else if(e.getSource().equals(betbtn.get(50))){
+        else if(e.getSource().equals(betbtn.get("50"))){
             this.gm.getPlayerControls().get(this.gm.getPlayRound()).stackCurrentBetStage(50);
-            System.out.println(this.gm.getPlayerControls().get(this.gm.getPlayRound()).getCurrentBetStage());
+            betStage = this.gm.getPlayerControls().get(this.gm.getPlayRound()).getCurrentBetStage();;
+            System.out.println("Player will bet = " + this.gm.getPlayerControls().get(this.gm.getPlayRound()).getCurrentBetStage());
         }
         else if(e.getSource().equals(btn.get("bet"))){
             this.gm.getPlayerControls().get(this.gm.getPlayRound()).bet();
+            this.gm.getPlayerControls().get(this.gm.getPlayRound()).setCurrentBetStage(0);
             System.out.println(this.gm.getPlayerControls().get(this.gm.getPlayRound()).getPlayer().getChips());
-            System.out.println(this.gm.getPlayerControls().get(this.gm.getPlayRound()).getCurrentBetStage());
+            System.out.println("BETTTTTT");
+            System.out.println("Chip : " + this.gm.getPlayerControls().get(this.gm.getPlayRound()).getPlayer().getChips());
         }
         else if(e.getSource().equals(btn.get("dbd"))){
             this.gm.checkDoubleDown();
-            this.gm.getPlayerControls().get(this.gm.getPlayRound()).doubleDown(this.gm.getDeck());
+            this.gm.getPlayer().pickUpCard(this.gm.getDeck());
             this.gm.checkStand();
             System.out.println((this.gm.getPlayer().getName()));
         }
@@ -89,7 +95,7 @@ public class Testing implements ActionListener {
             this.gm.checkStand();
             this.gm.getPlayerController().setPlayerStand(true);
             this.gm.nextRound();
-            System.out.println(this.gm.getPlayer().getName());
+            System.out.println("Player before you have stand. Now it's your turn " + this.gm.getPlayer().getName());
         }
     }
 

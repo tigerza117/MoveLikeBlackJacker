@@ -175,12 +175,11 @@ public class GameController implements Runnable {
     }
 
     public void nextRound(){
-        if(this.playerControls.get(playRound).getPlayerStand()){
+        if(this.playerControls.get(playRound-1).getPlayerStand()){
             this.playerControls.get(playRound).setPlayerHit(false);
             this.playerControls.get(playRound).setPlayerDoubledown(false);
             this.playerControls.get(playRound).setPlayerBet(false);
             this.playRound++;
-            //this.thread.start();
         }
     }
 
