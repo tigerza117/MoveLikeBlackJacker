@@ -4,7 +4,10 @@ import co.yunchao.base.models.Deck;
 import co.yunchao.base.models.Inventory;
 import co.yunchao.base.models.Player;
 
+import java.util.ArrayList;
+
 public class PlayerController {
+    private ArrayList<Integer> betRange = new ArrayList<Integer>();
     private Player player;
     private Deck deck;
     private Inventory inv;
@@ -12,19 +15,21 @@ public class PlayerController {
     private boolean playerDoubledown = false;
     private boolean playerHit = false;
     private boolean playerBet = false;
-
+    private int currentBetStage = 0;
     public PlayerController(Player player){
         this.player = player;
+        this.betRange.add(1000);
+        this.betRange.add(250);
+        this.betRange.add(100);
     }
 
     public void pickUpCard(Deck deck) {
         this.inv.addCard(deck.pickTopCard());
     }
 
-    public int bet(int amount){ //get amount from view (set later)
-        this.player.setChips(this.player.getChips() - amount);
+    public void bet(){
+        this.player.setChips(this.player.getChips() - currentBetStage);
         this.playerBet = true;
-        return this.player.getChips();
     }
 
     public void hit(){
@@ -39,9 +44,9 @@ public class PlayerController {
         }
     }
 
-    public void doubleDown(int amount){ //same as bet
-        this.bet(amount);
+    public void doubleDown(Deck deck){ //same as bet
         if(this.player.getInventory().getPoint() <= 21 && this.player.getInventory().getCards().size() == 2){
+            this.player.pickUpCard(deck);
             this.playerStand = true;
         }
     }
@@ -49,12 +54,13 @@ public class PlayerController {
     public boolean actionControl(){
         return this.getPlayerDoubledown() || this.getPlayerHit();
     }
+
     public boolean CheckPlayerBlackJack(){
         return this.player.getInventory().getPoint() == 21 && this.player.getInventory().getCards().size() == 2;
     }
 
     public boolean IsPlayerAlreadyAction(){
-        return this.playerStand || this.playerHit;
+        return this.playerStand;
     }
 
     public boolean CheckPlayer5Card(){
@@ -64,7 +70,6 @@ public class PlayerController {
     public boolean CheckPlayerBust(){
         return this.player.getInventory().getPoint() > 21;
     }
-
 
     public void setPlayerBet(boolean playerBet) {
         this.playerBet = playerBet;
@@ -100,6 +105,18 @@ public class PlayerController {
 
     public Player getPlayer() {
         return this.player;
+    }
+
+    public int getCurrentBetStage(){
+        return this.currentBetStage;
+    }
+
+    public void setCurrentBetStage(int currentBetStage) {
+        this.currentBetStage = currentBetStage;
+    }
+
+    public void stackCurrentBetStage(int amount){
+        this.currentBetStage += amount;
     }
 }
 
