@@ -114,7 +114,7 @@ public class GameController implements Runnable {
         }
     }
 
-    public void checkHit(){
+    public synchronized void checkHit(){
         if(this.getPlayer().getInventory().getPoint() != 21 && this.getPlayer().getInventory().getPoint() < 21){
             this.playerCon.setPlayerHit(true);
         }
@@ -218,20 +218,28 @@ public class GameController implements Runnable {
     @Override
     public void run() {
         try{
-            if(this.playerTimer != 0 && !this.playerCon.getPlayerStand()){
+            if(this.playerTimer != 0 && !this.playerCon.getPlayerStand() && !this.playerControls.get(this.getPlayRound()).CheckPlayerBust()){
                 while (true){
-                    if(this.playerTimer != 0){
+                    if(this.playerTimer != 0 && !this.playerControls.get(this.getPlayRound()).CheckPlayerBust()){
+                        System.out.println(this.playerControls.get(this.getPlayRound()).getPlayer().getName() + " point " + this.playerControls.get(this.getPlayRound()).getPlayer().getInventory().getPoint());
                     System.out.println(this.playerTimer);
                     this.playerTimer--;
                     Thread.sleep(1000);
                     this.nextRound();
                     }
-                    else{
+                    else if(this.CheckLast() && (this.playerTimer == 0 || this.playerControls.get(this.getPlayRound()).CheckPlayerBust())){
+                        this.getPlayerController().setPlayerStand(true);
                         System.out.println("Break");
                         break;
                     }
+                    else if(!this.CheckLast()){
+                        System.out.println("This Player Bust or Time out!");
+                        this.getPlayerController().setPlayerStand(true);
+                        this.setPlayerTimer(20);
+                        this.playRound++;
+                        System.out.println(this.getPlayer().getName() + " Turn.");
+                    }
                 }
-
             }
             else{
                 this.thread.wait();
