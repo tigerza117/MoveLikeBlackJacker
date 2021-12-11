@@ -1,135 +1,135 @@
 package co.yunchao.server.controllers;
 
 import co.yunchao.base.models.Deck;
-import co.yunchao.base.models.Inventory;
-import co.yunchao.base.models.Player;
+import co.yunchao.server.models.Player;
+import co.yunchao.server.enums.GameState;
+import co.yunchao.server.enums.PlayerInGameState;
+import co.yunchao.server.enums.Result;
 
 import java.util.ArrayList;
 
 public class PlayerController {
+    private final GameController gameController;
     private ArrayList<Integer> betRange = new ArrayList<Integer>();
-    private Player player;
-    private Deck deck;
-    private Inventory inv;
-    private boolean playerStand = false;
-    private boolean playerDoubledown = false;
-    private boolean playerHit = false;
-    private boolean playerBet = false;
+    private final Player player;
+    private PlayerInGameState state;
     private int currentBetStage = 0;
-    private boolean playerWinnable = false;
-    public PlayerController(Player player){
+
+    public PlayerController(Player player, GameController gameController){
         this.player = player;
+        this.gameController = gameController;
+        this.state = PlayerInGameState.IDLE;
         this.betRange.add(1000);
         this.betRange.add(250);
         this.betRange.add(100);
     }
 
-    public void pickUpCard(Deck deck) {
-        this.inv.addCard(deck.pickTopCard());
+    public void getReward(double ratio) {
+        var reward = this.getCurrentBetStage() * ratio;
+        this.player.setChips(this.player.getChips() + (reward));
+        log("get reward " + reward + "$");
     }
 
-    public void bet(){
-        this.player.setChips(this.player.getChips() - currentBetStage);
-        this.playerBet = true;
+    public void pickUpCard() {
+        var inv = getPlayer().getInventory();
+        inv.addCard(gameController.getDeck().pickTopCard());
+        if (inv.isBlackJack()) {
+            this.state = PlayerInGameState.WINING;
+            log("is wining");
+        } else if(inv.isBust()) {
+            this.state = PlayerInGameState.BUST;
+            log("is bust");
+        }
+    }
+
+    public void skip() {
+        if(this.state != PlayerInGameState.READY){
+            if (!getPlayer().isDealer()) {
+                this.state = PlayerInGameState.SKIP;
+                currentBetStage = 0;
+                log("Skip success");
+            } else {
+                this.state = PlayerInGameState.READY;
+            }
+        }
+    }
+
+    public void confirmBet() {
+        if (this.state == PlayerInGameState.IDLE && gameController.getState() == GameState.BET && currentBetStage > 0) {
+            this.player.setChips(this.player.getChips() - currentBetStage);
+            this.state = PlayerInGameState.READY;
+            log("Confirm bet success " + currentBetStage + "$");
+        }
     }
 
     public void hit(){
-        if(this.playerHit && this.playerBet){
-            this.pickUpCard(deck);
+        if((this.state == PlayerInGameState.READY || this.state == PlayerInGameState.HIT) && gameController.isInGame()){
+            this.state = PlayerInGameState.HIT;
+            this.pickUpCard();
+            log("Hit success");
         }
     }
 
     public void stand(){
-        if((this.player.getInventory().getPoint() <= 21)){
-            this.playerStand = true;
+        if((this.state == PlayerInGameState.READY || this.state == PlayerInGameState.HIT) && gameController.isInGame()){
+            this.state = PlayerInGameState.STAND;
+            log("Stand success");
         }
     }
 
-    public void doubleDown(Deck deck){ //same as bet
-        if(this.player.getInventory().getPoint() <= 21 && this.player.getInventory().getCards().size() == 2){
-            this.player.pickUpCard(deck);
-            this.playerStand = true;
+    public void doubleDown(){
+        if (this.state == PlayerInGameState.READY && gameController.isInGame()) {
+            this.state = PlayerInGameState.DOUBLE;
+            this.pickUpCard();
+            log("Double down success");
         }
     }
 
-    public boolean actionControl(){
-        return this.getPlayerDoubledown() || this.getPlayerHit();
+    public Result getResult(Player dealer) {
+        var inv = player.getInventory();
+        var dealerInv = dealer.getInventory();
+        if (inv.isBust()) {
+            return Result.BUST;
+        } else if (dealerInv.isBust()) {
+            return Result.DEALER_BUST;
+        } else if (inv.isBlackJack()) {
+            return Result.BLACKJACK;
+        } else if (inv.is5Card()) {
+            return Result.Card5;
+        } else if (inv.getPoint() > dealerInv.getPoint()) {
+            return Result.HIGH_POINT;
+        } else if (inv.getPoint() == dealerInv.getPoint()) {
+            return Result.DRAW;
+        }
+        return Result.LOSE;
     }
 
-    public boolean CheckPlayerBlackJack(){
-        return this.player.getInventory().getPoint() == 21 && this.player.getInventory().getCards().size() == 2;
+    public void stackCurrentBetStage(int amount) {
+        if (player.getChips() - (currentBetStage + amount) >= 0) {
+            this.currentBetStage += amount;
+            log("stack bet " + amount + "$ total bet " + currentBetStage + "$");
+        }
     }
 
-    public boolean IsPlayerAlreadyAction(){
-        return this.playerStand;
+    public int getCurrentBetStage() {
+        return this.currentBetStage;
     }
 
-    public boolean CheckPlayer5Card(){
-        return this.player.getInventory().getCards().size() == 5 && this.player.getInventory().getPoint() <= 21;
-    }
-
-    public boolean CheckPlayerBust(){
-        return this.player.getInventory().getPoint() > 21;
-    }
-
-    public void setPlayerBet(boolean playerBet) {
-        this.playerBet = playerBet;
-    }
-
-    public void setPlayerDoubledown(boolean playerDoubledown) {
-        this.playerDoubledown = playerDoubledown;
-    }
-
-    public void setPlayerHit(boolean playerHit) {
-        this.playerHit = playerHit;
-    }
-
-    public void setPlayerStand(boolean playerStand) {
-        this.playerStand = playerStand;
-    }
-
-    public boolean getPlayerStand(){
-        return this.playerStand;
-    }
-
-    public boolean getPlayerHit(){
-        return this.playerHit;
-    }
-
-    public boolean getPlayerDoubledown(){
-        return this.playerDoubledown;
-    }
-
-    public boolean getPlayerBet(){
-        return this.playerBet;
+    public PlayerInGameState getState() {
+        return state;
     }
 
     public Player getPlayer() {
         return this.player;
     }
 
-    public int getCurrentBetStage(){
-        return this.currentBetStage;
+    public void log(String out) {
+        System.out.println("Player " + getPlayer().getName() + " > " + out);
     }
 
-    public void setCurrentBetStage(int currentBetStage) {
-        this.currentBetStage = currentBetStage;
-    }
-
-    public void stackCurrentBetStage(int amount){
-        this.currentBetStage += amount;
-    }
-
-    public void addChip(double ratio){
-        this.player.setChips(this.player.getChips() + (this.getCurrentBetStage() * ratio));
-    }
-
-    public void setPlayerWinnable(boolean playerWinnable){
-        this.playerWinnable = true;
-    }
-
-    public boolean getPlayerWinnable(){
-        return this.playerWinnable;
+    public void reset() {
+        this.state = PlayerInGameState.IDLE;
+        this.currentBetStage = 0;
     }
 }
 

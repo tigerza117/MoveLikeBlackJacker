@@ -28,8 +28,8 @@ public class Inventory {
     }
 
     public void addCard(Card card) {
-        System.out.printf("[Player]%s got: %s-%s card\n", player.getName(), card.getName(), card.getSuit());
         this.cards.add(card);
+        System.out.printf("%s -> got: %s-%s card total point %d\n", player.getName(), card.getName(), card.getSuit(), getPoint());
     }
 
     public void clearCard() {
@@ -49,7 +49,8 @@ public class Inventory {
         for (Object obj: aceStack.toArray()) {
             Card card = (Card) obj;
             if (points + 11 + aceStack.size() > 21) {
-                points++;
+                points+=aceStack.size();
+                break;
             } else {
                 points+=11;
             }
@@ -58,5 +59,15 @@ public class Inventory {
         return points;
     }
 
+    public boolean isBlackJack(){
+        return getPoint() == 21 && getCards().size() == 2;
+    }
 
+    public boolean is5Card(){
+        return getCards().size() == 5 && getPoint() <= 21;
+    }
+
+    public boolean isBust(){
+        return getPoint() > 21;
+    }
 }

@@ -1,33 +1,29 @@
 package co.yunchao.server.controllers;
 
 import co.yunchao.base.models.Deck;
-import co.yunchao.base.models.Player;
+import co.yunchao.server.enums.GameState;
+import co.yunchao.server.enums.PlayerInGameState;
+import co.yunchao.server.enums.Result;
+import co.yunchao.server.models.Player;
 
 import java.util.ArrayList;
 
 public class GameController implements Runnable {
-    private ArrayList<Player> players;
-    private ArrayList<PlayerController> playerControls = new ArrayList<PlayerController>();
-    private Deck deck = new Deck();
-    private PlayerController playerCon;
-    private DealerController dealerCon;
-    private boolean playerWinnable = false;
-    private boolean playerGotBlackJack = false;
-    private boolean playerDraw = false;
-    private int playerTimer = 20;
-    private int playRound = 0;
-    private boolean gameEnd = false;
-    private Thread thread;
 
-    public GameController(ArrayList<Player> players) {
-        this.players = players;
-        boolean first = true;
-        for(Player player : players){
-            this.playerControls.add(new PlayerController(player));
-            if(players.indexOf(player) == 4){
-                this.dealerCon = new DealerController(player);
-            }
-        }
+    private final ArrayList<Player> players;
+    private final Deck deck;
+    private final Thread thread;
+    private final Player dealer;
+    private int tick = 20;
+    private int playerTurnIndex = 0;
+    private GameState state;
+
+    public GameController() {
+        this.players = new ArrayList<>();
+        this.deck = new Deck();
+        this.thread = new Thread(this);
+        this.dealer = new Player("Dealer", this, true);
+        this.state = GameState.WAITING;
         this.Initial();
     }
 
@@ -37,235 +33,182 @@ public class GameController implements Runnable {
         }
         this.deck.generateCards();
         for(Player player : this.players){
-            playerCon = new PlayerController(player);
-            if(!this.playerCon.getPlayerBet()){
-                for (int i = 0; i < 2; i++) {
-                    player.pickUpCard(this.deck);
-                }
+            var con = player.getPlayerController();
+            for (int i = 0; i < 2; i++) {
+                player.pickUpCard(this.deck);
             }
-            this.playerCon.setCurrentBetStage(50);
-            this.playerCon.bet();
+            con.stackCurrentBetStage(50);
+            con.confirmBet();
         }
 
         for(Player player: this.players){
             System.out.println(player.getInventory().getPoint());
         }
-        thread = new Thread(this);
         thread.start();
     }
 
-    // สรุปสุดท้ายใครชนะไม่ชนะ
-    public void endResult(){
-        this.setPlayRound(0);
-        for(PlayerController playerConCheck: this.getPlayerControls()){
-            if (this.playerWinnable){
-                //ชนะปกติ
-                playerConCheck.addChip(2);
-            }
-            else if (playerGotBlackJack){
-                //ชนะเเบบได้ Bonus
-                playerConCheck.addChip(2.5);
-            }
-            else if (playerDraw){
-                //เสมอ
-                playerConCheck.addChip(1);
-            }
-            else{
-                //แพ้
-                playerConCheck.addChip(0);
-            }
-            playerDraw = false;
-            playerGotBlackJack = false;
-            this.playRound++;
-        }
-    }
-
-    public synchronized void checkHit(){
-        if(this.getPlayer().getInventory().getPoint() != 21 && this.getPlayer().getInventory().getPoint() < 21){
-            this.playerCon.setPlayerHit(true);
-        }
-    }
-
-    public synchronized void checkDoubleDown(){
-        if(this.getPlayer().getInventory().getPoint() != 21 && this.getPlayer().getInventory().getPoint() < 21){
-            this.getPlayerController().setPlayerDoubledown(true);
-            this.getPlayerController().setPlayerStand(true);
-            this.setPlayerTimer(20);
-            this.playRound++;
-        }
-    }
-
-    public synchronized void checkStand(){
-        if(this.getPlayer().getInventory().getPoint() <= 21){
-            this.getPlayerController().setPlayerStand(true);
-            this.setPlayerTimer(20);
-            this.playRound++;
-        }
-    }
-    public synchronized void LastStand(){
-        this.getPlayerController().setPlayerStand(true);
-        this.setPlayerTimer(0);
-    }
-
-    public void playerCheckWin() {
-        for(PlayerController playerConCheck: this.getPlayerControls()){
-            if(playerConCheck.CheckPlayerBust()){
-                playerConCheck.setPlayerWinnable(false);
-            }
-            else if(dealerCon.CheckDealerBust()){
-                if(!playerConCheck.CheckPlayerBust())
-                    playerConCheck.setPlayerWinnable(true);
-            }
-            else if(dealerCon.CheckDealer5Card()){
-                if(playerConCheck.CheckPlayer5Card()){
-                    playerConCheck.setPlayerWinnable(true);
-                }
-                else if(playerConCheck.CheckPlayerBlackJack()){
-                    playerConCheck.setPlayerWinnable(true);
-                }
-            }
-            else if(dealerCon.CheckDealerBlackJack()) {
-                if (playerConCheck.CheckPlayerBlackJack()) {
-                    playerConCheck.setPlayerWinnable(true);
-                }
-            }
-            else if(playerConCheck.getPlayer().getInventory().getPoint() < 21 && dealerCon.getPoint() < playerConCheck.getPlayer().getInventory().getPoint() && playerConCheck.getPlayerStand()){
-                playerConCheck.setPlayerWinnable(true);
-            }
-            else if(playerConCheck.getPlayer().getInventory().getPoint() < 21 && dealerCon.getPoint() == playerConCheck.getPlayer().getInventory().getPoint() && playerConCheck.getPlayerStand()){
-                this.playerDraw = true;
-            }
-            playerConCheck.setPlayerWinnable(false);
-        }
-    }
-
-    public synchronized void nextRound (){
-        if(this.getPlayerConWithIndex().getPlayerStand()){
-            this.getPlayerConWithIndex().setPlayerHit(false);
-            this.getPlayerConWithIndex().setPlayerDoubledown(false);
-            this.getPlayerConWithIndex().setPlayerBet(false);
-        }
-    }
-
-    public synchronized boolean CheckLast(){
-        if(this.playRound + 1 == this.players.size() - 1){
-            return true;
-        }
-        this.gameEnd = true;
-        return false;
-    }
-
-    public void setPlayRound(int playRound){
-        this.playRound = playRound;
-    }
-
-    public void setPlayerTimer(int time){
-        this.playerTimer = time;
-    }
-
-    public int getPlayerTimer() {
-        return playerTimer;
-    }
-
-    public boolean getPlayerWinnable(){
-        return playerWinnable;
-    }
-
-    public int getPlayRound(){
-        return this.playRound;
+    public void playerJoin(Player player) {
+        this.players.add(player);
     }
 
     public Deck getDeck(){
         return this.deck;
     }
 
-    public Player getPlayer(){
-        return this.players.get(this.playRound);
+    private boolean paused = false;
+
+    private synchronized void checkPaused(){
+        try{
+            while(paused){
+                this.wait();
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
-    public Player getPlayerFromPlayerCon(){
-        return this.getPlayerConWithIndex().getPlayer();
-    }
-
-    public PlayerController getPlayerConWithIndex(){
-        return this.playerControls.get(this.getPlayRound());
-    }
-
-    public PlayerController getPlayerController(){
-        return this.playerCon;
-    }
-
-    public ArrayList<PlayerController> getPlayerControls(){
-        return this.playerControls;
-    }
-
-    public void addChip(double ratio){
-        this.getPlayerFromPlayerCon().setChips(this.getPlayerFromPlayerCon().getChips() + (int) (this.getPlayerConWithIndex().getCurrentBetStage() * ratio));
+    public synchronized void pauseThread(){
+        this.paused = !this.paused;
+        if(!this.paused) this.notify();
     }
 
     @Override
     public void run() {
-        try{
-            if(this.playerTimer != 0 && !this.playerCon.getPlayerStand() && !this.getPlayerConWithIndex().CheckPlayerBust()){
-                while (true){
-                    if(this.getPlayerConWithIndex().CheckPlayerBlackJack()){
-                        System.out.println("This Player got BlackJack.");
-                        this.getPlayerController().setPlayerStand(true);
-                        this.setPlayerTimer(20);
-                        this.playRound++;
-                        System.out.println(this.getPlayer().getName() + " Turn.");
-                    }
-                    else if(this.CheckLast() && this.getPlayerConWithIndex().CheckPlayerBlackJack()){
-                        System.out.println("This Player got BlackJack.");
-                        this.getPlayerController().setPlayerStand(true);
-                        System.out.println("Break");
-                        this.endResult();
-                        break;
-                    }
-                    else if(this.playerTimer != 0 && !this.getPlayerConWithIndex().CheckPlayerBust() && !this.getPlayerConWithIndex().CheckPlayer5Card()){
-                        System.out.println(this.getPlayerConWithIndex().getPlayer().getName() + " point " + this.getPlayerConWithIndex().getPlayer().getInventory().getPoint());
-                    System.out.println(this.playerTimer);
-                    this.playerTimer--;
-                    Thread.sleep(1000);
-                    this.nextRound();
-                    }
-                    else if(this.CheckLast() && (this.playerTimer == 0 || this.getPlayerConWithIndex().CheckPlayerBust()
-                            || this.getPlayerConWithIndex().CheckPlayer5Card())){
-                        this.getPlayerController().setPlayerStand(true);
-                        this.playerCheckWin();
-                        this.endResult();
-                        for(Player player: players){
-                            System.out.println(player.getChips());
-                            System.out.println(this.getPlayerController().getPlayerWinnable());
+        try {
+            while (true) {
+                checkPaused();
+                System.out.println(state + " > " + tick);
+                switch (state) {
+                    case WAITING:
+                        if (this.players.size() > 0) {
+                            this.tick = 15;
+                            this.state = GameState.BET;
                         }
-                        System.out.println("Break");
                         break;
-                    }
-                    else if(!this.CheckLast() && this.getPlayerConWithIndex().CheckPlayer5Card()){
-                        System.out.println("This Player got 5 cards.");
-                        this.getPlayerController().setPlayerStand(true);
-                        this.setPlayerTimer(20);
-                        this.playRound++;
-                        System.out.println(this.getPlayer().getName() + " Turn.");
-                    }
-                    else if(!this.CheckLast()){
-                        System.out.println("This Player Bust or Time out!");
-                        this.getPlayerController().setPlayerStand(true);
-                        this.setPlayerTimer(20);
-                        this.playRound++;
-                        System.out.println(this.getPlayer().getName() + " Turn.");
-                    }
-                }
-            }
-            else{
-                this.thread.wait();
-            }
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        } {
+                    case BET:
+                        if (this.tick == 0) {
+                            dealer.reset();
+                            players.add(dealer);
+                            players.forEach(player -> {
+                                player.getPlayerController().skip();
+                                //clear card
+                            });
+                            this.state = GameState.HAND_OUT;
+                        } else {
+                            this.tick--;
+                        }
+                        break;
+                    case HAND_OUT:
+                        for (int i = 0; i < 2; i++) {
+                            players.forEach(player -> {
+                                if (player.isReady()) {
+                                    player.pickUpCard(deck);
+                                }
+                            });
+                        }
+                        if (dealer.getPlayerController().getState() == PlayerInGameState.WINING) {
+                            //flip card dealer
+                            this.state = GameState.PAY_OUT;
+                        } else {
+                            this.state = GameState.IN_GAME;
+                            this.playerTurnIndex = 0;
+                            this.tick = 15;
+                        }
+                        break;
+                    case IN_GAME:
+                        if (players.size() == playerTurnIndex) {
+                            this.state = GameState.PAY_OUT;
+                        } else {
+                            var player = this.players.get(playerTurnIndex);
+                            var controller = player.getPlayerController();
+                            if (this.tick != 0) {
+                                if (player.isDealer()) {
+                                    while (player.getInventory().getPoint() < 17) {
+                                        player.pickUpCard(this.deck);
+                                    }
+                                }
+                                System.out.println(player.getName() + "[" + player.getInventory().getPoint() + "] Turn > " + controller.getState());
+                                switch (controller.getState()) {
+                                    case BUST:
+                                        System.out.println("BUST!!!");
+                                        //Remove card
+                                        //Remove bet state
+                                    case SKIP:
+                                    case WINING:
+                                    case DOUBLE:
+                                    case STAND:
+                                        this.tick = 0;
+                                        break;
+                                    case HIT:
+                                    case READY:
+                                        this.tick--;
+                                        if (player.isDealer()) {
+                                            this.tick = 0;
+                                        }
+                                        break;
+                                }
+                                if (tick == 0) {
+                                    if (controller.getState() == PlayerInGameState.READY) {
+                                        controller.stand();
+                                    }
+                                    this.playerTurnIndex++;
+                                    this.tick = 15;
+                                    continue;
+                                }
+                            }
+                        }
+                        break;
+                    case PAY_OUT:
+                        players.remove(dealer);
+                        players.forEach(player -> {
+                            var result = player.getPlayerController().getResult(dealer);
+                            var ratio = 0.0;
+                            if (result != Result.LOSE) {
+                                System.out.println(player.getName() + " Wining");
+                                switch (result) {
+                                    case BLACKJACK:
+                                        ratio = 2.5;
+                                        break;
+                                    case DRAW:
+                                        ratio = 1;
+                                        break;
+                                    case Card5:
+                                    case HIGH_POINT:
+                                        ratio = 2;
+                                        break;
+                                    default:
+                                        ratio = 0;
+                                }
+                            }
 
+                            player.getPlayerController().getReward(ratio);
+                            player.reset();
+                            this.tick = 5;
+                            state = GameState.WAITING;
+                        });
+                        break;
+                }
+                Thread.sleep(1000);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    public GameState getState() {
+        return state;
+    }
+
+    public boolean isInGame() {
+        return state == GameState.IN_GAME;
+    }
+
+    public Player getPlayerInTurn() {
+        if (isInGame()) {
+            return this.players.get(playerTurnIndex);
+        }
+        return null;
     }
 }
 
