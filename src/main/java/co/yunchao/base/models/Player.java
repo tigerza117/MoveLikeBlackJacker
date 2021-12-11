@@ -1,8 +1,5 @@
 package co.yunchao.base.models;
 
-import co.yunchao.server.controllers.GameController;
-import co.yunchao.server.controllers.PlayerController;
-
 public class Player{
     private final Inventory inventory;
     private double chips;
@@ -31,5 +28,4 @@ public class Player{
     public Inventory getInventory() {
         return inventory;
     }
-
 }
