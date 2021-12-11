@@ -1,7 +1,7 @@
 package co.yunchao.client.net;
 
-import co.yunchao.base.models.Player;
-import co.yunchao.net.packets.Packet;
+import co.yunchao.client.controllers.GameController;
+import co.yunchao.net.packets.DataPacket;
 
 import java.net.InetSocketAddress;
 
@@ -9,17 +9,17 @@ public class Network {
 
     private Interface inf;
 
-    public Network(Player player) {
+    public Network(GameController gameController) {
         try {
             final InetSocketAddress localhost = new InetSocketAddress("localhost", 31747);
 
-            this.inf = new Interface(player, localhost);
+            this.inf = new Interface(gameController, localhost);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void putPacket(Packet packet) {
+    public void putPacket(DataPacket packet) {
         this.inf.getChannel().writeAndFlush(packet);
     }
 }
