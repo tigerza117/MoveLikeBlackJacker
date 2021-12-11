@@ -16,6 +16,7 @@ public class PlayerController {
     private boolean playerHit = false;
     private boolean playerBet = false;
     private int currentBetStage = 0;
+    private boolean playerWinnable = false;
     public PlayerController(Player player){
         this.player = player;
         this.betRange.add(1000);
@@ -120,7 +121,15 @@ public class PlayerController {
     }
 
     public void addChip(double ratio){
-        this.player.setChips(this.player.getChips() + (int) (this.getCurrentBetStage() * ratio));
+        this.player.setChips(this.player.getChips() + (this.getCurrentBetStage() * ratio));
+    }
+
+    public void setPlayerWinnable(boolean playerWinnable){
+        this.playerWinnable = true;
+    }
+
+    public boolean getPlayerWinnable(){
+        return this.playerWinnable;
     }
 }
 
