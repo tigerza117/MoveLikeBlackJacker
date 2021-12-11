@@ -2,17 +2,15 @@ package co.yunchao.net.packets;
 
 import io.netty.buffer.ByteBuf;
 
-import java.io.IOException;
-
-public class DisconnectPacket implements Packet {
+public class DisconnectPacket extends DataPacket {
 
     @Override
-    public void read(ByteBuf buff) throws IOException {
+    public void encode(ByteBuf buf) {
 
     }
 
     @Override
-    public void write(ByteBuf buff) throws IOException {
+    public void decode(ByteBuf buf) {
 
     }
 }

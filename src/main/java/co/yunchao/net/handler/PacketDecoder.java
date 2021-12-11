@@ -1,7 +1,7 @@
 package co.yunchao.net.handler;
 
 import co.yunchao.net.Network;
-import co.yunchao.net.packets.Packet;
+import co.yunchao.net.packets.DataPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -12,10 +12,10 @@ public class PacketDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> output) throws Exception {
         int id = in.readInt();
-        Packet packet = Network.getPacket(id);
+        DataPacket packet = Network.getPacket(id);
         if (packet == null) throw new NullPointerException("Couldn't find id of packet " + id);
 
-        packet.read(in);
+        packet.decode(in);
         output.add(packet);
     }
 }

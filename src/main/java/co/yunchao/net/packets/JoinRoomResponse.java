@@ -2,22 +2,14 @@ package co.yunchao.net.packets;
 
 import io.netty.buffer.ByteBuf;
 
-import java.io.IOException;
-
-public class JoinRoomResponse implements Packet {
-    private int id;
-
+public class JoinRoomResponse extends DataPacket {
     @Override
-    public void read(ByteBuf buff) throws IOException {
+    public void encode(ByteBuf buf) {
 
     }
 
     @Override
-    public void write(ByteBuf buff) throws IOException {
+    public void decode(ByteBuf buf) {
 
-    }
-
-    public int getId() {
-        return id;
     }
 }

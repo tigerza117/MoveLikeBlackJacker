@@ -2,22 +2,21 @@ package co.yunchao.net.packets;
 
 import io.netty.buffer.ByteBuf;
 
-import java.io.IOException;
-
-public class ConnectPacket implements Packet {
+public class ConnectPacket extends DataPacket {
     private String name;
-
-    @Override
-    public void read(ByteBuf buff) throws IOException {
-
-    }
-
-    @Override
-    public void write(ByteBuf buff) throws IOException {
-
-    }
+    private int chip;
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void encode(ByteBuf buf) {
+
+    }
+
+    @Override
+    public void decode(ByteBuf buf) {
+
     }
 }
