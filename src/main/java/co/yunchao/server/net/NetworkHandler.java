@@ -4,7 +4,7 @@ import co.yunchao.net.packets.*;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
+public class NetworkHandler extends SimpleChannelInboundHandler<DataPacket> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
@@ -12,9 +12,13 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Packet packet) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, DataPacket packet) throws Exception {
         if (packet instanceof ConnectPacket) {
             System.out.println("Connect -> " + ctx.channel());
+            var pk = new PlayerJoinPacket();
+            pk.setId("XXX");
+            pk.setName("YYY");
+            ctx.channel().writeAndFlush(pk);
         } else if (packet instanceof DisconnectPacket) {
             System.out.println("Disconnect -> " + ctx.channel());
         } else {
