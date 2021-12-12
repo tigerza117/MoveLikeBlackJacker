@@ -14,4 +14,9 @@ public class PlayerBetPacket extends DataPacket {
     public void decode(ByteBuf buf) {
         this.Bet = buf.readInt();
     }
+
+    @Override
+    public byte pid() {
+        return 0;
+    }
 }

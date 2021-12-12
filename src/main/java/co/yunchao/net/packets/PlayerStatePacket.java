@@ -23,4 +23,9 @@ public class PlayerStatePacket extends DataPacket {
     public void setState(PlayerInGameState state) {
         this.state = state;
     }
+
+    @Override
+    public byte pid() {
+        return 0;
+    }
 }

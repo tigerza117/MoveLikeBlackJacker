@@ -2,28 +2,30 @@ package co.yunchao.net;
 
 import co.yunchao.net.packets.*;
 
-import java.util.List;
-
 public class Network {
-    private static final List<Class<? extends DataPacket>> packetPool = List.of(
-            LoginPacket.class,
-            DisconnectPacket.class,
-            PlayerJoinPacket.class
-    );
+    private static final Class<? extends DataPacket>[] packetPool = new Class[256];
 
-    public static int getPacketId(DataPacket packet) {
-        return packetPool.indexOf(packet.getClass());
+    public Network() {
+        this.registerPackets();
     }
 
     public static DataPacket getPacket(int id) {
-        Class<? extends DataPacket> packetClass = packetPool.get(id);
-        if (packetClass == null) return null;
-        DataPacket packet = null;
-        try {
-            packet = packetClass.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+        Class<? extends DataPacket> clazz = packetPool[id];
+        if (clazz != null) {
+            try {
+                return clazz.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return packet;
+        return null;
+    }
+
+    public void registerPacket(byte id, Class<? extends DataPacket> clazz) {
+        packetPool[id & 0xff] = clazz;
+    }
+
+    private void registerPackets() {
+        this.registerPacket(ProtocolInfo.LOGIN_PACKET, LoginPacket.class);
     }
 }

@@ -17,8 +17,6 @@ public class NetworkHandler extends SimpleChannelInboundHandler<DataPacket> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DataPacket packet) throws Exception {
-        if (packet instanceof PlayerJoinPacket) {
-            gameController.handlerPlayerJoin((PlayerJoinPacket) packet);
-        }
+        gameController.handler(packet);
     }
 }

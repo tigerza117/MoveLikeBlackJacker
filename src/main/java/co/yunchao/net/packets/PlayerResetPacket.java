@@ -18,4 +18,9 @@ public class PlayerResetPacket extends DataPacket {
         this.ResetBet = buf.readBoolean();
         this.ResetCard = buf.readBoolean();
     }
+
+    @Override
+    public byte pid() {
+        return 0;
+    }
 }

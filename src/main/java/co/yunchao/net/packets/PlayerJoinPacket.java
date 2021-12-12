@@ -3,6 +3,8 @@ package co.yunchao.net.packets;
 import io.netty.buffer.ByteBuf;
 
 public class PlayerJoinPacket extends DataPacket {
+    public static final byte NETWORK_ID = ProtocolInfo.PLAYER_JOIN_PACKET;
+
     private String name;
     private String id;
 
@@ -32,5 +34,10 @@ public class PlayerJoinPacket extends DataPacket {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public byte pid() {
+        return NETWORK_ID;
     }
 }

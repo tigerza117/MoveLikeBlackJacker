@@ -23,7 +23,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<DataPacket> {
         var player = players.get(ctx.channel());
         if (player != null) {
             player.getPlayerController().handler(packet);
-            if (packet instanceof  DisconnectPacket) {
+            if (packet instanceof DisconnectPacket) {
                 ctx.close();
             }
         }

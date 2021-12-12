@@ -24,4 +24,9 @@ public class TimingPacket extends DataPacket {
     public int getTimeServer() {
         return timeServer;
     }
+
+    @Override
+    public byte pid() {
+        return 0;
+    }
 }

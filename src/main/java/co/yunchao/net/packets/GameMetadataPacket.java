@@ -23,4 +23,9 @@ public class GameMetadataPacket extends DataPacket {
         this.PyConfirm = buf.readBoolean();
         this.PyDouble = buf.readBoolean();
     }
+
+    @Override
+    public byte pid() {
+        return 0;
+    }
 }

@@ -13,4 +13,9 @@ public class PlayerActionPacket extends DataPacket {
     public void decode(ByteBuf buf) {
 
     }
+
+    @Override
+    public byte pid() {
+        return 0;
+    }
 }

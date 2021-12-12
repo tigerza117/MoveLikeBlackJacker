@@ -13,4 +13,9 @@ public class ChipDespawnPacket extends DataPacket {
     public void decode(ByteBuf buf) {
 
     }
+
+    @Override
+    public byte pid() {
+        return 0;
+    }
 }

@@ -33,4 +33,9 @@ public class DisconnectPacket extends DataPacket {
     public void setShowDialog(boolean showDialog) {
         this.showDialog = showDialog;
     }
+
+    @Override
+    public byte pid() {
+        return 0;
+    }
 }

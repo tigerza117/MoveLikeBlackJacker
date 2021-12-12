@@ -16,4 +16,8 @@ public class CardSpawnPacket extends DataPacket {
         this.ResetCard = buf.readBoolean();
     }
 
+    @Override
+    public byte pid() {
+        return 0;
+    }
 }

@@ -35,4 +35,9 @@ public class LoginPacket extends DataPacket {
     public void setId(UUID id) {
         this.id = id;
     }
+
+    @Override
+    public byte pid() {
+        return 0;
+    }
 }

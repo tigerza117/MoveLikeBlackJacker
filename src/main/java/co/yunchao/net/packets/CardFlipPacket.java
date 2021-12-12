@@ -15,4 +15,9 @@ public class CardFlipPacket extends DataPacket {
     public void decode(ByteBuf buf) {
         this.AllStand = buf.readBoolean();
     }
+
+    @Override
+    public byte pid() {
+        return 0;
+    }
 }

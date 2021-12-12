@@ -1,8 +1,6 @@
 package co.yunchao.server.controllers;
 
-import co.yunchao.net.packets.DataPacket;
-import co.yunchao.net.packets.DisconnectPacket;
-import co.yunchao.net.packets.LoginPacket;
+import co.yunchao.net.packets.*;
 import co.yunchao.server.models.Player;
 import co.yunchao.base.enums.GameState;
 import co.yunchao.base.enums.PlayerInGameState;
@@ -136,14 +134,19 @@ public class PlayerController {
 
     public void handler(DataPacket packet) {
         System.out.println("Player packet handler receive!");
-        if (packet instanceof LoginPacket) {
-            LoginPacket loginPacket = (LoginPacket) packet;
-            this.player.setName(loginPacket.getName());
-            this.player.setId(loginPacket.getId());
-            System.out.println("Player " + player.getName() + " has been join.");
-        } else if (packet instanceof DisconnectPacket) {
-            DisconnectPacket disconnectPacket = (DisconnectPacket) packet;
-            System.out.println("Player " + player.getName() + " has been disconnect for reason " + disconnectPacket.getMessage());
+        switch (packet.pid()) {
+            case ProtocolInfo.LOGIN_PACKET:
+                LoginPacket loginPacket = (LoginPacket) packet;
+                this.player.setName(loginPacket.getName());
+                this.player.setId(loginPacket.getId());
+                System.out.println("Player " + player.getName() + " has been join.");
+                break;
+            case ProtocolInfo.DISCONNECT_PACKET:
+                DisconnectPacket disconnectPacket = (DisconnectPacket) packet;
+                System.out.println("Player " + player.getName() + " has been disconnected for reason " + disconnectPacket.getMessage());
+                break;
+            default:
+                System.out.println("Unknown packet");
         }
     }
 }

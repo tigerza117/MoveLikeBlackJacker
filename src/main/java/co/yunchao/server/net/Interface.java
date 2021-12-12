@@ -1,10 +1,10 @@
 package co.yunchao.server.net;
 
+import co.yunchao.net.Network;
 import co.yunchao.net.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
-import network.ycc.raknet.client.RakNetClient;
 import network.ycc.raknet.pipeline.UserDataCodec;
 import network.ycc.raknet.server.RakNetServer;
 
@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class Interface {
     final EventLoopGroup ioGroup = new NioEventLoopGroup();
     final Channel channel;
+    final Network network = new Network();
 
     public Interface(InetSocketAddress adder) throws InterruptedException {
         channel = new ServerBootstrap()

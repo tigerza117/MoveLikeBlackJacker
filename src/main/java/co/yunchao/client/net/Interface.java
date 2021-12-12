@@ -2,6 +2,7 @@ package co.yunchao.client.net;
 
 import co.yunchao.base.models.Player;
 import co.yunchao.client.controllers.GameController;
+import co.yunchao.net.Network;
 import co.yunchao.net.handler.*;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class Interface {
     final EventLoopGroup ioGroup = new NioEventLoopGroup();
     final Channel channel;
+    final Network network = new Network();
 
     public Interface(GameController controller, InetSocketAddress adder) throws InterruptedException {
         channel = new Bootstrap()

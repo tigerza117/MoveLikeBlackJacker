@@ -16,4 +16,9 @@ public class GameStatePacket extends DataPacket {
         this.IsAllReady = buf.readBoolean();
         this.IsAllStand = buf.readBoolean();
     }
+
+    @Override
+    public byte pid() {
+        return 0;
+    }
 }
