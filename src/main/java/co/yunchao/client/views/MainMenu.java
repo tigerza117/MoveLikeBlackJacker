@@ -66,9 +66,9 @@ public class MainMenu extends FXGLMenu {
     }
 
     private Node createBody() {
-        var playBtn = Button.create("/mainResources/play_btn", "Play_Button", () -> listeners.forEach(MainMenuListener::clickPlay));
-        var optionBtn = Button.create("/mainResources/option_btn", () -> listeners.forEach(MainMenuListener::clickOption));
-        var leaveBtn = Button.create("/mainResources/quit_btn", () -> listeners.forEach(MainMenuListener::clickLeave));
+        var playBtn = Button.create("mainResources/play_btn", "Play_Button", () -> listeners.forEach(MainMenuListener::clickPlay));
+        var optionBtn = Button.create("mainResources/option_btn", () -> listeners.forEach(MainMenuListener::clickOption));
+        var leaveBtn = Button.create("mainResources/quit_btn", () -> listeners.forEach(MainMenuListener::clickLeave));
         Group group = new Group(playBtn, optionBtn, leaveBtn);
 
         int i = 0;

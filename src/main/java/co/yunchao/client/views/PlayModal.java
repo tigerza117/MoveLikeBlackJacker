@@ -23,7 +23,7 @@ public class PlayModal {
         var orSep = texture("enterRoom/Or.png");
         orSep.setLayoutY(-180);
 
-        var enterCodeBtn = texture("/enterName/textField.png");
+        var enterCodeBtn = texture("enterName/textField.png");
         enterCodeBtn.setTranslateY(-50);
 
         codeField = new TextField("Enter Room");
@@ -32,7 +32,7 @@ public class PlayModal {
         codeField.getStyleClass().add("text-field");
         codeField.setLayoutY((getAppHeight() / 2.0) - ((codeField.getHeight() / 2)-92));
 
-        var confirmBtn = Button.create("/enterName/confirmBtn", () -> {
+        var confirmBtn = Button.create("enterName/confirmBtn", () -> {
             banner.setVisible(false);
             playMenu.setVisible(false);
             codeField.setVisible(false);
