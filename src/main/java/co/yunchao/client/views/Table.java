@@ -36,6 +36,7 @@ public class Table {
 
     public void render() {
         group.setVisible(true);
+        getAudioPlayer().loopMusic(music);
         betSection.getGroup().setVisible(true);
     }
 
