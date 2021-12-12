@@ -5,9 +5,11 @@
     -fx-border-radius: 5px;
     -fx-border-width: 3px;
 }
+
 .big-check-box > .box > .mark {
     -fx-padding: 1.5em;
 }
+
 .big-check-box:selected .mark {
     -fx-background-color: white;
 }
@@ -17,25 +19,15 @@
     -fx-border-color: transparent;
     -fx-border-width: 3px;
 }
+
 @font-face {
     src: url("./assets/ui/fonts/GRADUATE.ttf");
 }
 
-.text-area {
+.text-field{
     -fx-background-color: rgba(53,89,119,0.0);
+    -fx-border-color: rgba(53,89,119,0.0);
     -fx-font-size: 40px;
     -fx-text-fill: #09213D;
     -fx-font-family: Graduate;
-}
-
-.text-area .scroll-pane {
-    -fx-background-color: transparent;
-}
-
-.text-area .scroll-pane .viewport{
-    -fx-background-color: transparent;
-}
-
-.text-area .scroll-pane .content{
-    -fx-background-color: transparent;
 }
