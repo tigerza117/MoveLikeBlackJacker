@@ -1,12 +1,9 @@
 package co.yunchao.server.controllers;
 
 import co.yunchao.base.models.Deck;
-import co.yunchao.net.packets.DataPacket;
-import co.yunchao.net.packets.DisconnectPacket;
-import co.yunchao.net.packets.LoginPacket;
-import co.yunchao.server.enums.GameState;
-import co.yunchao.server.enums.PlayerInGameState;
-import co.yunchao.server.enums.Result;
+import co.yunchao.base.enums.GameState;
+import co.yunchao.base.enums.PlayerInGameState;
+import co.yunchao.base.enums.Result;
 import co.yunchao.server.models.Player;
 
 import java.util.ArrayList;
