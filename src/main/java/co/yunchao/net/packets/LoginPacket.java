@@ -5,6 +5,8 @@ import io.netty.buffer.ByteBuf;
 import java.util.UUID;
 
 public class LoginPacket extends DataPacket {
+    public static final byte NETWORK_ID = ProtocolInfo.LOGIN_PACKET;
+
     private UUID id;
     private String name;
 
@@ -38,6 +40,6 @@ public class LoginPacket extends DataPacket {
 
     @Override
     public byte pid() {
-        return 0;
+        return NETWORK_ID;
     }
 }

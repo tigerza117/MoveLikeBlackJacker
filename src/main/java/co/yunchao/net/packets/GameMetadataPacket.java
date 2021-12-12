@@ -3,6 +3,7 @@ package co.yunchao.net.packets;
 import io.netty.buffer.ByteBuf;
 
 public class GameMetadataPacket extends DataPacket {
+    public static final byte NETWORK_ID = ProtocolInfo.GAME_METADATA_PACKET;
 
     @Override
     public void encode(ByteBuf buf) {
@@ -16,6 +17,6 @@ public class GameMetadataPacket extends DataPacket {
 
     @Override
     public byte pid() {
-        return 0;
+        return NETWORK_ID;
     }
 }

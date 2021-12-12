@@ -27,5 +27,6 @@ public class Network {
 
     private void registerPackets() {
         this.registerPacket(ProtocolInfo.LOGIN_PACKET, LoginPacket.class);
+        this.registerPacket(ProtocolInfo.GAME_METADATA_PACKET, GameMetadataPacket.class);
     }
 }
