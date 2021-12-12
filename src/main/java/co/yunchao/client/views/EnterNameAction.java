@@ -10,13 +10,13 @@ import java.util.HashMap;
 import static com.almasb.fxgl.dsl.FXGL.texture;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
-public class enterNameAction {
+public class EnterNameAction {
 
     private static Group group;
     private final HashMap<String, Node> buttons;
     TextField nameField;
 
-    public enterNameAction(){
+    public EnterNameAction(){
         group = new Group();
 
         var namePane = texture("/enterName/namePanel.png", getAppWidth(), 306);
