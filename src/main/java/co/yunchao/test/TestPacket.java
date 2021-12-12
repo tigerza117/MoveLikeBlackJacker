@@ -1,11 +1,12 @@
 package co.yunchao.test;
 
+import co.yunchao.base.enums.GameState;
+import co.yunchao.base.enums.PlayerInGameState;
+import co.yunchao.base.enums.Result;
 import co.yunchao.net.Network;
 import co.yunchao.net.handler.PacketDecoder;
 import co.yunchao.net.handler.PacketEncoder;
-import co.yunchao.net.packets.DataPacket;
-import co.yunchao.net.packets.GameMetadataPacket;
-import co.yunchao.net.packets.LoginPacket;
+import co.yunchao.net.packets.*;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -74,9 +75,8 @@ public class TestPacket {
                         }
                     }).connect(adder).sync().channel();
 
-            var pk = new LoginPacket();
-            pk.setName("TIGER");
-            pk.setId(UUID.randomUUID());
+            var pk = new PlayerBetPacket();
+            pk.setGameState(GameState.WAITING);
             clientChannel.writeAndFlush(pk).sync();
 
             serverChannel.close().sync();

@@ -33,12 +33,20 @@ public class ChipDespawnPacket extends DataPacket {
         this.gameState = gameState;
     }
 
+    public void setResult(Result result) {
+        this.result = result;
+    }
+
     public GameState getGameState() {
         return gameState;
     }
 
     public PlayerInGameState getPlayerState() {
         return playerState;
+    }
+
+    public Result getResult() {
+        return result;
     }
 
     @Override

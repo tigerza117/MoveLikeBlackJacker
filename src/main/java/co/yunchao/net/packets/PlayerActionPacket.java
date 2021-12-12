@@ -20,7 +20,7 @@ public class PlayerActionPacket extends DataPacket {
 
     @Override
     public byte pid() {
-        return 0;
+        return NETWORK_ID;
     }
 
     public void setPlayer(PlayerInGameState player) {

@@ -11,19 +11,19 @@ public class CardFlipPacket extends DataPacket {
 
     @Override
     public void encode(ByteBuf buf) {
-        buf.writeInt(gameState.ordinal());
         buf.writeInt(playerState.ordinal());
+        buf.writeInt(gameState.ordinal());
     }
 
     @Override
     public void decode(ByteBuf buf) {
-        this.gameState = GameState.values()[buf.readInt()];
         this.playerState = PlayerInGameState.values()[buf.readInt()];
+        this.gameState = GameState.values()[buf.readInt()];
     }
 
     @Override
     public byte pid() {
-        return 0;
+        return NETWORK_ID;
     }
 
     public void setGameState(GameState gameState) {
