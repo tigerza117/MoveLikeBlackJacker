@@ -1,23 +1,32 @@
 package co.yunchao.net.packets;
 
+import co.yunchao.base.enums.GameState;
 import io.netty.buffer.ByteBuf;
 
 public class CardSpawnPacket extends DataPacket {
 
-    private boolean ResetCard;
+    private GameState gameState;
 
     @Override
     public void encode(ByteBuf buf) {
-        buf.writeBoolean(ResetCard);
+        buf.writeInt(gameState.ordinal());
     }
 
     @Override
     public void decode(ByteBuf buf) {
-        this.ResetCard = buf.readBoolean();
+        this.gameState = GameState.values()[buf.readInt()];
     }
 
     @Override
     public byte pid() {
         return 0;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public GameState getGameState() {
+        return gameState;
     }
 }
