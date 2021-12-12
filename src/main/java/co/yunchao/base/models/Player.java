@@ -8,9 +8,8 @@ public class Player{
     private String name;
     private UUID id;
 
-    public Player(String name, int chips){
+    public Player(String name){
         this.name = name;
-        this.chips = chips;
         this.inventory = new Inventory(this);
     }
 
@@ -18,7 +17,9 @@ public class Player{
         this.inventory.addCard(deck.pickTopCard());
     }
 
-    public void setChips(double chip){this.chips = chip;}
+    public void setChips(double chip){
+        this.chips = chip;
+    }
 
     public double getChips() {
         return chips;
