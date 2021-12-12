@@ -66,15 +66,9 @@ public class MainMenu extends FXGLMenu {
     }
 
     private Node createBody() {
-        var playBtn = Button.create("/mainResources/play_btn", "Play_Button", () -> {
-            listeners.forEach(MainMenuListener::clickPlay);
-        });
-        var optionBtn = Button.create("/mainResources/option_btn", () -> {
-            listeners.forEach(MainMenuListener::clickOption);
-        });
-        var leaveBtn = Button.create("/mainResources/quit_btn", () -> {
-            listeners.forEach(MainMenuListener::clickLeave);
-        });
+        var playBtn = Button.create("/mainResources/play_btn", "Play_Button", () -> listeners.forEach(MainMenuListener::clickPlay));
+        var optionBtn = Button.create("/mainResources/option_btn", () -> listeners.forEach(MainMenuListener::clickOption));
+        var leaveBtn = Button.create("/mainResources/quit_btn", () -> listeners.forEach(MainMenuListener::clickLeave));
         Group group = new Group(playBtn, optionBtn, leaveBtn);
 
         int i = 0;
@@ -83,7 +77,7 @@ public class MainMenu extends FXGLMenu {
             i++;
         }
 
-        group.setLayoutY((getAppHeight() / 2.0)+(group.getBoundsInLocal().getHeight() / 3));
+        group.setLayoutY((getAppHeight() / 3.0)+(group.getBoundsInLocal().getHeight() / 2));
         group.setLayoutX((getAppWidth() / 2.0)-(group.getBoundsInLocal().getWidth() / 2));
 
         return group;
