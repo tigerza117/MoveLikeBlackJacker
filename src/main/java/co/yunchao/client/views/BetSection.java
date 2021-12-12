@@ -17,13 +17,14 @@ public class BetSection {
     private final Group group;
     private final Text balanceText;
     private final LeaveButtonAction leaveAction = new LeaveButtonAction();
+    private final Options optionsAction = new Options();
     private final HashMap<String, Node> buttons;
 
     BetSection() {
         group = new Group();
         balanceText = FXGL.getUIFactoryService().newText("0$", Color.WHITE, FontType.GAME, 52);
 
-        getGameScene().getContentRoot().getChildren().addAll(leaveAction.getGroup());
+        getGameScene().getContentRoot().getChildren().addAll(leaveAction.getGroup(), optionsAction.getGroup());
 
         var optionBtn = texture("in_game_option_btn.png");
         var leaveBtn = texture("leave_btn.png");
@@ -61,6 +62,14 @@ public class BetSection {
             play("Clicked.wav");
             }
         );
+
+        optionBtn.setOnMouseClicked(event ->{
+            System.out.println("Leave Game");
+            optionsAction.render();
+            play("Clicked.wav");
+            }
+        );
+
 
         var disableGroup = new Group();
         var topGroup = new Group();
