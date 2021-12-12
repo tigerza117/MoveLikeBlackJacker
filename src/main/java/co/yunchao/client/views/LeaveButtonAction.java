@@ -36,7 +36,6 @@ public class LeaveButtonAction {
 
         Group leaveMenu = new Group(yesBtn, noBtn);
 
-        getGameScene().getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
         leaveMenu.setLayoutY((getAppHeight() / 2.0)+(leaveMenu.getBoundsInLocal().getHeight() / 3.5));
         leaveMenu.setLayoutX((getAppWidth() / 2.0)-(leaveMenu.getBoundsInLocal().getWidth() / 2));
         
