@@ -1,4 +1,4 @@
-package co.yunchao.server.enums;
+package co.yunchao.base.enums;
 
 public enum Result {
     LOSE,
