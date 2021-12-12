@@ -4,7 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
-import javafx.scene.effect.GaussianBlur;
+
 import java.util.HashMap;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -103,7 +103,6 @@ public class Options {
         saveBtn.setLayoutY((getAppHeight() / 2.0)+(saveBtn.getBoundsInLocal().getHeight() / 2)+180);
         saveBtn.setLayoutX((getAppWidth() / 2.0)-(saveBtn.getBoundsInLocal().getWidth() / 3));
 
-        getGameScene().getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
         options.setLayoutY((getAppHeight() / 2.0)+(options.getBoundsInLocal().getHeight() / 3));
         options.setLayoutX((getAppWidth() / 2.0)-(options.getBoundsInLocal().getWidth() / 2));
 
