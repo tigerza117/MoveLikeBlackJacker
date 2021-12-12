@@ -1,13 +1,13 @@
 package co.yunchao.client.views;
 
-import com.almasb.fxgl.dsl.FXGL;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.TextArea;
 import javafx.scene.effect.GaussianBlur;
 
-import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
+import static com.almasb.fxgl.dsl.FXGL.play;
 import static com.almasb.fxgl.dsl.FXGL.texture;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
@@ -15,6 +15,7 @@ public class PlayButtonAction {
 
     private final HashMap<String, Node> buttons;
     private final Group group;
+    TextArea codeField;
 
     public PlayButtonAction(){
         group = new Group();
@@ -26,10 +27,21 @@ public class PlayButtonAction {
         createBtn.setTranslateY(-300);
         var orSep = texture("/enterRoom/Or.png");
         orSep.setLayoutY(-180);
-        var enterCodeBtn = texture("/enterRoom/enterNum.png");
-        enterCodeBtn.setTranslateY(-50);
+        var enterCode = texture("/enterName/textField.png");
+        enterCode.setTranslateY(-50);
 
-        Group playMenu = new Group(createBtn, orSep, enterCodeBtn);
+        var confirmBtn = texture("/enterName/confirmBtn.png");
+        confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getHeight() / 2)-130));
+        confirmBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getWidth()/2.0)-200));
+
+        codeField = new TextArea("Enter Room");
+        codeField.setMaxWidth(380);
+        codeField.getStylesheets().add("/css/style.css");
+        codeField.setLayoutY((getAppHeight() / 2.0) - ((codeField.getHeight() / 2)-95));
+        codeField.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getWidth()/2.0)+200));
+
+        Group playMenu = new Group(createBtn, orSep, enterCode);
+        Group enterPane = new Group(codeField, confirmBtn);
 
         getGameScene().getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
         playMenu.setLayoutY((getAppHeight() / 2.0)+(playMenu.getBoundsInLocal().getHeight() / 3));
@@ -37,20 +49,24 @@ public class PlayButtonAction {
 
         buttons = new HashMap<>() {{
             put("create", createBtn);
-            put("enterRoom", enterCodeBtn);
+            put("confirm", confirmBtn);
         }};
 
         var enterNameAc = new enterNameAction();
 
         buttons.forEach((s, btn) -> {
-            btn.setOnMouseClicked(e-> {
+            btn.setOnMouseClicked(e -> {
                 banner.setVisible(false);
                 playMenu.setVisible(false);
+                enterPane.setVisible(false);
                 enterNameAc.getGroup().setVisible(true);
+
+                System.out.println(this.codeField.getText());
+                play("Clicked.wav");
             });
         });
 
-        group.getChildren().addAll(banner, playMenu, enterNameAc.getGroup());
+        group.getChildren().addAll(banner, playMenu, enterPane, enterNameAc.getGroup());
         group.setVisible(false);
     }
 
