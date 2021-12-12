@@ -23,8 +23,8 @@ public class MainMenu extends FXGLMenu {
     public MainMenu() {
         super(MenuType.MAIN_MENU);
 
-        var bg = texture("/mainResources/background.png", getAppWidth(), getAppHeight());
-        var logo = texture("/mainResources/homeLogo.png", 400, 412);
+        var bg = texture("mainResources/background.png", getAppWidth(), getAppHeight());
+        var logo = texture("mainResources/homeLogo.png", 400, 412);
         logo.setLayoutX(759);
         logo.setLayoutY(71);
         var body = createBody();
@@ -66,9 +66,9 @@ public class MainMenu extends FXGLMenu {
     }
 
     private Node createBody() {
-        var playBtn = Button.create("/mainResources/play_btn", "Play_Button", () -> listeners.forEach(MainMenuListener::clickPlay));
-        var optionBtn = Button.create("/mainResources/option_btn", () -> listeners.forEach(MainMenuListener::clickOption));
-        var leaveBtn = Button.create("/mainResources/quit_btn", () -> listeners.forEach(MainMenuListener::clickLeave));
+        var playBtn = Button.create("mainResources/play_btn", "Play_Button", () -> listeners.forEach(MainMenuListener::clickPlay));
+        var optionBtn = Button.create("mainResources/option_btn", () -> listeners.forEach(MainMenuListener::clickOption));
+        var leaveBtn = Button.create("mainResources/quit_btn", () -> listeners.forEach(MainMenuListener::clickLeave));
         Group group = new Group(playBtn, optionBtn, leaveBtn);
 
         int i = 0;

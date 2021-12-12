@@ -1,9 +1,6 @@
 package co.yunchao.client.views;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
-
-import java.util.HashMap;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
@@ -13,11 +10,11 @@ public class LeaveModal {
     public LeaveModal(){
         group = new Group();
 
-        var quitPane = texture("/leaveGame/leavePane.png", getAppWidth(), 290);
+        var quitPane = texture("leaveGame/leavePane.png", getAppWidth(), 290);
         quitPane.setLayoutY((getAppHeight() / 2.0)-(quitPane.getHeight() / 2));
 
-        var yesBtn = Button.create("/leaveGame/yesBtn", () -> getGameController().exit());
-        var noBtn = Button.create("/leaveGame/noBtn", this::close);
+        var yesBtn = Button.create("leaveGame/yesBtn", () -> getGameController().exit());
+        var noBtn = Button.create("leaveGame/noBtn", this::close);
         noBtn.setLayoutX(200);
 
         Group leaveMenu = new Group(yesBtn, noBtn);

@@ -13,7 +13,7 @@ public class OptionsModal {
     public OptionsModal(){
         group = new Group();
 
-        var banner = texture("/options/optionPane.png", getGameScene().getAppWidth(), 684);
+        var banner = texture("options/optionPane.png", getGameScene().getAppWidth(), 684);
         banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
         CheckBox fullScreen = new CheckBox();
@@ -22,19 +22,19 @@ public class OptionsModal {
         Slider sfxVol = new Slider(0, 100, 0);
         fullScreen.getStyleClass().add("big-check-box");
 
-        var fullHD_btn = Button.create("/options/Full_HDRes", () -> {
+        var fullHD_btn = Button.create("options/Full_HDRes", () -> {
             System.out.println("FULL HD RESOLUTION SELECTED!");
             play("Clicked.wav");
         });
-        var HD_btn = Button.create("/options/HDRes", () -> {
+        var HD_btn = Button.create("options/HDRes", () -> {
             System.out.println("HD RESOLUTION SELECTED!");
             play("Clicked.wav");
         });
-        var SD_btn = Button.create("/options/SDRes", () -> {
+        var SD_btn = Button.create("options/SDRes", () -> {
             System.out.println("SD RESOLUTION SELECTED!");
             play("Clicked.wav");
         });
-        var saveBtn = Button.create("/options/saveBtn", () -> {
+        var saveBtn = Button.create("options/saveBtn", () -> {
             System.out.println("master vol. : " + (int) masterVol.getValue());
             System.out.println("music vol. : " + (int) mscVol.getValue());
             System.out.println("sfx vol. : " + (int) sfxVol.getValue());
@@ -60,18 +60,18 @@ public class OptionsModal {
         sfxVol.setTranslateY(120);
         sfxVol.setPrefWidth(630);
 
-        var resolutionText = texture("/options/resolution.png");
+        var resolutionText = texture("options/resolution.png");
         resolutionText.setLayoutY(-220);
-        var fullScreenText = texture("/options/fullText.png");
+        var fullScreenText = texture("options/fullText.png");
         fullScreenText.setLayoutY(-120);
-        var masText = texture("/options/masterText.png");
+        var masText = texture("options/masterText.png");
         masText.setLayoutY(-40);
-        var mscText = texture("/options/musicText.png");
+        var mscText = texture("options/musicText.png");
         mscText.setLayoutY(40);
-        var sfxText = texture("/options/sfxV.png");
+        var sfxText = texture("options/sfxV.png");
         sfxText.setLayoutY(120);
 
-        var separateLine = texture("/options/sepLine.png");
+        var separateLine = texture("options/sepLine.png");
         separateLine.setLayoutX((getAppWidth()/2.0)-250);
         separateLine.setLayoutY(310);
 

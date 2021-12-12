@@ -17,13 +17,13 @@ public class PlayModal {
         var playMenu = new Group();
         var enterNameAc = new EnterNameAction();
 
-        var banner = texture("/enterRoom/yellow_banner.png", getAppWidth(), 500);
+        var banner = texture("enterRoom/yellow_banner.png", getAppWidth(), 500);
         banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
-        var orSep = texture("/enterRoom/Or.png");
+        var orSep = texture("enterRoom/Or.png");
         orSep.setLayoutY(-180);
 
-        var enterCodeBtn = texture("/enterName/textField.png");
+        var enterCodeBtn = texture("enterName/textField.png");
         enterCodeBtn.setTranslateY(-50);
 
         codeField = new TextField("Enter Room");
@@ -32,7 +32,7 @@ public class PlayModal {
         codeField.getStyleClass().add("text-field");
         codeField.setLayoutY((getAppHeight() / 2.0) - ((codeField.getHeight() / 2)-92));
 
-        var confirmBtn = Button.create("/enterName/confirmBtn", () -> {
+        var confirmBtn = Button.create("enterName/confirmBtn", () -> {
             banner.setVisible(false);
             playMenu.setVisible(false);
             codeField.setVisible(false);
@@ -46,7 +46,7 @@ public class PlayModal {
 
         codeField.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth()/2.0)+200));
 
-        var createBtn = Button.create("/enterRoom/createRoom", () -> {
+        var createBtn = Button.create("enterRoom/createRoom", () -> {
             banner.setVisible(false);
             playMenu.setVisible(false);
             codeField.setVisible(false);
