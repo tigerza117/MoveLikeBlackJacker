@@ -1,27 +1,26 @@
 package co.yunchao.net.packets;
 
+import co.yunchao.base.enums.PlayerInGameState;
 import io.netty.buffer.ByteBuf;
 
 public class PlayerStatePacket extends DataPacket {
-
-    private boolean Bust;
-    private boolean Win;
-    private boolean Lose;
-    private boolean BlkJack;
+    private PlayerInGameState state;
 
     @Override
     public void encode(ByteBuf buf) {
-        buf.writeBoolean(Bust);
-        buf.writeBoolean(Win);
-        buf.writeBoolean(Lose);
-        buf.writeBoolean(BlkJack);
+        buf.writeInt(state.ordinal());
     }
 
     @Override
     public void decode(ByteBuf buf) {
-        this.Bust = buf.readBoolean();
-        this.Win = buf.readBoolean();
-        this.Lose = buf.readBoolean();
-        this.BlkJack = buf.readBoolean();
+        this.state = PlayerInGameState.values()[buf.readInt()];
+    }
+
+    public PlayerInGameState getState() {
+        return state;
+    }
+
+    public void setState(PlayerInGameState state) {
+        this.state = state;
     }
 }
