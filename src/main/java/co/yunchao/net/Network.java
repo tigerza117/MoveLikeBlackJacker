@@ -1,15 +1,12 @@
 package co.yunchao.net;
 
-import co.yunchao.net.packets.ConnectPacket;
-import co.yunchao.net.packets.DataPacket;
-import co.yunchao.net.packets.DisconnectPacket;
-import co.yunchao.net.packets.PlayerJoinPacket;
+import co.yunchao.net.packets.*;
 
 import java.util.List;
 
 public class Network {
     private static final List<Class<? extends DataPacket>> packetPool = List.of(
-            ConnectPacket.class,
+            LoginPacket.class,
             DisconnectPacket.class,
             PlayerJoinPacket.class
     );
