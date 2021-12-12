@@ -2,7 +2,6 @@ package co.yunchao.net.packets;
 
 import co.yunchao.base.enums.GameState;
 import co.yunchao.base.enums.PlayerInGameState;
-import co.yunchao.server.models.Player;
 import io.netty.buffer.ByteBuf;
 
 public class CardDeSpawnPacket extends DataPacket {
