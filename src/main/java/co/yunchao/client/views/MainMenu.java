@@ -23,8 +23,8 @@ public class MainMenu extends FXGLMenu {
     public MainMenu() {
         super(MenuType.MAIN_MENU);
 
-        var bg = texture("/mainResources/background.png", getAppWidth(), getAppHeight());
-        var logo = texture("/mainResources/homeLogo.png", 400, 412);
+        var bg = texture("mainResources/background.png", getAppWidth(), getAppHeight());
+        var logo = texture("mainResources/homeLogo.png", 400, 412);
         logo.setLayoutX(759);
         logo.setLayoutY(71);
         var body = createBody();

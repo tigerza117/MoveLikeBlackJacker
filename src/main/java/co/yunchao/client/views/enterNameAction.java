@@ -19,14 +19,14 @@ public class enterNameAction {
     public enterNameAction(){
         group = new Group();
 
-        var namePane = texture("/enterName/namePanel.png", getAppWidth(), 306);
+        var namePane = texture("enterName/namePanel.png", getAppWidth(), 306);
         namePane.setLayoutY((getAppHeight() / 2.0)-(namePane.getHeight() / 2));
 
-        var textField = texture("/enterName/textField.png");
+        var textField = texture("enterName/textField.png");
         textField.setLayoutY((getAppHeight() / 2.0)-((textField.getHeight() / 2)-50));
         textField.setLayoutX((getAppWidth()/2.0) - (textField.getWidth()/2.0));
 
-        var confirmBtn = Button.create("/enterName/confirmBtn", () -> {
+        var confirmBtn = Button.create("enterName/confirmBtn", () -> {
             FXGL.getGameController().startNewGame();
             System.out.println(nameField.getText());
         });
@@ -35,7 +35,7 @@ public class enterNameAction {
 
         nameField = new TextField("Your Name");
         nameField.setMaxWidth(380);
-        nameField.getStylesheets().add("/css/style.css");
+        nameField.getStylesheets().add("css/style.css");
         nameField.getStyleClass().add("text-field");
         nameField.setLayoutY((getAppHeight() / 2.0) - ((nameField.getHeight() / 2)-14));
         nameField.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)+200));

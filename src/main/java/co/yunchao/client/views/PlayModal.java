@@ -17,10 +17,10 @@ public class PlayModal {
         var playMenu = new Group();
         var enterNameAc = new enterNameAction();
 
-        var banner = texture("/enterRoom/yellow_banner.png", getAppWidth(), 500);
+        var banner = texture("enterRoom/yellow_banner.png", getAppWidth(), 500);
         banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
-        var orSep = texture("/enterRoom/Or.png");
+        var orSep = texture("enterRoom/Or.png");
         orSep.setLayoutY(-180);
 
         var enterCodeBtn = texture("/enterName/textField.png");
@@ -46,7 +46,7 @@ public class PlayModal {
 
         codeField.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth()/2.0)+200));
 
-        var createBtn = Button.create("/enterRoom/createRoom", () -> {
+        var createBtn = Button.create("enterRoom/createRoom", () -> {
             banner.setVisible(false);
             playMenu.setVisible(false);
             codeField.setVisible(false);
