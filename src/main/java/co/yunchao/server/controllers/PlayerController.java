@@ -2,6 +2,7 @@ package co.yunchao.server.controllers;
 
 import co.yunchao.base.models.Deck;
 import co.yunchao.net.packets.DataPacket;
+import co.yunchao.net.packets.DisconnectPacket;
 import co.yunchao.net.packets.LoginPacket;
 import co.yunchao.server.models.Player;
 import co.yunchao.server.enums.GameState;
@@ -141,6 +142,9 @@ public class PlayerController {
             this.player.setName(loginPacket.getName());
             this.player.setId(loginPacket.getId());
             System.out.println("Player " + player.getName() + " has been join.");
+        } else if (packet instanceof DisconnectPacket) {
+            DisconnectPacket disconnectPacket = (DisconnectPacket) packet;
+            System.out.println("Player " + player.getName() + " has been disconnect for reason " + disconnectPacket.getMessage());
         }
     }
 }
