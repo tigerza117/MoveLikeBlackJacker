@@ -5,24 +5,24 @@ import io.netty.buffer.ByteBuf;
 
 public class PlayerStatePacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.PLAYER_STATE_PACKET;
-    private PlayerInGameState state;
+    private PlayerInGameState player;
 
     @Override
     public void encode(ByteBuf buf) {
-        buf.writeInt(state.ordinal());
+        buf.writeInt(player.ordinal());
     }
 
     @Override
     public void decode(ByteBuf buf) {
-        this.state = PlayerInGameState.values()[buf.readInt()];
+        this.player = PlayerInGameState.values()[buf.readInt()];
     }
 
     public PlayerInGameState getState() {
-        return state;
+        return player;
     }
 
     public void setState(PlayerInGameState state) {
-        this.state = state;
+        this.player = state;
     }
 
     @Override

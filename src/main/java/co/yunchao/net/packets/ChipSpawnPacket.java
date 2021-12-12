@@ -20,7 +20,9 @@ public class ChipSpawnPacket extends DataPacket {
 
     @Override
     public void decode(ByteBuf buf) {
-
+        this.gameState = GameState.values()[buf.readInt()];
+        this.playerState = PlayerInGameState.values()[buf.readInt()];
+        this.result = Result.values()[buf.readInt()];
     }
 
     public void setGameState(GameState gameState) {
