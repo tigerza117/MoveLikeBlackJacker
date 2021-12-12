@@ -3,6 +3,7 @@ package co.yunchao.net.packets;
 import io.netty.buffer.ByteBuf;
 
 public class DisconnectPacket extends DataPacket {
+    public static final byte NETWORK_ID = ProtocolInfo.DISCONNECT_PACKET;
     private String message;
     private boolean showDialog;
 
@@ -36,6 +37,6 @@ public class DisconnectPacket extends DataPacket {
 
     @Override
     public byte pid() {
-        return 0;
+        return NETWORK_ID;
     }
 }

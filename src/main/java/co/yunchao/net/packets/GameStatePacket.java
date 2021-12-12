@@ -1,24 +1,31 @@
 package co.yunchao.net.packets;
 
+import co.yunchao.base.enums.GameState;
 import io.netty.buffer.ByteBuf;
 
 public class GameStatePacket extends DataPacket {
-    private boolean IsAllReady;
-    private boolean IsAllStand;
+    public static final byte NETWORK_ID = ProtocolInfo.GAME_STATE_PACKET;
+    private GameState gameState;
     @Override
     public void encode(ByteBuf buf) {
-        buf.writeBoolean(IsAllReady);
-        buf.writeBoolean(IsAllStand);
+        buf.writeInt(this.gameState.ordinal());
     }
 
     @Override
     public void decode(ByteBuf buf) {
-        this.IsAllReady = buf.readBoolean();
-        this.IsAllStand = buf.readBoolean();
+        this.gameState = GameState.values()[buf.readInt()];
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public GameState getGameState() {
+        return gameState;
     }
 
     @Override
     public byte pid() {
-        return 0;
+        return NETWORK_ID;
     }
 }

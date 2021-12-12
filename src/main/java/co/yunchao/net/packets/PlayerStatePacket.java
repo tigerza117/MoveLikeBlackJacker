@@ -4,6 +4,7 @@ import co.yunchao.base.enums.PlayerInGameState;
 import io.netty.buffer.ByteBuf;
 
 public class PlayerStatePacket extends DataPacket {
+    public static final byte NETWORK_ID = ProtocolInfo.PLAYER_STATE_PACKET;
     private PlayerInGameState state;
 
     @Override
@@ -26,6 +27,6 @@ public class PlayerStatePacket extends DataPacket {
 
     @Override
     public byte pid() {
-        return 0;
+        return NETWORK_ID;
     }
 }

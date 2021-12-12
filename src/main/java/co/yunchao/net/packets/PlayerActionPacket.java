@@ -1,8 +1,10 @@
 package co.yunchao.net.packets;
 
+import co.yunchao.base.models.Player;
 import io.netty.buffer.ByteBuf;
 
 public class PlayerActionPacket extends DataPacket {
+    private Player player;
 
     @Override
     public void encode(ByteBuf buf) {

@@ -5,7 +5,7 @@ import co.yunchao.base.enums.PlayerInGameState;
 import io.netty.buffer.ByteBuf;
 
 public class CardFlipPacket extends DataPacket {
-
+    private PlayerInGameState playerState;
     private GameState gameState;
 
     @Override

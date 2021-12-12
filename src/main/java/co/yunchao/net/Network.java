@@ -27,6 +27,12 @@ public class Network {
 
     private void registerPackets() {
         this.registerPacket(ProtocolInfo.LOGIN_PACKET, LoginPacket.class);
-        this.registerPacket(ProtocolInfo.GAME_METADATA_PACKET, GameMetadataPacket.class);
+        this.registerPacket(ProtocolInfo.CARD_DE_SPAWN_PACKET, CardDeSpawnPacket.class);
+        this.registerPacket(ProtocolInfo.CARD_FLIP_PACKET, CardFlipPacket.class);
+        this.registerPacket(ProtocolInfo.CARD_SPAWN_PACKET, CardSpawnPacket.class);
+        this.registerPacket(ProtocolInfo.CHIP_DE_SPAWN_PACKET, ChipDespawnPacket.class);
+        this.registerPacket(ProtocolInfo.CHIP_SPAWN_PACKET, ChipSpawnPacket.class);
+
     }
+
 }
