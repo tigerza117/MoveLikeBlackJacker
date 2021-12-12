@@ -15,7 +15,7 @@ public class PlayModal {
     public PlayModal(){
         group = new Group();
         var playMenu = new Group();
-        var enterNameAc = new enterNameAction();
+        var enterNameAc = new EnterNameAction();
 
         var banner = texture("/enterRoom/yellow_banner.png", getAppWidth(), 500);
         banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
