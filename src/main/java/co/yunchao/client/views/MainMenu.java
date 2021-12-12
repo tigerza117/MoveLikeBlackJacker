@@ -1,19 +1,13 @@
 package co.yunchao.client.views;
 
-import com.almasb.fxgl.animation.Interpolators;
+import co.yunchao.client.listener.MainMenuListener;
+import co.yunchao.client.listener.ViewListener;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.core.asset.AssetType;
-import javafx.beans.binding.Bindings;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.effect.GaussianBlur;
-import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +15,10 @@ import java.util.List;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class MainMenu extends FXGLMenu {
+    private final List<MainMenuListener> listeners = new ArrayList<>();
+    private final List<ViewListener> viewListeners = new ArrayList<>();
     private final List<Node> buttons = new ArrayList<>();
-    private Music music;
-    private final Options options = new Options();
-    private final LeaveButtonAction leaveAction = new LeaveButtonAction();
-    private final PlayButtonAction playAction = new PlayButtonAction();
+    private final Group group;
 
     public MainMenu() {
         super(MenuType.MAIN_MENU);
@@ -36,31 +29,17 @@ public class MainMenu extends FXGLMenu {
         logo.setLayoutY(71);
         var body = createBody();
 
-        getContentRoot().getChildren().addAll(bg, logo, body, options.getGroup(),
-                leaveAction.getGroup(), playAction.getGroup());
-    }
+        group = new Group(bg, logo, body);
 
-    private int animIndex = 0;
+        getContentRoot().getChildren().addAll(group);
+    }
 
     @Override
     public void onCreate() {
-        buttons.forEach(btn -> {
-            animationBuilder(this)
-                    .delay(Duration.seconds(animIndex * 0.1))
-                    .interpolator(Interpolators.BACK.EASE_OUT())
-                    .translate(btn)
-                    .from(new Point2D(-200, 0))
-                    .to(new Point2D(0, 0))
-                    .buildAndPlay();
-            animationBuilder(this)
-                    .delay(Duration.seconds(animIndex * 0.1))
-                    .fadeIn(btn)
-                    .buildAndPlay();
+        super.onCreate();
+        viewListeners.forEach(viewListener -> viewListener.open(group));
 
-            animIndex++;
-        });
-
-        music = getAssetLoader().load(AssetType.MUSIC, "main_menu_bg.mp3");
+        Music music = getAssetLoader().load(AssetType.MUSIC, "main_menu_bg.mp3");
 
         getAudioPlayer().loopMusic(music);
     }
@@ -68,39 +47,39 @@ public class MainMenu extends FXGLMenu {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        viewListeners.forEach(viewListener -> viewListener.close(group));
         getAudioPlayer().stopAllSoundsAndMusic();
         getAudioPlayer().onMainLoopPausing();
         getGameScene().clearEffect();
     }
 
-    private Node createBody() {
-        var playBtn = createButton("/mainResources/play_btn", () -> {
-            System.out.println("Play");
-            playAction.render();
-            play("Play_Button.wav");
-        });
-        var optionBtn = createButton("/mainResources/option_btn", () -> {
-            System.out.println("Options");
-            options.render();
-            play("Clicked.wav");
-        });
-        var quitBtn = createButton("/mainResources/quit_btn", () -> {
-            System.out.println("Leave Game");
-            leaveAction.render();
-            play("Clicked.wav");
-        });
+    public void addListener(MainMenuListener listener) {
+        listeners.add(listener);
+    }
 
-        Group group = new Group(playBtn, optionBtn, quitBtn);
+    public void addViewListener(ViewListener listener) {
+        viewListeners.add(listener);
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    private Node createBody() {
+        var playBtn = Button.create("/mainResources/play_btn", "Play_Button", () -> {
+            listeners.forEach(MainMenuListener::clickPlay);
+        });
+        var optionBtn = Button.create("/mainResources/option_btn", () -> {
+            listeners.forEach(MainMenuListener::clickOption);
+        });
+        var leaveBtn = Button.create("/mainResources/quit_btn", () -> {
+            listeners.forEach(MainMenuListener::clickLeave);
+        });
+        Group group = new Group(playBtn, optionBtn, leaveBtn);
 
         int i = 0;
         for (Node n : group.getChildren()) {
             n.setLayoutY((n.getBoundsInLocal().getHeight() * (i*1.2)));
-            n.scaleXProperty().bind(
-                    Bindings.when(n.hoverProperty()).then(1.1).otherwise(1)
-            );
-            n.scaleYProperty().bind(
-                    Bindings.when(n.hoverProperty()).then(1.1).otherwise(1)
-            );
             i++;
         }
 
@@ -108,43 +87,5 @@ public class MainMenu extends FXGLMenu {
         group.setLayoutX((getAppWidth() / 2.0)-(group.getBoundsInLocal().getWidth() / 2));
 
         return group;
-    }
-
-    /**
-     * Creates a new button with given name that performs given action on click/press.
-     *
-     * @param action button action
-     * @return new button
-     */
-    protected Node createButton(String file, Runnable action) {
-        var bg = texture(file+".png", 674.54, 83);
-
-        var btn = new StackPane(bg);
-
-        btn.setAlignment(Pos.CENTER_LEFT);
-        btn.setOnMouseClicked(e -> action.run());
-        
-        buttons.add(btn);
-
-        btn.setTranslateX(-200);
-        btn.setCache(true);
-        btn.setCacheHint(CacheHint.SPEED);
-
-        return btn;
-    }
-    protected Node createModalButton(String file, Runnable action) {
-        var bg = texture(file+".png");
-
-        var modalBtn = new StackPane(bg);
-
-        modalBtn.setAlignment(Pos.CENTER_LEFT);
-        modalBtn.setOnMouseClicked(e -> action.run());
-
-        buttons.add(modalBtn);
-
-        modalBtn.setCache(true);
-        modalBtn.setCacheHint(CacheHint.SPEED);
-
-        return modalBtn;
     }
 }

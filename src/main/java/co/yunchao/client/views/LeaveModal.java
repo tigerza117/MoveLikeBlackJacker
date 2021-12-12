@@ -2,37 +2,23 @@ package co.yunchao.client.views;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.effect.GaussianBlur;
 
 import java.util.HashMap;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
-public class LeaveButtonAction {
-
-    private final HashMap<String, Node> buttons;
+public class LeaveModal {
     private final Group group;
 
-    public LeaveButtonAction(){
+    public LeaveModal(){
         group = new Group();
 
         var quitPane = texture("/leaveGame/leavePane.png", getAppWidth(), 290);
         quitPane.setLayoutY((getAppHeight() / 2.0)-(quitPane.getHeight() / 2));
 
-        var yesBtn = texture("/leaveGame/yesBtn.png");
-        yesBtn.setOnMouseClicked(yes -> {
-            System.exit(0);
-            play("Clicked.wav");
-        });
-
-        var noBtn = texture("/leaveGame/noBtn.png");
-        noBtn.setOnMouseClicked(no -> quitPane.dispose());
+        var yesBtn = Button.create("/leaveGame/yesBtn", () -> getGameController().exit());
+        var noBtn = Button.create("/leaveGame/noBtn", this::close);
         noBtn.setLayoutX(200);
-
-        buttons = new HashMap<>() {{
-            put("yes", yesBtn);
-            put("no", noBtn);
-        }};
 
         Group leaveMenu = new Group(yesBtn, noBtn);
 
@@ -43,12 +29,12 @@ public class LeaveButtonAction {
         group.setVisible(false);
     }
 
-    public HashMap<String, Node> getButtons() {
-        return buttons;
-    }
-
     public void render() {
         group.setVisible(true);
+    }
+
+    public void close() {
+        group.setVisible(false);
     }
 
     public Group getGroup() {

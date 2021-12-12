@@ -1,20 +1,16 @@
 package co.yunchao.client.views;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.GaussianBlur;
-import java.util.HashMap;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-public class Options {
-
-    private final HashMap<String, Node> buttons;
+public class OptionsModal {
     private final Group group;
 
-    public Options(){
+    public OptionsModal(){
         group = new Group();
 
         var banner = texture("/options/optionPane.png", getGameScene().getAppWidth(), 684);
@@ -26,36 +22,26 @@ public class Options {
         Slider sfxVol = new Slider(0, 100, 0);
         fullScreen.getStyleClass().add("big-check-box");
 
-        var fullHD_btn = texture("/options/Full_HDRes.png");
-        var HD_btn = texture("/options/HDRes.png");
-        var SD_btn = texture("/options/SDRes.png");
-        var saveBtn = texture("/options/saveBtn.png");
-
-        fullHD_btn.setOnMouseClicked( e -> {
+        var fullHD_btn = Button.create("/options/Full_HDRes", () -> {
             System.out.println("FULL HD RESOLUTION SELECTED!");
             play("Clicked.wav");
         });
-        HD_btn.setOnMouseClicked( e -> {
+        var HD_btn = Button.create("/options/HDRes", () -> {
             System.out.println("HD RESOLUTION SELECTED!");
             play("Clicked.wav");
         });
-        SD_btn.setOnMouseClicked( e -> {
+        var SD_btn = Button.create("/options/SDRes", () -> {
             System.out.println("SD RESOLUTION SELECTED!");
             play("Clicked.wav");
         });
-        saveBtn.setOnMouseClicked( e -> {
+        var saveBtn = Button.create("/options/saveBtn", () -> {
             System.out.println("master vol. : " + (int) masterVol.getValue());
             System.out.println("music vol. : " + (int) mscVol.getValue());
             System.out.println("sfx vol. : " + (int) sfxVol.getValue());
             System.out.println("Full screen toggle : " + fullScreen.isSelected());
             play("Clicked.wav");
+            close();
         });
-
-        buttons = new HashMap<>() {{
-            put("fullHD", fullHD_btn);
-            put("HD", HD_btn);
-            put("SD", SD_btn);
-        }};
 
         fullHD_btn.setTranslateX(100);
         fullHD_btn.setTranslateY(-242);
@@ -114,12 +100,12 @@ public class Options {
         group.setVisible(false);
     }
 
-    public HashMap<String, Node> getButtons() {
-        return buttons;
-    }
-
     public void render() {
         group.setVisible(true);
+    }
+
+    public void close() {
+        group.setVisible(false);
     }
 
     public Group getGroup() {

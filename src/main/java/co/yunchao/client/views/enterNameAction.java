@@ -24,11 +24,9 @@ public class enterNameAction {
         nameField.setLayoutY((getAppHeight() / 2.0)-((nameField.getHeight() / 2)-50));
         nameField.setLayoutX((getAppWidth()/2.0) - (nameField.getWidth()/2.0));
 
-        var confirmBtn = texture("/enterName/confirmBtn.png");
-        confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getHeight() / 2)-50));
-        confirmBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getWidth()/2.0)-200));
-
-        confirmBtn.setOnMouseClicked( e -> FXGL.getGameController().startNewGame());
+        var confirmBtn = Button.create("/enterName/confirmBtn", () -> FXGL.getGameController().startNewGame());
+        confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-50));
+        confirmBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)-200));
 
         buttons = new HashMap<>() {{
             put("confirm", confirmBtn);

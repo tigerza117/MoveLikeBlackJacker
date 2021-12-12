@@ -16,7 +16,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class BetSection {
     private final Group group;
     private final Text balanceText;
-    private final LeaveButtonAction leaveAction = new LeaveButtonAction();
+    private final LeaveModal leaveAction = new LeaveModal();
     private final HashMap<String, Node> buttons;
 
     BetSection() {
