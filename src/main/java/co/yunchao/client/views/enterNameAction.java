@@ -36,10 +36,10 @@ public class enterNameAction {
             System.out.println(this.textArea.getText());
         });
 
-        textArea = new TextArea("Enter Your Name");
+        textArea = new TextArea("Your Name");
         textArea.setMaxWidth(380);
         textArea.getStylesheets().add("/css/style.css");
-        textArea.setLayoutY((getAppHeight() / 2.0) - ((textArea.getHeight() / 2)-10));
+        textArea.setLayoutY((getAppHeight() / 2.0) - ((textArea.getHeight() / 2)-12));
         textArea.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getWidth()/2.0)+200));
 
         buttons = new HashMap<>() {{
