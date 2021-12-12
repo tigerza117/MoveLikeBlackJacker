@@ -39,6 +39,6 @@ public class CardDeSpawnPacket extends DataPacket {
 
     @Override
     public byte pid() {
-        return this.NETWORK_ID;
+        return NETWORK_ID;
     }
 }
