@@ -46,7 +46,7 @@ public class enterNameAction {
         group.setVisible(true);
     }
 
-    public static Group getGroup() {
+    public Group getGroup() {
         return group;
     }
 

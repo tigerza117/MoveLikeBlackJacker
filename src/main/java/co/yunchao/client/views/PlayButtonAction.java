@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.effect.GaussianBlur;
 
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
 import static com.almasb.fxgl.dsl.FXGL.texture;
@@ -28,8 +29,6 @@ public class PlayButtonAction {
         var enterCodeBtn = texture("/enterRoom/enterNum.png");
         enterCodeBtn.setTranslateY(-50);
 
-        createBtn.setOnMouseClicked( e -> FXGL.getGameController().startNewGame());
-
         Group playMenu = new Group(createBtn, orSep, enterCodeBtn);
 
         getGameScene().getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
@@ -41,7 +40,17 @@ public class PlayButtonAction {
             put("enterRoom", enterCodeBtn);
         }};
 
-        group.getChildren().addAll(banner, playMenu);
+        var enterNameAc = new enterNameAction();
+
+        buttons.forEach((s, btn) -> {
+            btn.setOnMouseClicked(e-> {
+                banner.setVisible(false);
+                playMenu.setVisible(false);
+                enterNameAc.getGroup().setVisible(true);
+            });
+        });
+
+        group.getChildren().addAll(banner, playMenu, enterNameAc.getGroup());
         group.setVisible(false);
     }
 
