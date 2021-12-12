@@ -1,6 +1,8 @@
 package co.yunchao.server.controllers;
 
 import co.yunchao.base.models.Deck;
+import co.yunchao.net.packets.DataPacket;
+import co.yunchao.net.packets.LoginPacket;
 import co.yunchao.server.models.Player;
 import co.yunchao.server.enums.GameState;
 import co.yunchao.server.enums.PlayerInGameState;
@@ -130,6 +132,16 @@ public class PlayerController {
     public void reset() {
         this.state = PlayerInGameState.IDLE;
         this.currentBetStage = 0;
+    }
+
+    public void handler(DataPacket packet) {
+        System.out.println("Player packet handler receive!");
+        if (packet instanceof LoginPacket) {
+            LoginPacket loginPacket = (LoginPacket) packet;
+            this.player.setName(loginPacket.getName());
+            this.player.setId(loginPacket.getId());
+            System.out.println("Player " + player.getName() + " has been join.");
+        }
     }
 }
 

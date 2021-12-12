@@ -1,9 +1,12 @@
 package co.yunchao.base.models;
 
+import java.util.UUID;
+
 public class Player{
     private final Inventory inventory;
     private double chips;
-    private final String name;
+    private String name;
+    private UUID id;
 
     public Player(String name, int chips){
         this.name = name;
@@ -27,5 +30,17 @@ public class Player{
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
