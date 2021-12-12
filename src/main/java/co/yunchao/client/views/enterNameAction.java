@@ -26,7 +26,10 @@ public class enterNameAction {
         textField.setLayoutY((getAppHeight() / 2.0)-((textField.getHeight() / 2)-50));
         textField.setLayoutX((getAppWidth()/2.0) - (textField.getWidth()/2.0));
 
-        var confirmBtn = Button.create("/enterName/confirmBtn", () -> FXGL.getGameController().startNewGame());
+        var confirmBtn = Button.create("/enterName/confirmBtn", () -> {
+            FXGL.getGameController().startNewGame();
+            System.out.println(nameField.getText());
+        });
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-50));
         confirmBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)-200));
 

@@ -37,6 +37,8 @@ public class PlayModal {
             playMenu.setVisible(false);
             codeField.setVisible(false);
             enterNameAc.getGroup().setVisible(true);
+
+            System.out.println(codeField.getText());
         });
 
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-130));
