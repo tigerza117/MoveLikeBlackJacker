@@ -1,5 +1,6 @@
 package co.yunchao.client.controllers;
 
+import co.yunchao.client.views.Intro;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.*;
@@ -22,7 +23,7 @@ public class MainController extends GameApplication {
         settings.setHeightFromRatio(16/9.0);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
-        settings.setIntroEnabled(false);
+        settings.setIntroEnabled(true);
         settings.setFullScreenAllowed(true);
         settings.setDeveloperMenuEnabled(true);
         settings.setScaleAffectedOnResize(true);
@@ -65,7 +66,7 @@ public class MainController extends GameApplication {
             @NotNull
             @Override
             public IntroScene newIntro() {
-                return super.newIntro();
+                return new Intro();
             }
         });
     }
