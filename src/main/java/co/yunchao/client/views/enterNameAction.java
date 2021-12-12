@@ -3,14 +3,16 @@ package co.yunchao.client.views;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.TextArea;
 
 import java.util.HashMap;
 
 import static com.almasb.fxgl.dsl.FXGL.texture;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 
 public class enterNameAction {
-
+    TextArea textArea;
     private static Group group;
     private final HashMap<String, Node> buttons;
 
@@ -28,13 +30,23 @@ public class enterNameAction {
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getHeight() / 2)-50));
         confirmBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getWidth()/2.0)-200));
 
-        confirmBtn.setOnMouseClicked( e -> FXGL.getGameController().startNewGame());
+        confirmBtn.setOnMouseClicked( e -> {
+            FXGL.getGameController().startNewGame();
+            this.textArea.getText();
+            System.out.println(this.textArea.getText());
+        });
+
+        textArea = new TextArea("Enter Your Name");
+        textArea.setMaxWidth(380);
+        textArea.getStylesheets().add("/css/style.css");
+        textArea.setLayoutY((getAppHeight() / 2.0) - ((textArea.getHeight() / 2)-10));
+        textArea.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getWidth()/2.0)+200));
 
         buttons = new HashMap<>() {{
             put("confirm", confirmBtn);
         }};
 
-        group.getChildren().addAll(namePane, nameField, confirmBtn);
+        group.getChildren().addAll(namePane, nameField, confirmBtn, textArea);
         group.setVisible(false);
     }
 
