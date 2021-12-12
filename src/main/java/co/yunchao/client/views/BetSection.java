@@ -16,6 +16,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class BetSection {
     private final Group group;
     private final Text balanceText;
+    private final OptionsModal optionsAction = new OptionsModal();
     private final LeaveModal leaveAction = new LeaveModal();
     private final HashMap<String, Node> buttons;
 
@@ -23,7 +24,7 @@ public class BetSection {
         group = new Group();
         balanceText = FXGL.getUIFactoryService().newText("0$", Color.WHITE, FontType.GAME, 52);
 
-        getGameScene().getContentRoot().getChildren().addAll(leaveAction.getGroup());
+        getGameScene().getContentRoot().getChildren().addAll(leaveAction.getGroup(), optionsAction.getGroup());
 
         var optionBtn = texture("in_game_option_btn.png");
         var leaveBtn = texture("leave_btn.png");
@@ -55,7 +56,14 @@ public class BetSection {
             put("bet_chip_3", chip3BetBtn);
         }};
 
-        leaveBtn.setOnMouseClicked(event ->{
+        optionBtn.setOnMouseClicked(event -> {
+            System.out.println("Leave Game");
+            optionsAction.render();
+            play("Clicked.wav");
+            }
+        );
+
+        leaveBtn.setOnMouseClicked(event -> {
             System.out.println("Leave Game");
             leaveAction.render();
             play("Clicked.wav");
