@@ -2,7 +2,7 @@ package co.yunchao.server.models;
 
 import co.yunchao.server.controllers.GameController;
 import co.yunchao.server.controllers.PlayerController;
-import co.yunchao.server.enums.PlayerInGameState;
+import co.yunchao.base.enums.PlayerInGameState;
 
 public class Player extends co.yunchao.base.models.Player {
 
