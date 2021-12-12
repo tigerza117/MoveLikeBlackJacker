@@ -1,7 +1,7 @@
 package co.yunchao.server.net;
 
 import co.yunchao.net.packets.*;
-import co.yunchao.server.models.Player;
+import co.yunchao.server.controllers.Player;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -9,7 +9,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import java.util.HashMap;
 
 public class NetworkHandler extends SimpleChannelInboundHandler<DataPacket> {
-    private HashMap<Channel ,Player> players = new HashMap<>();
+    private final HashMap<Channel , Player> players = new HashMap<>();
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -22,7 +22,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<DataPacket> {
     protected void channelRead0(ChannelHandlerContext ctx, DataPacket packet) throws Exception {
         var player = players.get(ctx.channel());
         if (player != null) {
-            player.getPlayerController().handler(packet);
+            player.handler(packet);
             if (packet instanceof DisconnectPacket) {
                 ctx.close();
             }

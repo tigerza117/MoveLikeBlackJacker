@@ -1,17 +1,12 @@
 package co.yunchao.server.controllers;
 
-import co.yunchao.server.models.Player;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Testing {
     String[] names = new String[]{"Romeo", "Juliet", "Cykablyat", "Anjing"};
-    private GameController gm;
+    private Game gm;
 
     private HashMap<String ,JButton> btn = new HashMap<String, JButton>(){{
         put("hit", new JButton("Hit"));
@@ -30,7 +25,7 @@ public class Testing {
 
         var btn = new JButton("Start");
         btn.addActionListener(e -> {
-            this.gm = new GameController();
+            this.gm = new Game();
             for (String name : names) {
                 var player = new Player(name, this.gm);
                 gm.playerJoin(player);
@@ -40,23 +35,23 @@ public class Testing {
 
                 var hitBtn = new JButton("Hit");
                 hitBtn.addActionListener(e1 -> {
-                    player.getPlayerController().hit();
+                    player.hit();
                 });
                 var standBtn = new JButton("Stand");
                 standBtn.addActionListener(e1 -> {
-                    player.getPlayerController().stand();
+                    player.stand();
                 });
                 var dbdBtn = new JButton("Double Down");
                 dbdBtn.addActionListener(e1 -> {
-                    player.getPlayerController().doubleDown();
+                    player.doubleDown();
                 });
                 var betBtn = new JButton("Bet");
                 betBtn.addActionListener(e1 -> {
-                    player.getPlayerController().confirmBet();
+                    player.confirmBet();
                 });
                 var skipBtn = new JButton("Skip");
                 skipBtn.addActionListener(e1 -> {
-                    player.getPlayerController().skip();
+                    player.skip();
                 });
 
                 var bet1 = new JButton("500");
@@ -64,13 +59,13 @@ public class Testing {
                 var bet3 = new JButton("50");
 
                 bet1.addActionListener(e1 -> {
-                    player.getPlayerController().stackCurrentBetStage(500);
+                    player.stackCurrentBetStage(500);
                 });
                 bet2.addActionListener(e1 -> {
-                    player.getPlayerController().stackCurrentBetStage(100);
+                    player.stackCurrentBetStage(100);
                 });
                 bet3.addActionListener(e1 -> {
-                    player.getPlayerController().stackCurrentBetStage(50);
+                    player.stackCurrentBetStage(50);
                 });
 
                 f.add(new JLabel(player.getName()));

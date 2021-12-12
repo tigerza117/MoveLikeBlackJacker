@@ -4,12 +4,10 @@ import co.yunchao.base.models.Deck;
 import co.yunchao.base.enums.GameState;
 import co.yunchao.base.enums.PlayerInGameState;
 import co.yunchao.base.enums.Result;
-import co.yunchao.server.models.Player;
 
 import java.util.ArrayList;
 
-public class GameController implements Runnable {
-
+public class Game implements Runnable {
     private final ArrayList<Player> players;
     private final Deck deck;
     private final Thread thread;
@@ -18,7 +16,7 @@ public class GameController implements Runnable {
     private int playerTurnIndex = 0;
     private GameState state;
 
-    public GameController() {
+    public Game() {
         this.players = new ArrayList<>();
         this.deck = new Deck();
         this.thread = new Thread(this);
@@ -33,12 +31,11 @@ public class GameController implements Runnable {
         }
         this.deck.generateCards();
         for(Player player : this.players){
-            var con = player.getPlayerController();
             for (int i = 0; i < 2; i++) {
                 player.pickUpCard(this.deck);
             }
-            con.stackCurrentBetStage(50);
-            con.confirmBet();
+            player.stackCurrentBetStage(50);
+            player.confirmBet();
         }
 
         for(Player player: this.players){
@@ -90,10 +87,8 @@ public class GameController implements Runnable {
                         if (this.tick == 0) {
                             dealer.reset();
                             players.add(dealer);
-                            players.forEach(player -> {
-                                player.getPlayerController().skip();
-                                //clear card
-                            });
+                            //clear card
+                            players.forEach(Player::skip);
                             this.state = GameState.HAND_OUT;
                         } else {
                             this.tick--;
@@ -107,7 +102,7 @@ public class GameController implements Runnable {
                                 }
                             });
                         }
-                        if (dealer.getPlayerController().getState() == PlayerInGameState.WINING) {
+                        if (dealer.getState() == PlayerInGameState.WINING) {
                             //flip card dealer
                             this.state = GameState.PAY_OUT;
                         } else {
@@ -121,15 +116,14 @@ public class GameController implements Runnable {
                             this.state = GameState.PAY_OUT;
                         } else {
                             var player = this.players.get(playerTurnIndex);
-                            var controller = player.getPlayerController();
                             if (this.tick != 0) {
                                 if (player.isDealer()) {
                                     while (player.getInventory().getPoint() < 17) {
                                         player.pickUpCard(this.deck);
                                     }
                                 }
-                                System.out.println(player.getName() + "[" + player.getInventory().getPoint() + "] Turn > " + controller.getState());
-                                switch (controller.getState()) {
+                                System.out.println(player.getName() + "[" + player.getInventory().getPoint() + "] Turn > " + player.getState());
+                                switch (player.getState()) {
                                     case BUST:
                                         System.out.println("BUST!!!");
                                         //Remove card
@@ -149,8 +143,8 @@ public class GameController implements Runnable {
                                         break;
                                 }
                                 if (tick == 0) {
-                                    if (controller.getState() == PlayerInGameState.READY) {
-                                        controller.stand();
+                                    if (player.getState() == PlayerInGameState.READY) {
+                                        player.stand();
                                     }
                                     this.playerTurnIndex++;
                                     this.tick = 15;
@@ -162,7 +156,7 @@ public class GameController implements Runnable {
                     case PAY_OUT:
                         players.remove(dealer);
                         players.forEach(player -> {
-                            var result = player.getPlayerController().getResult(dealer);
+                            var result = player.getResult(dealer);
                             var ratio = 0.0;
                             if (result != Result.LOSE) {
                                 System.out.println(player.getName() + " Wining");
@@ -182,7 +176,7 @@ public class GameController implements Runnable {
                                 }
                             }
 
-                            player.getPlayerController().getReward(ratio);
+                            player.getReward(ratio);
                             player.reset();
                             this.tick = 5;
                             state = GameState.WAITING;
