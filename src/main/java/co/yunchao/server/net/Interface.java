@@ -2,6 +2,7 @@ package co.yunchao.server.net;
 
 import co.yunchao.net.Network;
 import co.yunchao.net.handler.*;
+import co.yunchao.server.controllers.Server;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -28,7 +29,7 @@ public class Interface {
                         ch.pipeline()
                                 .addLast(new PacketEncoder())
                                 .addLast(new PacketDecoder())
-                                .addLast(new NetworkHandler());
+                                .addLast(new NetworkHandler(new Server()));
                     }
                 }).bind(adder).sync().channel();
     }

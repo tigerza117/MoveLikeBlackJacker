@@ -27,7 +27,7 @@ public class Testing {
         btn.addActionListener(e -> {
             this.gm = new Game();
             for (String name : names) {
-                var player = new Player(name, this.gm);
+                var player = new Player(name, false);
                 gm.playerJoin(player);
                 var f = new JFrame();
                 f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

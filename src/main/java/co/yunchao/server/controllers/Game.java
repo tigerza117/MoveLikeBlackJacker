@@ -20,7 +20,7 @@ public class Game implements Runnable {
         this.players = new ArrayList<>();
         this.deck = new Deck();
         this.thread = new Thread(this);
-        this.dealer = new Player("Dealer", this, true);
+        this.dealer = new Player("Dealer",true);
         this.state = GameState.WAITING;
         this.Initial();
     }
@@ -203,6 +203,10 @@ public class Game implements Runnable {
             return this.players.get(playerTurnIndex);
         }
         return null;
+    }
+
+    public int countPlayers() {
+        return players.size();
     }
 
 }

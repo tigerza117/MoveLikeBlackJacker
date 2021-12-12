@@ -4,22 +4,23 @@ import co.yunchao.net.packets.*;
 import co.yunchao.base.enums.GameState;
 import co.yunchao.base.enums.PlayerInGameState;
 import co.yunchao.base.enums.Result;
-
-import java.util.ArrayList;
+import io.netty.channel.Channel;
 
 public class Player extends co.yunchao.base.models.Player {
-    private final Game game;
+    private Game game;
     private PlayerInGameState state;
+    private Server server;
     private int currentBetStage = 0;
     private boolean isDealer;
+    private Channel channel;
 
-    public Player(String name, Game game) {
-        super(name, 1000);
-        this.game = game;
+    public Player(String name, Channel channel) {
+        super(name);
+        this.channel = channel;
     }
 
-    public Player(String name, Game game, boolean isDealer) {
-        this(name, game);
+    public Player(String name, boolean isDealer) {
+        super(name);
         this.isDealer = isDealer;
     }
 
@@ -128,17 +129,14 @@ public class Player extends co.yunchao.base.models.Player {
         getInventory().clearCard();
     }
 
+    public void putPacket(DataPacket packet) {
+        channel.writeAndFlush(packet);
+    }
+
     public void handler(DataPacket packet) {
         switch (packet.pid()) {
-            case ProtocolInfo.LOGIN_PACKET:
-                LoginPacket loginPacket = (LoginPacket) packet;
-                setName(loginPacket.getName());
-                setId(loginPacket.getId());
-                System.out.println("Player " + getName() + " has been join.");
-                break;
-            case ProtocolInfo.DISCONNECT_PACKET:
+            case ProtocolInfo.JOIN_ROOM_PACKET:
                 DisconnectPacket disconnectPacket = (DisconnectPacket) packet;
-                System.out.println("Player " + getName() + " has been disconnected for reason " + disconnectPacket.getMessage());
                 break;
             default:
                 System.out.println("Unknown packet");
@@ -155,6 +153,25 @@ public class Player extends co.yunchao.base.models.Player {
 
     public boolean isReady() {
         return state.equals(PlayerInGameState.READY);
+    }
+
+    public void kick(String message) {
+        kick(message, false);
+    }
+
+    public void kick(String message, boolean showMsg) {
+        var pk = new DisconnectPacket();
+        pk.setMessage(message);
+        pk.setShowDialog(showMsg);
+        putPacket(pk);
+    }
+
+    public void close() {
+        System.out.println("Player " + getName() + " has been disconnected");
+    }
+
+    public Server getServer() {
+        return server;
     }
 }
 
