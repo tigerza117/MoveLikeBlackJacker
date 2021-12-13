@@ -24,8 +24,15 @@ public class BetSection {
         group = new Group();
         balanceText = FXGL.getUIFactoryService().newText("0$", Color.WHITE, FontType.GAME, 52);
 
-        var optionBtn = texture("in_game_option_btn.png");
-        var leaveBtn = texture("leave_btn.png");
+        var optionBtn = Button.create("in_game_option_btn", () -> {
+            System.out.println("Leave Game");
+            getSceneService().pushSubScene(optionsAction);
+        });
+        var leaveBtn = Button.create("leave_btn", () -> {
+            System.out.println("Leave Game");
+            getSceneService().pushSubScene(leaveAction);
+        });
+
         var textureBalance = texture("balance_box.png");
         var confirmBtn = texture("confirm_btn.png");
         var standBtn = texture("stand_btn.png");
@@ -53,18 +60,6 @@ public class BetSection {
             put("bet_chip_2", chip2BetBtn);
             put("bet_chip_3", chip3BetBtn);
         }};
-
-        optionBtn.setOnMouseClicked(event -> {
-            System.out.println("Leave Game");
-            play("Clicked.wav");
-            }
-        );
-
-        leaveBtn.setOnMouseClicked(event -> {
-            System.out.println("Leave Game");
-            play("Clicked.wav");
-            }
-        );
 
         var disableGroup = new Group();
         var topGroup = new Group();
