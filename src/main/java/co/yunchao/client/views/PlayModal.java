@@ -73,7 +73,6 @@ public class PlayModal extends SubScene {
 
         playMenu.getChildren().addAll(createBtn, orSep, enterCodeBtn);
 
-        getGameScene().getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
         playMenu.setLayoutY((getAppHeight() / 2.0)+(playMenu.getBoundsInLocal().getHeight() / 3));
         playMenu.setLayoutX((getAppWidth() / 2.0)-((playMenu.getBoundsInLocal().getWidth() / 2)-10));
 
