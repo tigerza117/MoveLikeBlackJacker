@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 
 import java.util.HashMap;
 
+import static com.almasb.fxgl.dsl.FXGL.play;
 import static com.almasb.fxgl.dsl.FXGL.texture;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
@@ -31,8 +32,16 @@ public class EnterNameAction {
             FXGL.getGameController().startNewGame();
             System.out.println(nameField.getText());
         });
+
+        var BackBtn = Button.create("mainResources/backBtn", () -> {
+            play("Clicked.wav");
+            close();
+        });
+
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-50));
         confirmBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)-200));
+        BackBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-160));
+        BackBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)+30));
 
         nameField = new TextField("Your Name");
         nameField.setMaxWidth(380);
@@ -55,10 +64,11 @@ public class EnterNameAction {
             confirmBtn.setVisible(nameField.getText().length() > 3);
         });
 
-        Group enterPane = new Group(textField, nameField, confirmBtn);
+        Group enterPane = new Group(textField, nameField, confirmBtn, BackBtn);
 
         buttons = new HashMap<>() {{
             put("confirm", confirmBtn);
+            put("Back", BackBtn);
         }};
 
         group.getChildren().addAll(namePane, enterPane);
@@ -75,6 +85,10 @@ public class EnterNameAction {
 
     public Group getGroup() {
         return group;
+    }
+
+    public void close() {
+        group.setVisible(false);
     }
 
 }
