@@ -2,17 +2,27 @@ package co.yunchao.client.views;
 
 import com.almasb.fxgl.scene.Scene;
 import com.almasb.fxgl.scene.SubScene;
+import javafx.animation.FadeTransition;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.GaussianBlur;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class EnterNameAction extends SubScene {
     TextField nameField;
+    FadeTransition fade;
 
     public EnterNameAction(){
+
+        Rectangle shadow = new Rectangle();
+        shadow.setHeight(getAppHeight());
+        shadow.setWidth(getAppWidth());
+        shadow.setFill(Color.BLACK);
+        shadow.setOpacity(0.65);
+
         var namePane = texture("enterName/namePanel.png", getAppWidth(), 306);
         namePane.setLayoutY((getAppHeight() / 2.0)-(namePane.getHeight() / 2));
 
@@ -23,11 +33,12 @@ public class EnterNameAction extends SubScene {
         var confirmBtn = Button.create("enterName/confirmBtn", () -> {
             getGameController().startNewGame();
             System.out.println(nameField.getText());
+            play("Clicked.wav");
         });
 
         var BackBtn = Button.create("mainResources/backBtn", () -> {
             play("Clicked.wav");
-            getSceneService().popSubScene();
+            close();
         });
 
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-50));
@@ -58,18 +69,23 @@ public class EnterNameAction extends SubScene {
 
         Group enterPane = new Group(textField, nameField, confirmBtn, BackBtn);
 
-        getContentRoot().getChildren().addAll(namePane, enterPane);
+        Group group = new Group(shadow, namePane, enterPane);
+        fade = SubSceneAnimation.fade(group);
+        getContentRoot().getChildren().addAll(group);
     }
 
     @Override
     public void onEnteredFrom(@NotNull Scene prevState) {
         super.onEnteredFrom(prevState);
-        prevState.getContentRoot().setEffect(new GaussianBlur());
+        fade.playFromStart();
     }
 
-    @Override
-    public void onExitingTo(@NotNull Scene nextState) {
-        super.onExitingTo(nextState);
-        nextState.getContentRoot().setEffect(null);
+    public void close() {
+        fade.setRate(-1);
+        fade.play();
+        fade.setOnFinished(event -> {
+            getSceneService().popSubScene();
+            fade.setOnFinished(null);
+        });
     }
 }

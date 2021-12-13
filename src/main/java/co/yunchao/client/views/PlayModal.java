@@ -2,17 +2,26 @@ package co.yunchao.client.views;
 
 import com.almasb.fxgl.scene.Scene;
 import com.almasb.fxgl.scene.SubScene;
+import javafx.animation.FadeTransition;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.GaussianBlur;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class PlayModal extends SubScene {
     TextField codeField;
+    FadeTransition fade;
 
     public PlayModal(){
+        Rectangle shadow = new Rectangle();
+        shadow.setHeight(getAppHeight());
+        shadow.setWidth(getAppWidth());
+        shadow.setFill(Color.BLACK);
+        shadow.setOpacity(0.65);
+
         var playMenu = new Group();
         var enterName = new EnterNameAction();
 
@@ -29,7 +38,10 @@ public class PlayModal extends SubScene {
         backBtn.setTranslateX((getAppWidth()/2.0) - (backBtn.getWidth() / 2.0));
         backBtn.setTranslateY((getAppHeight()/2.0) + 220);
 
-        backBtn.setOnMouseClicked( e -> getSceneService().popSubScene());
+        backBtn.setOnMouseClicked( e -> {
+            close();
+            play("Clicked.wav");
+        });
 
         codeField = new TextField("");
         codeField.setMaxWidth(300);
@@ -41,6 +53,7 @@ public class PlayModal extends SubScene {
             System.out.println(codeField.getText());
             getSceneService().popSubScene();
             getSceneService().pushSubScene(enterName);
+            play("Clicked.wav");
         });
 
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-130));
@@ -76,18 +89,23 @@ public class PlayModal extends SubScene {
         playMenu.setLayoutY((getAppHeight() / 2.0)+(playMenu.getBoundsInLocal().getHeight() / 3));
         playMenu.setLayoutX((getAppWidth() / 2.0)-((playMenu.getBoundsInLocal().getWidth() / 2)-10));
 
-        getContentRoot().getChildren().addAll(banner, playMenu, confirmBtn, codeField, backBtn);
+        Group group = new Group(shadow, banner, playMenu, confirmBtn, codeField, backBtn);
+        fade = SubSceneAnimation.fade(group);
+        getContentRoot().getChildren().addAll(group);
     }
 
     @Override
     public void onEnteredFrom(@NotNull Scene prevState) {
         super.onEnteredFrom(prevState);
-        prevState.getContentRoot().setEffect(new GaussianBlur());
+        fade.playFromStart();
     }
 
-    @Override
-    public void onExitingTo(@NotNull Scene nextState) {
-        super.onExitingTo(nextState);
-        nextState.getContentRoot().setEffect(null);
+    public void close() {
+        fade.setRate(-1);
+        fade.play();
+        fade.setOnFinished(event -> {
+            getSceneService().popSubScene();
+            fade.setOnFinished(null);
+        });
     }
 }
