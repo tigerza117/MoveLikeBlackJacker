@@ -1,26 +1,18 @@
 package co.yunchao.client.views;
 
-import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.scene.Scene;
+import com.almasb.fxgl.scene.SubScene;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.GaussianBlur;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import static com.almasb.fxgl.dsl.FXGL.*;
 
-import static com.almasb.fxgl.dsl.FXGL.play;
-import static com.almasb.fxgl.dsl.FXGL.texture;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
-
-public class EnterNameAction {
-
-    private static Group group;
-    private final HashMap<String, Node> buttons;
+public class EnterNameAction extends SubScene {
     TextField nameField;
 
     public EnterNameAction(){
-        group = new Group();
-
         var namePane = texture("enterName/namePanel.png", getAppWidth(), 306);
         namePane.setLayoutY((getAppHeight() / 2.0)-(namePane.getHeight() / 2));
 
@@ -29,13 +21,13 @@ public class EnterNameAction {
         textField.setLayoutX((getAppWidth()/2.0) - (textField.getWidth()/2.0));
 
         var confirmBtn = Button.create("enterName/confirmBtn", () -> {
-            FXGL.getGameController().startNewGame();
+            getGameController().startNewGame();
             System.out.println(nameField.getText());
         });
 
         var BackBtn = Button.create("mainResources/backBtn", () -> {
             play("Clicked.wav");
-            close();
+            getSceneService().popSubScene();
         });
 
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-50));
@@ -66,29 +58,18 @@ public class EnterNameAction {
 
         Group enterPane = new Group(textField, nameField, confirmBtn, BackBtn);
 
-        buttons = new HashMap<>() {{
-            put("confirm", confirmBtn);
-            put("Back", BackBtn);
-        }};
-
-        group.getChildren().addAll(namePane, enterPane);
-        group.setVisible(false);
+        getContentRoot().getChildren().addAll(namePane, enterPane);
     }
 
-    public HashMap<String, Node> getButtons() {
-        return buttons;
+    @Override
+    public void onEnteredFrom(@NotNull Scene prevState) {
+        super.onEnteredFrom(prevState);
+        prevState.getContentRoot().setEffect(new GaussianBlur());
     }
 
-    public void render() {
-        group.setVisible(true);
+    @Override
+    public void onExitingTo(@NotNull Scene nextState) {
+        super.onExitingTo(nextState);
+        nextState.getContentRoot().setEffect(null);
     }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void close() {
-        group.setVisible(false);
-    }
-
 }

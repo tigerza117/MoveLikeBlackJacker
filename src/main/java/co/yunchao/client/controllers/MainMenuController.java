@@ -9,6 +9,8 @@ import co.yunchao.client.views.PlayModal;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import javafx.scene.Group;
 
+import static com.almasb.fxgl.dsl.FXGL.*;
+
 public class MainMenuController implements MainMenuListener, ViewListener {
     private final MainMenu view;
     private final OptionsModal optionsModal = new OptionsModal();
@@ -19,7 +21,7 @@ public class MainMenuController implements MainMenuListener, ViewListener {
         view = new MainMenu();
         view.addListener(this);
         view.addViewListener(this);
-        view.getGroup().getChildren().addAll(optionsModal.getGroup(), leaveModal.getGroup(), playModal.getGroup());
+        view.getGroup().getChildren().addAll(optionsModal.getGroup(), leaveModal.getGroup());
     }
 
     public FXGLMenu getView() {
@@ -28,7 +30,7 @@ public class MainMenuController implements MainMenuListener, ViewListener {
 
     @Override
     public void clickPlay() {
-        playModal.render();
+        getSceneService().pushSubScene(playModal);
     }
 
     @Override

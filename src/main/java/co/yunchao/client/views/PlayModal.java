@@ -1,21 +1,20 @@
 package co.yunchao.client.views;
 
+import com.almasb.fxgl.scene.Scene;
+import com.almasb.fxgl.scene.SubScene;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.GaussianBlur;
+import org.jetbrains.annotations.NotNull;
 
-import static com.almasb.fxgl.dsl.FXGL.texture;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import static com.almasb.fxgl.dsl.FXGL.*;
 
-public class PlayModal {
-
-    private final Group group;
+public class PlayModal extends SubScene {
     TextField codeField;
 
     public PlayModal(){
-        group = new Group();
         var playMenu = new Group();
-        var enterNameAc = new EnterNameAction();
+        var enterName = new EnterNameAction();
 
         var banner = texture("enterRoom/yellow_banner.png", getAppWidth(), 500);
         banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
@@ -30,7 +29,7 @@ public class PlayModal {
         backBtn.setTranslateX((getAppWidth()/2.0) - (backBtn.getWidth() / 2.0));
         backBtn.setTranslateY((getAppHeight()/2.0) + 220);
 
-        backBtn.setOnMouseClicked( e -> close());
+        backBtn.setOnMouseClicked( e -> getSceneService().popSubScene());
 
         codeField = new TextField("");
         codeField.setMaxWidth(300);
@@ -39,12 +38,9 @@ public class PlayModal {
         codeField.setLayoutY((getAppHeight() / 2.0) - ((codeField.getHeight() / 2)-92));
 
         var confirmBtn = Button.create("enterName/confirmBtn", () -> {
-            banner.setVisible(false);
-            playMenu.setVisible(false);
-            codeField.setVisible(false);
-            backBtn.setVisible(false);
-            enterNameAc.render();
             System.out.println(codeField.getText());
+            getSceneService().popSubScene();
+            getSceneService().pushSubScene(enterName);
         });
 
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-130));
@@ -70,12 +66,8 @@ public class PlayModal {
         });
 
         var createBtn = Button.create("enterRoom/createRoom", () -> {
-            banner.setVisible(false);
-            playMenu.setVisible(false);
-            codeField.setVisible(false);
-            confirmBtn.setVisible(false);
-            backBtn.setVisible(false);
-            enterNameAc.render();
+            getSceneService().popSubScene();
+            getSceneService().pushSubScene(enterName);
         });
         createBtn.setTranslateY(-300);
 
@@ -85,24 +77,18 @@ public class PlayModal {
         playMenu.setLayoutY((getAppHeight() / 2.0)+(playMenu.getBoundsInLocal().getHeight() / 3));
         playMenu.setLayoutX((getAppWidth() / 2.0)-((playMenu.getBoundsInLocal().getWidth() / 2)-10));
 
-        group.getChildren().addAll(banner, playMenu, confirmBtn, codeField, backBtn, enterNameAc.getGroup());
-
-        group.setVisible(false);
+        getContentRoot().getChildren().addAll(banner, playMenu, confirmBtn, codeField, backBtn);
     }
 
-    public static String removeLastChars(String str, int chars) {
-        return str.substring(0, str.length() - chars);
+    @Override
+    public void onEnteredFrom(@NotNull Scene prevState) {
+        super.onEnteredFrom(prevState);
+        prevState.getContentRoot().setEffect(new GaussianBlur());
     }
 
-    public void render() {
-        group.setVisible(true);
-    }
-
-    public void close() {
-        group.setVisible(false);
-    }
-
-    public Group getGroup() {
-        return group;
+    @Override
+    public void onExitingTo(@NotNull Scene nextState) {
+        super.onExitingTo(nextState);
+        nextState.getContentRoot().setEffect(null);
     }
 }
