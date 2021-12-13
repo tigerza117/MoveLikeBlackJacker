@@ -8,7 +8,8 @@ import javafx.scene.control.TextField;
 import java.util.HashMap;
 
 import static com.almasb.fxgl.dsl.FXGL.texture;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 
 public class EnterNameAction {
 
@@ -39,6 +40,20 @@ public class EnterNameAction {
         nameField.getStyleClass().add("text-field");
         nameField.setLayoutY((getAppHeight() / 2.0) - ((nameField.getHeight() / 2)-14));
         nameField.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)+200));
+
+        nameField.setOnKeyTyped(ev -> {
+            String txt = nameField.getText();
+            if (txt.length() > 0) {
+                System.out.println(txt.matches("^[a-zA-Z0-9_]*$"));
+                if (!txt.matches("^[a-zA-Z0-9_]*$")) {
+                    nameField.deletePreviousChar();
+                }
+                if (nameField.getText().length() > 10) {
+                    nameField.deletePreviousChar();
+                }
+            }
+            confirmBtn.setVisible(nameField.getText().length() > 3);
+        });
 
         Group enterPane = new Group(textField, nameField, confirmBtn);
 
