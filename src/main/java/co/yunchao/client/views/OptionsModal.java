@@ -1,18 +1,18 @@
 package co.yunchao.client.views;
 
+import com.almasb.fxgl.scene.Scene;
+import com.almasb.fxgl.scene.SubScene;
 import javafx.scene.Group;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.GaussianBlur;
+import org.jetbrains.annotations.NotNull;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-public class OptionsModal {
-    private final Group group;
+public class OptionsModal extends SubScene {
 
     public OptionsModal(){
-        group = new Group();
-
         var banner = texture("options/optionPane.png", getGameScene().getAppWidth(), 684);
         banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
@@ -40,7 +40,8 @@ public class OptionsModal {
             System.out.println("sfx vol. : " + (int) sfxVol.getValue());
             System.out.println("Full screen toggle : " + fullScreen.isSelected());
             play("Clicked.wav");
-            close();
+
+            getSceneService().popSubScene();
         });
 
         fullHD_btn.setTranslateX(100);
@@ -96,19 +97,18 @@ public class OptionsModal {
         sliders.setLayoutY((getAppHeight() / 2.0)+(options.getBoundsInLocal().getHeight() / 3));
         sliders.setLayoutX((getAppWidth() / 2.0)-(options.getBoundsInLocal().getWidth() / 2));
 
-        group.getChildren().addAll(banner, options, text, fullScreen, sliders, saveBtn, separateLine);
-        group.setVisible(false);
+        getContentRoot().getChildren().addAll(banner, options, text, fullScreen, sliders, saveBtn, separateLine);
     }
 
-    public void render() {
-        group.setVisible(true);
+    @Override
+    public void onEnteredFrom(@NotNull Scene prevState) {
+        super.onEnteredFrom(prevState);
+        prevState.getContentRoot().setEffect(new GaussianBlur());
     }
 
-    public void close() {
-        group.setVisible(false);
-    }
-
-    public Group getGroup() {
-        return group;
+    @Override
+    public void onExitingTo(@NotNull Scene nextState) {
+        super.onExitingTo(nextState);
+        nextState.getContentRoot().setEffect(null);
     }
 }
