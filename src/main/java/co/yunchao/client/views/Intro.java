@@ -1,32 +1,42 @@
 package co.yunchao.client.views;
 
 import com.almasb.fxgl.app.scene.IntroScene;
+import javafx.scene.CacheHint;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
 
 public class Intro extends IntroScene {
     MediaView viewer;
 
     public Intro() {
-        var file = getClass().getClassLoader().getResource("hello.mp4");
-        if (file != null) {
-            Media media = new Media(file.toString());
-            viewer = new MediaView(new MediaPlayer(media));
-
-            getRoot().getChildren().add(viewer);
-        }
+        setBackgroundColor(Color.BLACK);
     }
 
     @Override
     public void startIntro() {
-        if (viewer != null) {
-            var player = viewer.getMediaPlayer();
-            player.play();
-            player.setOnEndOfMedia(() -> {
-                getRoot().getChildren().remove(viewer);
-                getController().gotoMainMenu();
-            });
+        try {
+            Thread.sleep(1000);
+            var file = getClass().getClassLoader().getResource("video/intro.mp4");
+            if (file != null) {
+                Media media = new Media(file.toString());
+                MediaPlayer player = new MediaPlayer(media);
+                player.setOnPlaying(() -> {
+                    viewer = new MediaView(player);
+                    player.setOnEndOfMedia(this::clear);
+                    getContentRoot().getChildren().add(viewer);
+                });
+                player.setOnError(this::clear);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            clear();
         }
+    }
+
+    public void clear() {
+        getController().gotoMainMenu();
     }
 }
