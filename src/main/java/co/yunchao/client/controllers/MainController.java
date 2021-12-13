@@ -7,7 +7,7 @@ import com.almasb.fxgl.app.scene.*;
 import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class MainController extends GameApplication {
 
@@ -23,17 +23,19 @@ public class MainController extends GameApplication {
         settings.setHeightFromRatio(16/9.0);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
-        settings.setIntroEnabled(true);
+        settings.setIntroEnabled(false);
         settings.setFullScreenAllowed(true);
         settings.setDeveloperMenuEnabled(true);
         settings.setScaleAffectedOnResize(true);
         settings.set3D(true);
+        settings.setPauseMusicWhenMinimized(false);
         settings.setFontGame("Graduate.ttf");
         settings.setFontText("Graduate.ttf");
         settings.setFontMono("Graduate.ttf");
         settings.setManualResizeEnabled(false);
-        settings.setPreserveResizeRatio(true);
-
+        settings.setPreserveResizeRatio(false);
+        settings.setTitle("Legendary Blackjack");
+        settings.setVersion("1.0");
         settings.setSceneFactory(new SceneFactory() {
             @NotNull
             @Override
@@ -72,6 +74,16 @@ public class MainController extends GameApplication {
     }
 
     @Override
+    protected void onPreInit() {
+        super.onPreInit();
+        getPrimaryStage().setWidth(1280);
+        getPrimaryStage().setHeight(720);
+        getPrimaryStage().setMaxWidth(1920);
+        getPrimaryStage().setMaxHeight(1080);
+        getPrimaryStage().setFullScreen(false);
+    }
+
+    @Override
     protected void initInput() {
         // Press F to trigger loading scene
         onKeyDown(KeyCode.F, () -> {
@@ -82,7 +94,6 @@ public class MainController extends GameApplication {
                     e.printStackTrace();
                 }
             });
-            return null;
         });
     }
 
