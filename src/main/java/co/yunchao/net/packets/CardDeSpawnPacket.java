@@ -6,8 +6,8 @@ import io.netty.buffer.ByteBuf;
 
 public class CardDeSpawnPacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.CARD_DE_SPAWN_PACKET;
-    private PlayerInGameState playerState;
-    private GameState gameState;
+    public PlayerInGameState playerState;
+    public GameState gameState;
 
     @Override
     public void encode(ByteBuf buf) {
@@ -19,22 +19,6 @@ public class CardDeSpawnPacket extends DataPacket {
     public void decode(ByteBuf buf) {
         this.playerState = PlayerInGameState.values()[buf.readInt()];
         this.gameState = GameState.values()[buf.readInt()];
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
-    public void setPlayerState(PlayerInGameState playerState) {
-        this.playerState = playerState;
-    }
-
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public PlayerInGameState getPlayerState() {
-        return playerState;
     }
 
     @Override

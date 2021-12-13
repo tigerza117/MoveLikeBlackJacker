@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 public class TimingPacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.TIMING_PACKET;
 
-    private int timeServer;
+    public int timeServer;
 
     @Override
     public void encode(ByteBuf buf) {
@@ -16,14 +16,6 @@ public class TimingPacket extends DataPacket {
     @Override
     public void decode(ByteBuf buf) {
         this.timeServer = buf.readInt();
-    }
-
-    public void setTimeServer(int timeServer) {
-        this.timeServer = timeServer;
-    }
-
-    public int getTimeServer() {
-        return timeServer;
     }
 
     @Override

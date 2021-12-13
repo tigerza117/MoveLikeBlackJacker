@@ -7,8 +7,8 @@ import java.util.UUID;
 public class LoginPacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.LOGIN_PACKET;
 
-    private UUID id;
-    private String name;
+    public UUID id;
+    public String name;
 
     @Override
     public void encode(ByteBuf byteBuf) {
@@ -20,22 +20,6 @@ public class LoginPacket extends DataPacket {
     public void decode(ByteBuf byteBuf) {
         this.id = UUID.fromString(readString(byteBuf));
         this.name = readString(byteBuf);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     @Override
