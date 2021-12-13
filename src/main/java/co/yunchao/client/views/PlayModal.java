@@ -26,8 +26,8 @@ public class PlayModal {
         var enterCodeBtn = texture("enterName/textField.png");
         enterCodeBtn.setTranslateY(-50);
 
-        codeField = new TextField("Enter Room");
-        codeField.setMaxWidth(380);
+        codeField = new TextField("");
+        codeField.setMaxWidth(300);
         codeField.getStylesheets().add("/css/style.css");
         codeField.getStyleClass().add("text-field");
         codeField.setLayoutY((getAppHeight() / 2.0) - ((codeField.getHeight() / 2)-92));
@@ -37,14 +37,30 @@ public class PlayModal {
             playMenu.setVisible(false);
             codeField.setVisible(false);
             enterNameAc.getGroup().setVisible(true);
-
             System.out.println(codeField.getText());
         });
 
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-130));
         confirmBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth()/2.0)-200));
+        confirmBtn.setVisible(false);
 
         codeField.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth()/2.0)+200));
+
+        codeField.setOnKeyTyped(ev -> {
+            String txt = codeField.getText();
+            if (txt.length() > 0) {
+                try {
+                    Integer.parseInt(txt);
+                } catch (NumberFormatException e) {
+                    codeField.deletePreviousChar();
+                } finally {
+                    if (codeField.getText().length() > 4) {
+                        codeField.deletePreviousChar();
+                    }
+                }
+            }
+            confirmBtn.setVisible(codeField.getText().length() == 4);
+        });
 
         var createBtn = Button.create("enterRoom/createRoom", () -> {
             banner.setVisible(false);
@@ -64,6 +80,10 @@ public class PlayModal {
         group.getChildren().addAll(banner, playMenu, confirmBtn, codeField, enterNameAc.getGroup());
 
         group.setVisible(false);
+    }
+
+    public static String removeLastChars(String str, int chars) {
+        return str.substring(0, str.length() - chars);
     }
 
     public void render() {
