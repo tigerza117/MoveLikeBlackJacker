@@ -1,12 +1,11 @@
 package co.yunchao.test;
 
-import co.yunchao.base.enums.GameState;
-import co.yunchao.base.enums.PlayerInGameState;
-import co.yunchao.base.enums.Result;
 import co.yunchao.net.Network;
 import co.yunchao.net.handler.PacketDecoder;
 import co.yunchao.net.handler.PacketEncoder;
-import co.yunchao.net.packets.*;
+import co.yunchao.net.packets.DataPacket;
+import co.yunchao.net.packets.GameMetadataPacket;
+import co.yunchao.net.packets.PlayerBetPacket;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -16,7 +15,6 @@ import network.ycc.raknet.pipeline.UserDataCodec;
 import network.ycc.raknet.server.RakNetServer;
 
 import java.net.InetSocketAddress;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class TestPacket {
@@ -76,7 +74,6 @@ public class TestPacket {
                     }).connect(adder).sync().channel();
 
             var pk = new PlayerBetPacket();
-            pk.setGameState(GameState.WAITING);
             clientChannel.writeAndFlush(pk).sync();
 
             serverChannel.close().sync();

@@ -32,7 +32,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<DataPacket> {
                 if (player != null) {
                     player.kick("Player exit join.");
                 }
-                players.put(ctx.channel(), new Player(loginPacket.getName(), ctx.channel()));
+                players.put(ctx.channel(), new Player(loginPacket.name, ctx.channel()));
                 break;
             case ProtocolInfo.DISCONNECT_PACKET:
                 if (player != null) {

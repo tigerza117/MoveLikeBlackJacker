@@ -161,8 +161,8 @@ public class Player extends co.yunchao.base.models.Player {
 
     public void kick(String message, boolean showMsg) {
         var pk = new DisconnectPacket();
-        pk.setMessage(message);
-        pk.setShowDialog(showMsg);
+        pk.message = message;
+        pk.showDialog = showMsg;
         putPacket(pk);
     }
 
