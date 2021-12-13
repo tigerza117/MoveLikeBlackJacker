@@ -7,9 +7,9 @@ import io.netty.buffer.ByteBuf;
 
 public class ChipDespawnPacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.CHIP_DE_SPAWN_PACKET;
-    private GameState gameState;
-    private PlayerInGameState playerState;
-    private Result result;
+    public GameState gameState;
+    public PlayerInGameState playerState;
+    public Result result;
 
     @Override
     public void encode(ByteBuf buf) {
@@ -23,30 +23,6 @@ public class ChipDespawnPacket extends DataPacket {
         this.gameState = GameState.values()[buf.readInt()];
         this.playerState = PlayerInGameState.values()[buf.readInt()];
         this.result = Result.values()[buf.readInt()];
-    }
-
-    public void setPlayerState(PlayerInGameState playerState) {
-        this.playerState = playerState;
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
-    public void setResult(Result result) {
-        this.result = result;
-    }
-
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public PlayerInGameState getPlayerState() {
-        return playerState;
-    }
-
-    public Result getResult() {
-        return result;
     }
 
     @Override

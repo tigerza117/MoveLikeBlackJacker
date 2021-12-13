@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 
 public class PlayerActionPacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.PLAYER_ACTION_PACKET;
-    private PlayerInGameState player;
+    public PlayerInGameState player;
 
     @Override
     public void encode(ByteBuf buf) {
@@ -21,13 +21,5 @@ public class PlayerActionPacket extends DataPacket {
     @Override
     public byte pid() {
         return NETWORK_ID;
-    }
-
-    public void setPlayer(PlayerInGameState player) {
-        this.player = player;
-    }
-
-    public PlayerInGameState getPlayer() {
-        return player;
     }
 }

@@ -5,7 +5,8 @@ import io.netty.buffer.ByteBuf;
 
 public class GameStatePacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.GAME_STATE_PACKET;
-    private GameState gameState;
+    public GameState gameState;
+
     @Override
     public void encode(ByteBuf buf) {
         buf.writeInt(this.gameState.ordinal());
@@ -14,14 +15,6 @@ public class GameStatePacket extends DataPacket {
     @Override
     public void decode(ByteBuf buf) {
         this.gameState = GameState.values()[buf.readInt()];
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
-    public GameState getGameState() {
-        return gameState;
     }
 
     @Override

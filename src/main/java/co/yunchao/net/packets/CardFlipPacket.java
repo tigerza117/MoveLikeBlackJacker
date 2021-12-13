@@ -6,8 +6,8 @@ import io.netty.buffer.ByteBuf;
 
 public class CardFlipPacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.CARD_FLIP_PACKET;
-    private PlayerInGameState playerState;
-    private GameState gameState;
+    public PlayerInGameState playerState;
+    public GameState gameState;
 
     @Override
     public void encode(ByteBuf buf) {
@@ -24,21 +24,5 @@ public class CardFlipPacket extends DataPacket {
     @Override
     public byte pid() {
         return NETWORK_ID;
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public void setPlayerState(PlayerInGameState playerState) {
-        this.playerState = playerState;
-    }
-
-    public PlayerInGameState getPlayerState() {
-        return playerState;
     }
 }
