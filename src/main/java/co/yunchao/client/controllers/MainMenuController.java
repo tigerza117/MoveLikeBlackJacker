@@ -21,7 +21,6 @@ public class MainMenuController implements MainMenuListener, ViewListener {
         view = new MainMenu();
         view.addListener(this);
         view.addViewListener(this);
-        view.getGroup().getChildren().addAll(optionsModal.getGroup(), leaveModal.getGroup());
     }
 
     public FXGLMenu getView() {
@@ -35,12 +34,12 @@ public class MainMenuController implements MainMenuListener, ViewListener {
 
     @Override
     public void clickOption() {
-        optionsModal.render();
+        getSceneService().pushSubScene(optionsModal);
     }
 
     @Override
     public void clickLeave() {
-        leaveModal.render();
+        getSceneService().pushSubScene(leaveModal);
     }
 
     @Override
