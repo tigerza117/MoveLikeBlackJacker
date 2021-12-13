@@ -26,6 +26,12 @@ public class PlayModal {
         var enterCodeBtn = texture("enterName/textField.png");
         enterCodeBtn.setTranslateY(-50);
 
+        var backBtn = texture("mainResources/backBtn.png");
+        backBtn.setTranslateX((getAppWidth()/2.0) - (backBtn.getWidth() / 2.0));
+        backBtn.setTranslateY((getAppHeight()/2.0) + 220);
+
+        backBtn.setOnMouseClicked( e -> close());
+
         codeField = new TextField("");
         codeField.setMaxWidth(300);
         codeField.getStylesheets().add("/css/style.css");
@@ -36,7 +42,8 @@ public class PlayModal {
             banner.setVisible(false);
             playMenu.setVisible(false);
             codeField.setVisible(false);
-            enterNameAc.getGroup().setVisible(true);
+            backBtn.setVisible(false);
+            enterNameAc.render();
             System.out.println(codeField.getText());
         });
 
@@ -67,7 +74,8 @@ public class PlayModal {
             playMenu.setVisible(false);
             codeField.setVisible(false);
             confirmBtn.setVisible(false);
-            enterNameAc.getGroup().setVisible(true);
+            backBtn.setVisible(false);
+            enterNameAc.render();
         });
         createBtn.setTranslateY(-300);
 
@@ -75,9 +83,9 @@ public class PlayModal {
 
         getGameScene().getContentRoot().getChildren().forEach(node -> node.setEffect(new GaussianBlur()));
         playMenu.setLayoutY((getAppHeight() / 2.0)+(playMenu.getBoundsInLocal().getHeight() / 3));
-        playMenu.setLayoutX((getAppWidth() / 2.0)-(playMenu.getBoundsInLocal().getWidth() / 2));
+        playMenu.setLayoutX((getAppWidth() / 2.0)-((playMenu.getBoundsInLocal().getWidth() / 2)-10));
 
-        group.getChildren().addAll(banner, playMenu, confirmBtn, codeField, enterNameAc.getGroup());
+        group.getChildren().addAll(banner, playMenu, confirmBtn, codeField, backBtn, enterNameAc.getGroup());
 
         group.setVisible(false);
     }
