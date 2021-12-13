@@ -21,6 +21,7 @@ public class Intro extends IntroScene {
             if (file != null) {
                 Media media = new Media(file.toString());
                 MediaPlayer player = new MediaPlayer(media);
+                player.setAutoPlay(true);
                 player.setOnPlaying(() -> {
                     viewer = new MediaView(player);
                     player.setOnEndOfMedia(this::clear);
