@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 
 public class DisconnectPacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.DISCONNECT_PACKET;
+
     public String message;
     public boolean showDialog;
 

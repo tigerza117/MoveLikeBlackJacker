@@ -1,27 +1,98 @@
 package co.yunchao.server.controllers;
 
-import co.yunchao.net.packets.*;
-import co.yunchao.base.enums.GameState;
-import co.yunchao.base.enums.PlayerInGameState;
+import co.yunchao.base.enums.ChipType;
 import co.yunchao.base.enums.Result;
+import co.yunchao.base.models.Chip;
+import co.yunchao.base.models.Inventory;
+import co.yunchao.net.packets.*;
+import co.yunchao.base.enums.PlayerInGameState;
 import io.netty.channel.Channel;
 
 public class Player extends co.yunchao.base.models.Player {
-    private Game game;
-    private PlayerInGameState state;
     private Server server;
-    private int currentBetStage = 0;
-    private boolean isDealer;
     private Channel channel;
+    private final Inventory inventory;
 
-    public Player(String name, Channel channel) {
-        super(name);
+    public Player(String name, Channel channel, Server server) {
+        this(name, false);
         this.channel = channel;
+        this.server = server;
     }
 
     public Player(String name, boolean isDealer) {
-        super(name);
-        this.isDealer = isDealer;
+        super(name, isDealer);
+        this.inventory = new Inventory(this);
+    }
+
+    @Override
+    public void setState(PlayerInGameState state) {
+        super.setState(state);
+        updateMetadata();
+    }
+
+    @Override
+    public void setCurrentBetStage(int currentBetStage) {
+        super.setCurrentBetStage(currentBetStage);
+        updateMetadata();
+    }
+
+    @Override
+    public void setChips(double chip) {
+        super.setChips(chip);
+        updateMetadata();
+    }
+
+    @Override
+    public void handler(DataPacket packet) {
+        switch (packet.pid()) {
+            case ProtocolInfo.JOIN_ROOM_PACKET:
+                JoinRoomPacket joinRoomPacket = (JoinRoomPacket) packet;
+                getServer().join(this, joinRoomPacket.getRoomId());
+                break;
+            case ProtocolInfo.PLAYER_ACTION_PACKET:
+                PlayerActionPacket actionPacket = (PlayerActionPacket) packet;
+                if (getGame() != null) {
+                    switch (actionPacket.action) {
+                        case CONFIRM_BET:
+                            confirmBet();
+                        case STAND:
+                            stand();
+                            break;
+                        case HIT:
+                            hit();
+                            break;
+                        case DOUBLE:
+                            doubleDown();
+                            break;
+                        default:
+                            System.out.println("Unknown action");
+                    }
+                }
+                break;
+            case ProtocolInfo.PLAYER_BET_STACK_PACKET:
+                PlayerBetStackPacket playerBetStackPacket = (PlayerBetStackPacket) packet;
+                if (getGame() != null) {
+                    stackCurrentBetStage(playerBetStackPacket.type);
+                }
+                break;
+            default:
+                System.out.println("Unknown packet");
+        }
+    }
+
+    @Override
+    public void putPacket(DataPacket packet) {
+        channel.writeAndFlush(packet);
+    }
+
+    @Override
+    public void close() {
+        getServer().leave(this);
+        reset();
+        if (getGame() != null) {
+            getGame().leave(this);
+        }
+        System.out.println("Player " + getName() + " has been disconnected");
     }
 
     public void getReward(double ratio) {
@@ -30,58 +101,90 @@ public class Player extends co.yunchao.base.models.Player {
         log("get reward " + reward + "$");
     }
 
-    public void pickUpCard() {
-        var inv = getInventory();
-        inv.addCard(game.getDeck().pickTopCard());
-        if (inv.isBlackJack()) {
-            this.state = PlayerInGameState.WINING;
-            log("is wining");
-        } else if(inv.isBust()) {
-            this.state = PlayerInGameState.BUST;
-            log("is bust");
-        }
-    }
-
+    @Override
     public void skip() {
-        if(this.state != PlayerInGameState.READY){
+        if(!isReady()){
             if (!isDealer()) {
-                this.state = PlayerInGameState.SKIP;
-                currentBetStage = 0;
+                setState(PlayerInGameState.SKIP);
+                setCurrentBetStage(0);
                 log("Skip success");
             } else {
-                this.state = PlayerInGameState.READY;
+                setState(PlayerInGameState.READY);
             }
         }
     }
 
+    @Override
     public void confirmBet() {
-        if (this.state == PlayerInGameState.IDLE && game.getState() == GameState.BET && currentBetStage > 0) {
-            this.setChips(getChips() - currentBetStage);
-            this.state = PlayerInGameState.READY;
-            log("Confirm bet success " + currentBetStage + "$");
+        if (canConfirmBet()) {
+            this.setChips(getChips() - getCurrentBetStage());
+            setState(PlayerInGameState.READY);
+            log("Confirm bet success " + getCurrentBetStage() + "$");
         }
     }
 
-    public void hit(){
-        if((this.state == PlayerInGameState.READY || this.state == PlayerInGameState.HIT) && game.isInGame()){
-            this.state = PlayerInGameState.HIT;
+    @Override
+    public void hit() {
+        if (canHit()){
+            setState(PlayerInGameState.HIT);
             this.pickUpCard();
             log("Hit success");
         }
     }
 
-    public void stand(){
-        if((this.state == PlayerInGameState.READY || this.state == PlayerInGameState.HIT) && game.isInGame()){
-            this.state = PlayerInGameState.STAND;
+    @Override
+    public void stand() {
+        if (canStand()) {
+            setState(PlayerInGameState.STAND);
             log("Stand success");
         }
     }
 
-    public void doubleDown(){
-        if (this.state == PlayerInGameState.READY && game.isInGame()) {
-            this.state = PlayerInGameState.DOUBLE;
+    public void doubleDown() {
+        if (canDoubleDown()) {
+            this.setState(PlayerInGameState.DOUBLE);
             this.pickUpCard();
             log("Double down success");
+        }
+    }
+
+    @Override
+    public void stackCurrentBetStage(ChipType chipType) {
+        int amount = chipType.getPoint();
+        if (canStackCurrentBetStage(amount)) {
+            getInventory().putChip(new Chip(chipType));
+            setCurrentBetStage(getCurrentBetStage() + amount);
+            log("stack bet " + amount + "$ total bet " + getCurrentBetStage() + "$");
+        }
+    }
+
+    public void updateMetadata() {
+        Game game = getGame();
+        if (game != null) {
+            PlayerMetadataPacket packet = new PlayerMetadataPacket();
+            packet.id = getId();
+            packet.name = getName();
+            packet.chips = getChips();
+            packet.state = getState();
+            packet.isDealer = isDealer();
+            packet.currentBetStage = getCurrentBetStage();
+            game.putPacket(packet);
+        }
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void pickUpCard() {
+        var inv = getInventory();
+        inv.putCard(getGame().getDeck().pickTopCard());
+        if (inv.isBlackJack()) {
+            setState(PlayerInGameState.WINING);
+            log("is wining");
+        } else if(inv.isBust()) {
+            setState(PlayerInGameState.BUST);
+            log("is bust");
         }
     }
 
@@ -104,55 +207,15 @@ public class Player extends co.yunchao.base.models.Player {
         return Result.LOSE;
     }
 
-    public void stackCurrentBetStage(int amount) {
-        if (getChips() - (currentBetStage + amount) >= 0) {
-            this.currentBetStage += amount;
-            log("stack bet " + amount + "$ total bet " + currentBetStage + "$");
-        }
-    }
-
-    public int getCurrentBetStage() {
-        return this.currentBetStage;
-    }
-
-    public PlayerInGameState getState() {
-        return state;
-    }
-
     public void log(String out) {
         System.out.println("Player " + getName() + " > " + out);
     }
 
     public void reset() {
-        this.state = PlayerInGameState.IDLE;
-        this.currentBetStage = 0;
-        getInventory().clearCard();
-    }
-
-    public void putPacket(DataPacket packet) {
-        channel.writeAndFlush(packet);
-    }
-
-    public void handler(DataPacket packet) {
-        switch (packet.pid()) {
-            case ProtocolInfo.JOIN_ROOM_PACKET:
-                DisconnectPacket disconnectPacket = (DisconnectPacket) packet;
-                break;
-            default:
-                System.out.println("Unknown packet");
-        }
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public boolean isDealer() {
-        return isDealer;
-    }
-
-    public boolean isReady() {
-        return state.equals(PlayerInGameState.READY);
+        setState(PlayerInGameState.IDLE);
+        setCurrentBetStage(0);
+        getInventory().clearCards();
+        getInventory().clearChips();
     }
 
     public void kick(String message) {
@@ -164,10 +227,6 @@ public class Player extends co.yunchao.base.models.Player {
         pk.message = message;
         pk.showDialog = showMsg;
         putPacket(pk);
-    }
-
-    public void close() {
-        System.out.println("Player " + getName() + " has been disconnected");
     }
 
     public Server getServer() {

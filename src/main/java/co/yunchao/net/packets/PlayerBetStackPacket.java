@@ -1,25 +1,20 @@
 package co.yunchao.net.packets;
 
-import co.yunchao.base.enums.*;
+import co.yunchao.base.enums.ChipType;
 import io.netty.buffer.ByteBuf;
 
-import java.util.UUID;
+public class PlayerBetStackPacket extends DataPacket {
+    public static final byte NETWORK_ID = ProtocolInfo.PLAYER_BET_STACK_PACKET;
 
-public class ChipSpawnPacket extends DataPacket {
-    public static final byte NETWORK_ID = ProtocolInfo.CHIP_SPAWN_PACKET;
-
-    public UUID id;
     public ChipType type;
 
     @Override
     public void encode(ByteBuf buf) {
-        writeString(buf, id.toString());
         buf.writeInt(this.type.ordinal());
     }
 
     @Override
     public void decode(ByteBuf buf) {
-        this.id = UUID.fromString(readString(buf));
         this.type = ChipType.values()[buf.readInt()];
     }
 

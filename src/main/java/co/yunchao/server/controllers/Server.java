@@ -1,17 +1,14 @@
 package co.yunchao.server.controllers;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class Server implements Runnable {
-    private LinkedList<Game> games;
-    private Queue<Player> queue;
-    private ArrayList<Player> players;
+    private final HashMap<String ,Game> games;
+    private final Queue<Player> queue;
+    private final ArrayList<Player> players;
 
     public Server() {
-        this.games = new LinkedList<>();
+        this.games = new HashMap<>();
         this.queue = new LinkedList<>();
         this.players = new ArrayList<>();
     }
@@ -41,7 +38,8 @@ public class Server implements Runnable {
                 checkPaused();
                 var player = queue.poll();
                 if (player != null) {
-
+                    Game game = newGame();
+                    game.join(player);
                 }
                 Thread.sleep(200);
             }
@@ -50,8 +48,38 @@ public class Server implements Runnable {
         }
     }
 
-    public void join(Player player) {
-        players.add(player);
+    public Game newGame() {
+        Random rand = new Random();
+        while (true) {
+            rand.setSeed(System.currentTimeMillis());
+            int idNumber = rand.nextInt(10000);
+            String id = String.format("%04d", idNumber);
+            if (!games.containsKey(id)) {
+                Game game = new Game(id);
+                games.put(id, game);
+                return game;
+            }
+        }
+    }
+
+    public void join(Player player, String roomId) {
+        if (roomId.equals("000A")) {
+            players.add(player);
+            enqueue(player);
+        } else {
+            if (!games.containsKey(roomId)) {
+                player.kick("Room not found.");
+            } else {
+                if (!games.get(roomId).join(player)) {
+                    player.kick("Room full please try again.");
+                }
+            }
+        }
+    }
+
+    public void leave(Player player) {
+        players.remove(player);
+        queue.remove(player);
     }
 
     public void enqueue(Player player) {

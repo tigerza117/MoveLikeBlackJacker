@@ -2,59 +2,110 @@ package co.yunchao.server.controllers;
 
 import co.yunchao.base.models.Deck;
 import co.yunchao.base.enums.GameState;
-import co.yunchao.base.enums.PlayerInGameState;
 import co.yunchao.base.enums.Result;
+import co.yunchao.net.packets.*;
 
 import java.util.ArrayList;
 
-public class Game implements Runnable {
+public class Game extends co.yunchao.base.models.Game implements Runnable {
     private final ArrayList<Player> players;
     private final Deck deck;
     private final Thread thread;
     private final Player dealer;
     private int tick = 20;
     private int playerTurnIndex = 0;
-    private GameState state;
 
-    public Game() {
+    public Game(String id) {
+        super(id);
         this.players = new ArrayList<>();
         this.deck = new Deck();
         this.thread = new Thread(this);
         this.dealer = new Player("Dealer",true);
-        this.state = GameState.WAITING;
-        this.Initial();
-    }
-
-    public void Initial() {
+        setState(GameState.WAITING);
         for(Player player: this.players){
-            player.getInventory().clearCard();
+            player.getInventory().clearCards();
         }
         this.deck.generateCards();
-        for(Player player : this.players){
-            for (int i = 0; i < 2; i++) {
-                player.pickUpCard(this.deck);
-            }
-            player.stackCurrentBetStage(50);
-            player.confirmBet();
-        }
-
-        for(Player player: this.players){
-            System.out.println(player.getInventory().getPoint());
-        }
         thread.start();
     }
 
-    public void playerJoin(Player player) {
-        this.players.add(player);
+    @Override
+    public void putPacket(DataPacket packet) {
+        players.forEach(player -> {
+            if (!player.isDealer()) {
+                player.putPacket(packet);
+            }
+        });
     }
 
-    public Deck getDeck(){
+    @Override
+    public synchronized boolean join(co.yunchao.base.models.Player player) {
+        if (this.players.size() < 4) return false;
+        Player pl = (Player) player;
+        broadcastPlayerJoin(pl);
+        player.setGame(this);
+        this.players.add(pl);
+        return true;
+    }
+
+    @Override
+    public synchronized void leave(co.yunchao.base.models.Player player) {
+        Player pl = (Player) player;
+        broadcastPlayerLeave(pl);
+        player.setGame(null);
+        this.players.remove(pl);
+    }
+
+    public void broadcastPlayerJoin(Player player) {
+        PlayerJoinPacket packet = new PlayerJoinPacket();
+        packet.id = player.getId();
+        packet.name = player.getName();
+        putPacket(packet);
+
+        GameMetadataPacket gameMetadataPacket = new GameMetadataPacket();
+        gameMetadataPacket.id = getId();
+        gameMetadataPacket.state = getState();
+        gameMetadataPacket.tick = tick;
+        player.putPacket(gameMetadataPacket);
+
+        players.forEach(pl -> {
+            PlayerMetadataPacket playerMetadataPacket = new PlayerMetadataPacket();
+            playerMetadataPacket.id = pl.getId();
+            playerMetadataPacket.name = pl.getName();
+            playerMetadataPacket.chips = pl.getChips();
+            playerMetadataPacket.state = pl.getState();
+            playerMetadataPacket.isDealer = pl.isDealer();
+            playerMetadataPacket.currentBetStage = pl.getCurrentBetStage();
+            player.putPacket(playerMetadataPacket);
+        });
+    }
+
+    public void broadcastPlayerLeave(Player player) {
+        PlayerLeavePacket packet = new PlayerLeavePacket();
+        packet.id = player.getId();
+        packet.name = player.getName();
+        putPacket(packet);
+    }
+
+    public void broadcastGameState() {
+        GameMetadataPacket packet = new GameMetadataPacket();
+        packet.id = getId();
+        packet.state = getState();
+        packet.tick = tick;
+        putPacket(packet);
+    }
+
+    public Deck getDeck() {
         return this.deck;
+    }
+
+    public int countPlayers() {
+        return players.size();
     }
 
     private boolean paused = false;
 
-    private synchronized void checkPaused(){
+    private synchronized void checkPaused() {
         try{
             while(paused){
                 this.wait();
@@ -65,7 +116,7 @@ public class Game implements Runnable {
         }
     }
 
-    public synchronized void pauseThread(){
+    public synchronized void pauseThread() {
         this.paused = !this.paused;
         if(!this.paused) this.notify();
     }
@@ -75,12 +126,13 @@ public class Game implements Runnable {
         try {
             while (true) {
                 checkPaused();
-                System.out.println(state + " > " + tick);
-                switch (state) {
+                broadcastGameState();
+                System.out.println(getState() + " > " + tick);
+                switch (getState()) {
                     case WAITING:
                         if (this.players.size() > 0) {
                             this.tick = 15;
-                            this.state = GameState.BET;
+                            setState(GameState.BET);
                         }
                         break;
                     case BET:
@@ -89,7 +141,7 @@ public class Game implements Runnable {
                             players.add(dealer);
                             //clear card
                             players.forEach(Player::skip);
-                            this.state = GameState.HAND_OUT;
+                            setState(GameState.HAND_OUT);
                         } else {
                             this.tick--;
                         }
@@ -98,28 +150,28 @@ public class Game implements Runnable {
                         for (int i = 0; i < 2; i++) {
                             players.forEach(player -> {
                                 if (player.isReady()) {
-                                    player.pickUpCard(deck);
+                                    player.pickUpCard();
                                 }
                             });
                         }
-                        if (dealer.getState() == PlayerInGameState.WINING) {
+                        if (dealer.isWining()) {
                             //flip card dealer
-                            this.state = GameState.PAY_OUT;
+                            setState(GameState.PAY_OUT);
                         } else {
-                            this.state = GameState.IN_GAME;
+                            setState(GameState.IN_GAME);
                             this.playerTurnIndex = 0;
                             this.tick = 15;
                         }
                         break;
                     case IN_GAME:
                         if (players.size() == playerTurnIndex) {
-                            this.state = GameState.PAY_OUT;
+                            setState(GameState.PAY_OUT);
                         } else {
                             var player = this.players.get(playerTurnIndex);
                             if (this.tick != 0) {
                                 if (player.isDealer()) {
                                     while (player.getInventory().getPoint() < 17) {
-                                        player.pickUpCard(this.deck);
+                                        player.pickUpCard();
                                     }
                                 }
                                 System.out.println(player.getName() + "[" + player.getInventory().getPoint() + "] Turn > " + player.getState());
@@ -143,7 +195,7 @@ public class Game implements Runnable {
                                         break;
                                 }
                                 if (tick == 0) {
-                                    if (player.getState() == PlayerInGameState.READY) {
+                                    if (player.isReady()) {
                                         player.stand();
                                     }
                                     this.playerTurnIndex++;
@@ -179,7 +231,7 @@ public class Game implements Runnable {
                             player.getReward(ratio);
                             player.reset();
                             this.tick = 5;
-                            state = GameState.WAITING;
+                            setState(GameState.WAITING);
                         });
                         break;
                 }
@@ -189,25 +241,5 @@ public class Game implements Runnable {
             e.printStackTrace();
         }
     }
-
-    public GameState getState() {
-        return state;
-    }
-
-    public boolean isInGame() {
-        return state == GameState.IN_GAME;
-    }
-
-    public Player getPlayerInTurn() {
-        if (isInGame()) {
-            return this.players.get(playerTurnIndex);
-        }
-        return null;
-    }
-
-    public int countPlayers() {
-        return players.size();
-    }
-
 }
 

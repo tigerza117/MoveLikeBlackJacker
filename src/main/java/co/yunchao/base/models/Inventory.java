@@ -1,13 +1,17 @@
 package co.yunchao.base.models;
 
+import co.yunchao.net.packets.*;
+
 import java.util.ArrayList;
 
 public class Inventory {
     private final ArrayList<Card> cards;
+    private final ArrayList<Chip> chips;
     private final Player player;
 
     public Inventory(Player player) {
         this.cards = new ArrayList<>();
+        this.chips = new ArrayList<>();
         this.player = player;
     }
 
@@ -15,25 +19,60 @@ public class Inventory {
         return cards;
     }
 
-    public Card getFirstCard(){
-        return cards.get(0);
+    public ArrayList<Chip> getChips() {
+        return chips;
     }
 
-    public Card getSecondCard(){
-        return cards.get(1);
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void addCard(Card card) {
+    public void putCard(Card card) {
+        if (player.getGame() != null) {
+            CardSpawnPacket packet = new CardSpawnPacket();
+            packet.id = card.getId();
+            packet.flip = card.isFlip();
+            player.getGame().putPacket(packet);
+        }
         this.cards.add(card);
-        System.out.printf("%s -> got: %s-%s card total point %d\n", player.getName(), card.getName(), card.getSuit(), getPoint());
     }
 
-    public void clearCard() {
+    public void putChip(Chip chip) {
+        if (player.getGame() != null) {
+            ChipSpawnPacket packet = new ChipSpawnPacket();
+            packet.id = chip.getId();
+            packet.type = chip.getType();
+            player.getGame().putPacket(packet);
+        }
+        this.chips.add(chip);
+    }
+
+    public void clearCards() {
+        if (player.getGame() != null) {
+            cards.forEach(card -> {
+                CardDeSpawnPacket packet = new CardDeSpawnPacket();
+                packet.id = card.getId();
+                player.getGame().putPacket(packet);
+            });
+        }
         this.cards.clear();
+    }
+
+    public void clearChips() {
+        if (player.getGame() != null) {
+            chips.forEach(chip -> {
+                ChipDeSpawnPacket packet = new ChipDeSpawnPacket();
+                packet.id = chip.getId();
+                player.getGame().putPacket(packet);
+            });
+        }
+        this.chips.clear();
+    }
+
+    public void toggleFlipCard(Card card) {
+        card.setFlip(!card.isFlip());
+        if (player.getGame() != null) {
+            CardToggleFlipPacket packet = new CardToggleFlipPacket();
+            packet.id = card.getId();
+            packet.flip = card.isFlip();
+            player.getGame().putPacket(packet);
+        }
     }
 
     public int getPoint() {
@@ -59,15 +98,15 @@ public class Inventory {
         return points;
     }
 
-    public boolean isBlackJack(){
+    public boolean isBlackJack() {
         return getPoint() == 21 && getCards().size() == 2;
     }
 
-    public boolean is5Card(){
+    public boolean is5Card() {
         return getCards().size() == 5 && getPoint() <= 21;
     }
 
-    public boolean isBust(){
+    public boolean isBust() {
         return getPoint() > 21;
     }
 }

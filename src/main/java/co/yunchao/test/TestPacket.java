@@ -5,7 +5,6 @@ import co.yunchao.net.handler.PacketDecoder;
 import co.yunchao.net.handler.PacketEncoder;
 import co.yunchao.net.packets.DataPacket;
 import co.yunchao.net.packets.GameMetadataPacket;
-import co.yunchao.net.packets.PlayerBetPacket;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -72,9 +71,6 @@ public class TestPacket {
                                     });
                         }
                     }).connect(adder).sync().channel();
-
-            var pk = new PlayerBetPacket();
-            clientChannel.writeAndFlush(pk).sync();
 
             serverChannel.close().sync();
             clientChannel.close().sync();

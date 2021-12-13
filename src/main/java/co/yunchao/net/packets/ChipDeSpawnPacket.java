@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.UUID;
 
-public class CardDeSpawnPacket extends DataPacket {
-    public static final byte NETWORK_ID = ProtocolInfo.CARD_DE_SPAWN_PACKET;
+public class ChipDeSpawnPacket extends DataPacket {
+    public static final byte NETWORK_ID = ProtocolInfo.CHIP_DE_SPAWN_PACKET;
 
     public UUID id;
 

@@ -1,22 +1,32 @@
 package co.yunchao.net.packets;
 
-import co.yunchao.base.enums.GameState;
-import co.yunchao.base.enums.PlayerInGameState;
+import co.yunchao.base.enums.CardSuit;
 import io.netty.buffer.ByteBuf;
+
+import java.util.UUID;
 
 public class CardSpawnPacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.CARD_SPAWN_PACKET;
-    public GameState gameState;
-    public PlayerInGameState playerState;
+
+    public UUID id;
+    public CardSuit suit;
+    public int point;
+    public boolean flip = true;
 
     @Override
     public void encode(ByteBuf buf) {
-        buf.writeInt(gameState.ordinal());
+        writeString(buf, id.toString());
+        buf.writeInt(suit.ordinal());
+        buf.writeInt(point);
+        buf.writeBoolean(flip);
     }
 
     @Override
     public void decode(ByteBuf buf) {
-        this.gameState = GameState.values()[buf.readInt()];
+        this.id = UUID.fromString(readString(buf));
+        this.suit = CardSuit.values()[buf.readInt()];
+        this.point = buf.readInt();
+        this.flip = buf.readBoolean();
     }
 
     @Override
