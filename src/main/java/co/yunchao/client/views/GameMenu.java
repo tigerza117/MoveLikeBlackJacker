@@ -2,17 +2,6 @@ package co.yunchao.client.views;
 
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
-import javafx.geometry.Pos;
-import javafx.scene.CacheHint;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.effect.GaussianBlur;
-import javafx.scene.layout.StackPane;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class GameMenu extends FXGLMenu {
     private final OptionsModal optionsModal = new OptionsModal();
@@ -21,7 +10,7 @@ public class GameMenu extends FXGLMenu {
         super(MenuType.GAME_MENU);
     }
 
-    @Override
+    /*@Override
     public void onCreate() {
         getGameScene().getContentRoot().getChildren().forEach(n -> n.setEffect(new GaussianBlur()));
         getRoot().getChildren().add(optionsModal.getGroup());
@@ -33,5 +22,5 @@ public class GameMenu extends FXGLMenu {
         super.onDestroy();
         getGameScene().getContentRoot().getChildren().forEach(n -> n.setEffect(null));
         getRoot().getChildren().remove(optionsModal.getGroup());
-    }
+    }*/
 }
