@@ -32,7 +32,7 @@ public class GameController {
                 break;
             case ProtocolInfo.PLAYER_JOIN_PACKET:
                 PlayerJoinPacket playerJoinPacket = (PlayerJoinPacket) packet;
-                System.out.println("Player " + playerJoinPacket.id + " has been join the game.");
+                /*System.out.println("Player " + playerJoinPacket.id + " has been join the game.");*/
                 break;
             default:
                 System.out.println("Unknown packet");
