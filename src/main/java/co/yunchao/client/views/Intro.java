@@ -17,7 +17,6 @@ public class Intro extends IntroScene {
     @Override
     public void startIntro() {
         try {
-            Thread.sleep(1000);
             var file = getClass().getClassLoader().getResource("video/intro.mp4");
             if (file != null) {
                 Media media = new Media(file.toString());
