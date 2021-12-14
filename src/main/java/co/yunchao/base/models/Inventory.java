@@ -27,6 +27,8 @@ public class Inventory {
         if (player.getGame() != null) {
             CardSpawnPacket packet = new CardSpawnPacket();
             packet.id = card.getId();
+            packet.number = card.getNumber();
+            packet.suit = card.getSuit();
             packet.flip = card.isFlip();
             player.getGame().putPacket(packet);
         }

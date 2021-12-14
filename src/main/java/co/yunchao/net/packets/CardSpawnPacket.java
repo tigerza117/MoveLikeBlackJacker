@@ -10,14 +10,14 @@ public class CardSpawnPacket extends DataPacket {
 
     public UUID id;
     public CardSuit suit;
-    public int point;
+    public int number;
     public boolean flip = true;
 
     @Override
     public void encode(ByteBuf buf) {
         writeString(buf, id.toString());
         buf.writeInt(suit.ordinal());
-        buf.writeInt(point);
+        buf.writeInt(number);
         buf.writeBoolean(flip);
     }
 
@@ -25,7 +25,7 @@ public class CardSpawnPacket extends DataPacket {
     public void decode(ByteBuf buf) {
         this.id = UUID.fromString(readString(buf));
         this.suit = CardSuit.values()[buf.readInt()];
-        this.point = buf.readInt();
+        this.number = buf.readInt();
         this.flip = buf.readBoolean();
     }
 

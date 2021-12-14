@@ -7,8 +7,9 @@ import java.util.UUID;
 
 public class Card implements Serializable {
     private final UUID id;
-    public CardSuit suit;
+    private final CardSuit suit;
     private final String name;
+    private final int number;
     private final int point;
     private boolean flip = false;
 
@@ -17,6 +18,7 @@ public class Card implements Serializable {
 
     public Card(int number, CardSuit suit){
         this.id = UUID.randomUUID();
+        this.number = number;
         switch (number) {
             case 1:
                 number = 101;
@@ -41,7 +43,7 @@ public class Card implements Serializable {
         this.suit = suit;
     }
 
-    public int getPoint(){
+    public int getPoint() {
         return point;
     }
 
@@ -63,5 +65,9 @@ public class Card implements Serializable {
 
     public boolean isFlip() {
         return flip;
+    }
+
+    public int getNumber() {
+        return number;
     }
 }
