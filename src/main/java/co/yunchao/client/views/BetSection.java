@@ -24,7 +24,7 @@ public class BetSection extends Group {
         balanceText = FXGL.getUIFactoryService().newText("0$", Color.WHITE, FontType.GAME, 52);
 
         var optionBtn = Button.create("in_game_option_btn", () -> {
-            System.out.println("Leave Game");
+            System.out.println("Options");
             getSceneService().pushSubScene(new OptionsModal());
         });
         var leaveBtn = Button.create("leave_btn", () -> {
@@ -49,18 +49,19 @@ public class BetSection extends Group {
         progress.getStyleClass().add("progress-bar");
 
         Text time = FXGL.getUIFactoryService().newText("time", Color.WHITE, FontType.GAME, 20);
+
         var textureBalance = texture("balance_box.png");
-        var confirmBtn = texture("confirm_btn.png");
-        var standBtn = texture("stand_btn.png");
-        var hitBtn = texture("hit_btn.png");
-        var doubleBtn = texture("double_btn.png");
+        var confirmBtn = Button.create("confirm_btn", () -> System.out.println("Confirm"));
+        var standBtn = Button.create("stand_btn", () -> System.out.println("Stand"));
+        var hitBtn = Button.create("hit_btn", () -> System.out.println("Hit"));
+        var doubleBtn = Button.create("double_btn", () -> System.out.println("Double"));
         var textureChipSection = texture("chip_section.png");
-        var minBtn = texture("min_btn.png");
-        var maxBtn = texture("max_btn.png");
-        var clearBtn = texture("clear_btn.png");
-        var chip1BetBtn = texture("chip1_bet_btn.png");
-        var chip2BetBtn = texture("chip2_bet_btn.png");
-        var chip3BetBtn = texture("chip3_bet_btn.png");
+        var minBtn = Button.create("min_btn", () -> System.out.println("Min Bet"));
+        var maxBtn = Button.create("max_btn", () -> System.out.println("Max Bet"));
+        var clearBtn = Button.create("clear_btn", () -> System.out.println("Clear"));
+        var chip1BetBtn = Button.create("chip1_bet_btn", () -> System.out.println("Chip 25$"));
+        var chip2BetBtn = Button.create("chip2_bet_btn", () -> System.out.println("Chip 100$"));
+        var chip3BetBtn = Button.create("chip3_bet_btn", () -> System.out.println("Chip 500$"));
 
         var disableGroup = new Group();
         var timerGroup = new Group();
