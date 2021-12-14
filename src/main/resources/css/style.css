@@ -52,4 +52,5 @@
     -fx-font-size: 40px;
     -fx-text-fill: #09213D;
     -fx-font-family: Graduate;
+    -fx-prompt-text-fill: gray;
 }
