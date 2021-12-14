@@ -27,6 +27,6 @@ public class Chip {
     }
 
     public int getPoint() {
-        return type.getPoint();
+        return type.getAmount();
     }
 }
