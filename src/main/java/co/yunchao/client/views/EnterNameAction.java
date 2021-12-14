@@ -30,13 +30,9 @@ public class EnterNameAction extends SubScene {
         textField.setLayoutY((getAppHeight() / 2.0)-((textField.getHeight() / 2)-50));
         textField.setLayoutX((getAppWidth()/2.0) - (textField.getWidth()/2.0));
 
-        var confirmBtn = Button.create("enterName/confirmBtn", () -> {
-            onConfirm.confirm(nameField.getText());
-        });
+        var confirmBtn = Button.create("enterName/confirmBtn", () -> onConfirm.confirm(nameField.getText()));
 
-        var BackBtn = Button.create("mainResources/backBtn", () -> {
-            close();
-        });
+        var BackBtn = Button.create("mainResources/backBtn", this::close);
 
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-50));
         confirmBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)-200));
@@ -62,7 +58,7 @@ public class EnterNameAction extends SubScene {
                     nameField.deletePreviousChar();
                 }
             }
-            confirmBtn.setVisible(nameField.getText().length() > 3);
+            confirmBtn.setVisible(nameField.getText().length() > 1);
         });
 
         Group enterPane = new Group(textField, nameField, confirmBtn, BackBtn);
