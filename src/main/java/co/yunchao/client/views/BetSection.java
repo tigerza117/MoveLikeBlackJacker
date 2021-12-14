@@ -36,11 +36,11 @@ public class BetSection extends Group {
         });
 
         ProgressBar progress = new ProgressBar();
-        IntegerProperty seconds = new SimpleIntegerProperty();
-        progress.progressProperty().bind(seconds.divide(60.0));
+        IntegerProperty mills = new SimpleIntegerProperty();
+        progress.progressProperty().bind(mills.divide(60000.0));
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(seconds, 60)),
-                new KeyFrame(Duration.minutes(1), e-> System.out.println("Minute over"), new KeyValue(seconds, 0))
+                new KeyFrame(Duration.ZERO, new KeyValue(mills, 60000.0)),
+                new KeyFrame(Duration.minutes(.5), e-> System.out.println("Minute over"), new KeyValue(mills, 0))
         );
         timeline.setCycleCount(1);
         timeline.play();
