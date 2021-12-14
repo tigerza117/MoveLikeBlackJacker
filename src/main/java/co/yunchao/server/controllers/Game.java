@@ -32,9 +32,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
     @Override
     public void putPacket(DataPacket packet) {
         players.forEach(player -> {
-            if (!player.isDealer()) {
-                player.putPacket(packet);
-            }
+            player.putPacket(packet);
         });
     }
 
