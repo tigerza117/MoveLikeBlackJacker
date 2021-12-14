@@ -47,6 +47,7 @@ public class EnterNameAction extends SubScene {
         nameField.setLayoutY((getAppHeight() / 2.0) - ((nameField.getHeight() / 2)-14));
         nameField.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)+200));
 
+        confirmBtn.setVisible(false);
         nameField.setOnKeyTyped(ev -> {
             String txt = nameField.getText();
             if (txt.length() > 0) {
