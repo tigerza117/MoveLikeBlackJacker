@@ -150,7 +150,7 @@ public class Player extends co.yunchao.base.models.Player {
 
     @Override
     public void stackCurrentBetStage(ChipType chipType) {
-        int amount = chipType.getPoint();
+        int amount = chipType.getAmount();
         if (canStackCurrentBetStage(amount)) {
             getInventory().putChip(new Chip(chipType));
             setCurrentBetStage(getCurrentBetStage() + amount);
