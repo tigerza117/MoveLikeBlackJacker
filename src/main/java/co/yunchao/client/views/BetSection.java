@@ -8,7 +8,6 @@ import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.paint.Color;
@@ -16,28 +15,24 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
-import java.util.HashMap;
-
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-public class BetSection {
-    private final Group group;
+public class BetSection extends Group {
     private final Text balanceText;
-    private final OptionsModal optionsAction = new OptionsModal();
-    private final LeaveModal leaveAction = new LeaveModal();
-    private final HashMap<String, Node> buttons;
 
-    BetSection() {
-        group = new Group();
+    BetSection(Table table) {
         balanceText = FXGL.getUIFactoryService().newText("0$", Color.WHITE, FontType.GAME, 52);
 
         var optionBtn = Button.create("in_game_option_btn", () -> {
             System.out.println("Leave Game");
-            getSceneService().pushSubScene(optionsAction);
+            getSceneService().pushSubScene(new OptionsModal());
         });
         var leaveBtn = Button.create("leave_btn", () -> {
             System.out.println("Leave Game");
-            getSceneService().pushSubScene(leaveAction);
+            getSceneService().pushSubScene(new LeaveModal(() -> {
+                getGameController().gotoMainMenu();
+                table.close();
+            }));
         });
 
         ProgressBar progress = new ProgressBar();
@@ -66,21 +61,6 @@ public class BetSection {
         var chip1BetBtn = texture("chip1_bet_btn.png");
         var chip2BetBtn = texture("chip2_bet_btn.png");
         var chip3BetBtn = texture("chip3_bet_btn.png");
-
-        buttons = new HashMap<>(){{
-            put("option", optionBtn);
-            put("leave", leaveBtn);
-            put("confirm", confirmBtn);
-            put("stand", confirmBtn);
-            put("hit", hitBtn);
-            put("double", doubleBtn);
-            put("bet_min", minBtn);
-            put("bet_max", maxBtn);
-            put("bet_clear", clearBtn);
-            put("bet_chip_1", chip1BetBtn);
-            put("bet_chip_2", chip2BetBtn);
-            put("bet_chip_3", chip3BetBtn);
-        }};
 
         var disableGroup = new Group();
         var timerGroup = new Group();
@@ -126,24 +106,14 @@ public class BetSection {
         disableGroup.setEffect(desaturate);
         disableGroup.setTranslateY(62);
 
-        group.getChildren().addAll(bottomGroup, disableGroup, timerGroup); //remove and add something to test
-        group.setLayoutX(32);
-        group.setLayoutY(842);
-        group.prefWidth(1855);
-        group.prefHeight(202);
-        group.setVisible(false);
-        getGameScene().getContentRoot().getChildren().add(group);
+        getChildren().addAll(bottomGroup, disableGroup, timerGroup); //remove and add something to test
+        setLayoutX(32);
+        setLayoutY(842);
+        prefWidth(1855);
+        prefHeight(202);
     }
 
     public void setBalance(int number) {
         balanceText.setText(number + "$");
-    }
-
-    public HashMap<String, Node> getButtons() {
-        return buttons;
-    }
-
-    public Group getGroup() {
-        return group;
     }
 }

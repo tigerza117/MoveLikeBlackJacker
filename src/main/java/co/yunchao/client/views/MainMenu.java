@@ -1,7 +1,6 @@
 package co.yunchao.client.views;
 
 import co.yunchao.client.listener.MainMenuListener;
-import co.yunchao.client.listener.ViewListener;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.audio.Music;
@@ -16,7 +15,6 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class MainMenu extends FXGLMenu {
     private final List<MainMenuListener> listeners = new ArrayList<>();
-    private final List<ViewListener> viewListeners = new ArrayList<>();
     private final List<Node> buttons = new ArrayList<>();
     private final Group group;
 
@@ -30,35 +28,26 @@ public class MainMenu extends FXGLMenu {
         var body = createBody();
 
         group = new Group(bg, logo, body);
-
-        getContentRoot().getChildren().addAll(group);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        viewListeners.forEach(viewListener -> viewListener.open(group));
-
         Music music = getAssetLoader().load(AssetType.MUSIC, "main_menu_bg.mp3");
-
         getAudioPlayer().loopMusic(music);
+        getContentRoot().getChildren().add(group);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        viewListeners.forEach(viewListener -> viewListener.close(group));
         getAudioPlayer().stopAllSoundsAndMusic();
         getAudioPlayer().onMainLoopPausing();
-        getGameScene().clearEffect();
+        getContentRoot().getChildren().remove(group);
     }
 
     public void addListener(MainMenuListener listener) {
         listeners.add(listener);
-    }
-
-    public void addViewListener(ViewListener listener) {
-        viewListeners.add(listener);
     }
 
     public Group getGroup() {

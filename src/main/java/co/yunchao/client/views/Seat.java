@@ -12,10 +12,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 import java.util.ArrayList;
 
-public class Seat {
-    private final Group group;
-    private final ArrayList<Card> cards;
-    private final ArrayList<Chip> chipBet;
+public class Seat extends Group {
+    private final ArrayList<CardEntity> cardEntities;
+    private final ArrayList<ChipEntity> chipEntityBet;
     private final Text textName;
     private final Text textBetTotal;
     private final Texture textureIcon;
@@ -24,17 +23,16 @@ public class Seat {
     private boolean isDealer = false;
 
     Seat(double offsetX, double offsetY) {
-        this.group = new Group();
         this.textName = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 16);
         this.textBetTotal = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 28);
-        this.cards = new ArrayList<>();
-        this.chipBet = new ArrayList<>();
+        this.cardEntities = new ArrayList<>();
+        this.chipEntityBet = new ArrayList<>();
         this.textureIcon = FXGL.texture("player_icon.png");
         this.textureDealerScore = FXGL.texture("Dealer Score.png");
         this.textDealerScore = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 22);
 
-        group.setTranslateX(offsetX);
-        group.setTranslateY(offsetY);
+        setTranslateX(offsetX);
+        setTranslateY(offsetY);
 
         textureIcon.setTranslateX(43);
         textureIcon.setTranslateY(295);
@@ -58,35 +56,34 @@ public class Seat {
         textDealerScore.setWrappingWidth(textureDealerScore.getWidth());
         textDealerScore.setTextAlignment(TextAlignment.CENTER);
 
-        group.getChildren().addAll(textName, textureIcon, textureDealerScore, textDealerScore, textBetTotal);
+        getChildren().addAll(textName, textureIcon, textureDealerScore, textDealerScore, textBetTotal);
 
-        getGameScene().getContentRoot().getChildren().addAll(group);
+        getGameScene().getContentRoot().getChildren().add(this);
     }
 
-    public void addCard(Card card) {
-        var cardGroup = card.getGroup();
-        var bounds = cardGroup.getBoundsInLocal();
-        var size = cards.size();
-        cardGroup.setLayoutX((bounds.getWidth() * size * 0.6));
-        cardGroup.setLayoutY(65 + (bounds.getHeight() * size * -0.1));
-        group.getChildren().add(cardGroup);
-        cards.add(card);
-        card.spawn();
+    public void addCard(CardEntity cardEntity) {
+        var bounds = cardEntity.getBoundsInLocal();
+        var size = cardEntities.size();
+        cardEntity.setLayoutX((bounds.getWidth() * size * 0.6));
+        cardEntity.setLayoutY(65 + (bounds.getHeight() * size * -0.1));
+
+        getChildren().add(cardEntity);
+        cardEntities.add(cardEntity);
+        cardEntity.spawn();
     }
 
-    public void addChipBet(Chip chip) {
-        var size = chipBet.size();
-        var chipGroup = chip.getGroup();
-        chipGroup.setTranslateX(63);
-        chipGroup.setLayoutY(216 - (6 * size));
-        group.getChildren().add(chipGroup);
-        chipBet.add(chip);
-        chip.spawn();
+    public void addChipBet(ChipEntity chipEntity) {
+        var size = chipEntityBet.size();
+        chipEntity.setTranslateX(63);
+        chipEntity.setLayoutY(216 - (6 * size));
+        getChildren().add(chipEntity);
+        chipEntityBet.add(chipEntity);
+        chipEntity.spawn();
     }
 
     public void clearCard() {
-        cards.forEach(Card::deSpawn);
-        chipBet.forEach(Chip::deSpawn);
+        cardEntities.forEach(CardEntity::deSpawn);
+        chipEntityBet.forEach(ChipEntity::deSpawn);
     }
 
     public void sit() {

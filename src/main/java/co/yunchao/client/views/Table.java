@@ -1,5 +1,6 @@
 package co.yunchao.client.views;
 
+import co.yunchao.client.controllers.GameController;
 import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.core.asset.AssetType;
 import com.almasb.fxgl.dsl.FXGL;
@@ -14,17 +15,17 @@ import java.util.HashMap;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-public class Table {
+public class Table extends Group {
     private final Music music;
     Text room_id;
     private final BetSection betSection;
-    private final Group group;
     private final HashMap<String, Seat> seats;
+    private final GameController gameController;
 
-    public Table() {
-        group = new Group();
-        getGameScene().getContentRoot().getChildren().add(group);
-        music = getAssetLoader().load(AssetType.MUSIC, "in-game_bg.mp3");
+    public Table(GameController gameController) {
+        this.gameController = gameController;
+        this.music = getAssetLoader().load(AssetType.MUSIC, "in-game_bg.mp3");
+
         Texture bg = texture("game_background.png", getAppWidth(), getAppHeight());
         Texture roomID = texture("enterRoom/roomID.png");
         roomID.setLayoutX(30);
@@ -34,7 +35,7 @@ public class Table {
         room_id.setWrappingWidth(roomID.getWidth()+60);
         room_id.setTextAlignment(TextAlignment.CENTER);
 
-        group.getChildren().addAll(bg, roomID, room_id);
+        getChildren().addAll(bg, roomID, room_id);
         seats = new HashMap<>(){{
             put("dealer", new Seat(876, 40));
             put("player1", new Seat( 432,294));
@@ -44,7 +45,9 @@ public class Table {
         }};
         seats.get("dealer").setIsDealer(true);
 
-        betSection = new BetSection();
+        betSection = new BetSection(this);
+
+        getChildren().add(betSection);
     }
 
     public void setRoomID(String id) {
@@ -52,22 +55,19 @@ public class Table {
     }
 
     public void render() {
-        group.setVisible(true);
+        getGameScene().getContentRoot().getChildren().add(this);
         getAudioPlayer().loopMusic(music);
-        betSection.getGroup().setVisible(true);
     }
 
     public void close() {
+        getGameScene().getContentRoot().getChildren().remove(this);
         getAudioPlayer().stopMusic(music);
         getAudioPlayer().onMainLoopPausing();
+        gameController.close();
     }
 
     public BetSection getBetSection() {
         return betSection;
-    }
-
-    public Group getGroup() {
-        return group;
     }
 
     public HashMap<String, Seat> getSeats() {

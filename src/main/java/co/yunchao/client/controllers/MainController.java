@@ -1,9 +1,13 @@
 package co.yunchao.client.controllers;
 
+import co.yunchao.client.net.Network;
+import co.yunchao.client.net.NetworkEngine;
 import co.yunchao.client.views.Intro;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.*;
+import com.almasb.fxgl.core.EngineService;
+import com.almasb.fxgl.dsl.FXGL;
 import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,16 +17,16 @@ public class MainController extends GameApplication {
 
     private GameController gameController;
     private MainMenuController mainMenuController;
-    private GameMenuController gameMenuController;
     private LoadingController loadingController;
     private StartupController startupController;
+    private MainController mainController = this;
 
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setWidth(1920);
         settings.setHeightFromRatio(16/9.0);
         settings.setMainMenuEnabled(true);
-        settings.setGameMenuEnabled(true);
+        settings.setGameMenuEnabled(false);
         settings.setIntroEnabled(false);
         settings.setFullScreenAllowed(true);
         settings.setDeveloperMenuEnabled(true);
@@ -40,15 +44,8 @@ public class MainController extends GameApplication {
             @NotNull
             @Override
             public FXGLMenu newMainMenu() {
-                mainMenuController = new MainMenuController();
+                mainMenuController = new MainMenuController(mainController);
                 return mainMenuController.getView();
-            }
-
-            @NotNull
-            @Override
-            public FXGLMenu newGameMenu() {
-                gameMenuController = new GameMenuController();
-                return gameMenuController.getView();
             }
 
             @NotNull
@@ -71,6 +68,7 @@ public class MainController extends GameApplication {
                 return new Intro();
             }
         });
+        settings.addEngineService(NetworkEngine.class);
     }
 
     @Override
@@ -99,17 +97,16 @@ public class MainController extends GameApplication {
 
     @Override
     protected void initGame() {
-        gameController = new GameController();
-        try {
-            Thread.sleep(1000);
-            gameController.Start();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        super.initGame();
+        gameController.start();
     }
 
     @Override
     protected void initUI() {
+        super.initUI();
+    }
 
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
     }
 }

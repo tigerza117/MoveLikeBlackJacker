@@ -14,9 +14,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class EnterNameAction extends SubScene {
     TextField nameField;
     FadeTransition fade;
+    private ConfirmAction onConfirm;
 
     public EnterNameAction(){
-
         Rectangle shadow = new Rectangle();
         shadow.setHeight(getAppHeight());
         shadow.setWidth(getAppWidth());
@@ -31,13 +31,10 @@ public class EnterNameAction extends SubScene {
         textField.setLayoutX((getAppWidth()/2.0) - (textField.getWidth()/2.0));
 
         var confirmBtn = Button.create("enterName/confirmBtn", () -> {
-            getGameController().startNewGame();
-            System.out.println(nameField.getText());
-            play("Clicked.wav");
+            onConfirm.confirm(nameField.getText());
         });
 
         var BackBtn = Button.create("mainResources/backBtn", () -> {
-            play("Clicked.wav");
             close();
         });
 
@@ -88,5 +85,13 @@ public class EnterNameAction extends SubScene {
             getSceneService().popSubScene();
             fade.setOnFinished(null);
         });
+    }
+
+    public void setOnConfirm(ConfirmAction confirm) {
+        this.onConfirm = confirm;
+    }
+
+    protected interface ConfirmAction {
+        void confirm(String name);
     }
 }

@@ -13,7 +13,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class LeaveModal extends SubScene {
     FadeTransition fade;
 
-    public LeaveModal(){
+    public LeaveModal(Runnable runnable){
 
         Rectangle shadow = new Rectangle();
         shadow.setHeight(getAppHeight());
@@ -24,11 +24,8 @@ public class LeaveModal extends SubScene {
         var quitPane = texture("leaveGame/leavePane.png", getAppWidth(), 290);
         quitPane.setLayoutY((getAppHeight() / 2.0)-(quitPane.getHeight() / 2));
 
-        var yesBtn = Button.create("leaveGame/yesBtn", () -> getGameController().exit());
-        var noBtn = Button.create("leaveGame/noBtn", () -> {
-            play("Clicked.wav");
-            close();
-        });
+        var yesBtn = Button.create("leaveGame/yesBtn", runnable);
+        var noBtn = Button.create("leaveGame/noBtn", this::close);
         noBtn.setLayoutX(200);
 
         Group leaveMenu = new Group(yesBtn, noBtn);

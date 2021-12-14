@@ -14,8 +14,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class PlayModal extends SubScene {
     TextField codeField;
     FadeTransition fade;
+    private ConfirmAction onConfirm;
 
-    public PlayModal(){
+    public PlayModal() {
         Rectangle shadow = new Rectangle();
         shadow.setHeight(getAppHeight());
         shadow.setWidth(getAppWidth());
@@ -34,14 +35,9 @@ public class PlayModal extends SubScene {
         var enterCodeBtn = texture("enterName/textField.png");
         enterCodeBtn.setTranslateY(-50);
 
-        var backBtn = texture("mainResources/backBtn.png");
-        backBtn.setTranslateX((getAppWidth()/2.0) - (backBtn.getWidth() / 2.0));
+        var backBtn = Button.create("mainResources/backBtn", this::close);
+        backBtn.setTranslateX((getAppWidth()/2.0) - (backBtn.getBoundsInLocal().getWidth() / 2.0));
         backBtn.setTranslateY((getAppHeight()/2.0) + 220);
-
-        backBtn.setOnMouseClicked( e -> {
-            close();
-            play("Clicked.wav");
-        });
 
         codeField = new TextField("");
         codeField.setMaxWidth(300);
@@ -50,10 +46,11 @@ public class PlayModal extends SubScene {
         codeField.setLayoutY((getAppHeight() / 2.0) - ((codeField.getHeight() / 2)-92));
 
         var confirmBtn = Button.create("enterName/confirmBtn", () -> {
-            System.out.println(codeField.getText());
+            enterName.setOnConfirm((name -> {
+                onConfirm.confirm(codeField.getText(), name);
+            }));
             getSceneService().popSubScene();
             getSceneService().pushSubScene(enterName);
-            play("Clicked.wav");
         });
 
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-130));
@@ -79,6 +76,9 @@ public class PlayModal extends SubScene {
         });
 
         var createBtn = Button.create("enterRoom/createRoom", () -> {
+            enterName.setOnConfirm((name -> {
+                onConfirm.confirm("000A", name);
+            }));
             getSceneService().popSubScene();
             getSceneService().pushSubScene(enterName);
         });
@@ -107,5 +107,13 @@ public class PlayModal extends SubScene {
             getSceneService().popSubScene();
             fade.setOnFinished(null);
         });
+    }
+
+    public void setOnConfirm(ConfirmAction confirm) {
+        this.onConfirm = confirm;
+    }
+
+    public interface ConfirmAction {
+        void confirm(String roomId, String name);
     }
 }

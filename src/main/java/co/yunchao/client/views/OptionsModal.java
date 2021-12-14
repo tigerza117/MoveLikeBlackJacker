@@ -33,22 +33,18 @@ public class OptionsModal extends SubScene {
 
         var fullHD_btn = Button.create("options/Full_HDRes", () -> {
             System.out.println("FULL HD RESOLUTION SELECTED!");
-            play("Clicked.wav");
         });
         var HD_btn = Button.create("options/HDRes", () -> {
             System.out.println("HD RESOLUTION SELECTED!");
-            play("Clicked.wav");
         });
         var SD_btn = Button.create("options/SDRes", () -> {
             System.out.println("SD RESOLUTION SELECTED!");
-            play("Clicked.wav");
         });
         var saveBtn = Button.create("options/saveBtn", () -> {
             System.out.println("master vol. : " + (int) masterVol.getValue());
             System.out.println("music vol. : " + (int) mscVol.getValue());
             System.out.println("sfx vol. : " + (int) sfxVol.getValue());
             System.out.println("Full screen toggle : " + fullScreen.isSelected());
-            play("Clicked.wav");
             close();
         });
 

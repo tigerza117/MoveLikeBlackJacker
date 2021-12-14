@@ -1,6 +1,7 @@
 package co.yunchao.client.net;
 
 import co.yunchao.client.controllers.GameController;
+import co.yunchao.client.controllers.PlayerController;
 import co.yunchao.net.packets.*;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -9,7 +10,6 @@ import java.text.SimpleDateFormat;
 
 public class NetworkHandler extends SimpleChannelInboundHandler<DataPacket> {
     private final GameController gameController;
-    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
     public NetworkHandler(GameController gameController) {
         this.gameController = gameController;
