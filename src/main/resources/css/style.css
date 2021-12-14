@@ -54,3 +54,21 @@
     -fx-font-family: Graduate;
     -fx-prompt-text-fill: gray;
 }
+
+.progress-bar{
+    -fx-box-border: transparent;
+}
+
+.progress-bar .bar{
+    -fx-box-border: transparent;
+    -fx-background-radius: 25px;
+    -fx-background-color:
+            -fx-box-border,
+            linear-gradient(to right, #AE1010, #EFB820);
+}
+
+.progress-bar > .track {
+    -fx-control-inner-background: transparent;
+    -fx-background-insets:  0, 1;
+    -fx-background-color: transparent;
+}

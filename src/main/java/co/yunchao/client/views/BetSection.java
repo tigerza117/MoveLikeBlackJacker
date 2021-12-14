@@ -2,12 +2,19 @@ package co.yunchao.client.views;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FontType;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 
 import java.util.HashMap;
 
@@ -33,6 +40,20 @@ public class BetSection {
             getSceneService().pushSubScene(leaveAction);
         });
 
+        ProgressBar progress = new ProgressBar();
+        IntegerProperty seconds = new SimpleIntegerProperty();
+        progress.progressProperty().bind(seconds.divide(60.0));
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(seconds, 60)),
+                new KeyFrame(Duration.minutes(1), e-> System.out.println("Minute over"), new KeyValue(seconds, 0))
+        );
+        timeline.setCycleCount(1);
+        timeline.play();
+        progress.setPrefWidth(703);
+        progress.getStylesheets().add("css/style.css");
+        progress.getStyleClass().add("progress-bar");
+
+        Text time = FXGL.getUIFactoryService().newText("time", Color.WHITE, FontType.GAME, 20);
         var textureBalance = texture("balance_box.png");
         var confirmBtn = texture("confirm_btn.png");
         var standBtn = texture("stand_btn.png");
@@ -62,6 +83,7 @@ public class BetSection {
         }};
 
         var disableGroup = new Group();
+        var timerGroup = new Group();
         var topGroup = new Group();
         var bottomGroup = new Group();
         var chipSection = new Group();
@@ -87,19 +109,24 @@ public class BetSection {
         chip3BetBtn.setTranslateX(291);
         maxBtn.setTranslateX(143);
         clearBtn.setTranslateX(286);
+        progress.setTranslateY(35);
+        progress.setTranslateX((getAppWidth()/2.0)+190);
+        time.setTranslateY(25);
+        time.setTranslateX((getAppWidth()/2.0)+515);
 
+        timerGroup.getChildren().addAll(time, progress);
         chipSection.getChildren().addAll(textureChipSection, chip1BetBtn, chip2BetBtn, chip3BetBtn);
         topGroup.getChildren().addAll(minBtn, maxBtn, clearBtn);
         bottomGroup.getChildren().addAll(optionBtn, leaveBtn, textureBalance, confirmBtn, chipSection, standBtn, hitBtn, doubleBtn, balanceText);
         disableGroup.getChildren().addAll(topGroup, chipSection, standBtn, hitBtn, doubleBtn);
 
-        topGroup.setTranslateY(-80); //set to show grayscale test
+        topGroup.setTranslateY(-60); //set to show grayscale test
         ColorAdjust desaturate = new ColorAdjust();
         desaturate.setSaturation(-1);
         disableGroup.setEffect(desaturate);
         disableGroup.setTranslateY(62);
 
-        group.getChildren().addAll(bottomGroup, disableGroup); //remove and add something to test
+        group.getChildren().addAll(bottomGroup, disableGroup, timerGroup); //remove and add something to test
         group.setLayoutX(32);
         group.setLayoutY(842);
         group.prefWidth(1855);
