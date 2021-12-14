@@ -1,10 +1,11 @@
 package co.yunchao.client.views;
 
-import javafx.beans.binding.Bindings;
+import javafx.animation.ScaleTransition;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.play;
 import static com.almasb.fxgl.dsl.FXGL.texture;
@@ -25,12 +26,22 @@ public class Button {
             action.run();
         });
 
-        btn.scaleXProperty().bind(
-                Bindings.when(btn.hoverProperty()).then(1.1).otherwise(1)
-        );
-        btn.scaleYProperty().bind(
-                Bindings.when(btn.hoverProperty()).then(1.1).otherwise(1)
-        );
+        ScaleTransition linearTransition = new ScaleTransition(new Duration(180), btn);
+        linearTransition.setFromX(btn.getScaleX());
+        linearTransition.setToX(1.1 * btn.getScaleX());
+        linearTransition.setFromY(btn.getScaleY());
+        linearTransition.setToY(1.1 * btn.getScaleY());
+        linearTransition.setFromZ(btn.getScaleZ());
+        linearTransition.setToZ(1.1 * btn.getScaleZ());
+        linearTransition.setCycleCount(1);
+        linearTransition.setAutoReverse(true);
+
+        btn.setOnMouseEntered( e -> linearTransition.playFromStart());
+
+        btn.setOnMouseExited( e -> {
+            linearTransition.setRate(-1);
+            linearTransition.play();
+        });
 
         btn.setCache(true);
         btn.setCacheHint(CacheHint.SPEED);
