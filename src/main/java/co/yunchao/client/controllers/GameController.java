@@ -96,6 +96,7 @@ public class GameController extends Game {
                 PlayerJoinPacket playerJoinPacket = (PlayerJoinPacket) packet;
                 PlayerController player = playerController;
                 player.setGameController(this);
+                play("Sparkle_Pop_01.wav");
                 System.out.println("Player " + playerJoinPacket.id + " has been join the game.");
                 if (playerJoinPacket.id != playerController.getId()) {
                     player = new PlayerController(playerJoinPacket.id, playerJoinPacket.name, playerJoinPacket.isDealer);
