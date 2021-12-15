@@ -93,9 +93,9 @@ public class GameController extends Game {
                 System.out.println("Player " + playerJoinPacket.id + " has been join the game.");
                 if (playerJoinPacket.id != playerController.getId()) {
                     player = new PlayerController(playerJoinPacket.id, playerJoinPacket.name, playerJoinPacket.isDealer);
-                    player.setOffset(new Offset(playerJoinPacket.offsetX, playerJoinPacket.offsetY));
                 }
                 if (!player.isDealer()) {
+                    player.setOffset(new Offset(playerJoinPacket.offsetX, playerJoinPacket.offsetY));
                     System.out.println("Offset " + player.getOffset().getX() + ":" + player.getOffset().getY());
                     player.sit(new Seat(player.getOffset()));
                 } else {

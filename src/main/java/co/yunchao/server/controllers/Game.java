@@ -157,6 +157,11 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         for (int i = 0; i < 2; i++) {
                             players.values().forEach(player -> {
                                 player.pickUpCard();
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             });
                         }
                         if (dealer.isWining()) {
