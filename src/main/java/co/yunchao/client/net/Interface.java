@@ -22,7 +22,7 @@ public class Interface {
     private onHandler onHandler;
 
     public Interface() throws Exception {
-        final InetSocketAddress adder = new InetSocketAddress("localhost", 31747);
+        final InetSocketAddress adder = new InetSocketAddress("103.91.205.130", 7856);
         NetworkHandler handler = new NetworkHandler(this);
         try {
             channel = new Bootstrap()

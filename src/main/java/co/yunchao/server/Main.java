@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         Server server = new Server();
         try {
-            final InetSocketAddress localhost = new InetSocketAddress("localhost", 31747);
+            final InetSocketAddress localhost = new InetSocketAddress("0.0.0.0", 7856);
 
             Interface inf = new Interface(localhost, server);
         } catch (Exception e) {
