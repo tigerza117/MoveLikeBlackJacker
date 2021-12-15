@@ -5,6 +5,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FontType;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.paint.Color;
@@ -15,9 +16,19 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class BetSection extends Group {
     private final Text balanceText;
-    Text timeText;
     ProgressBar progress;
     PlayerController playerController;
+
+    Node confirmBtn;
+    Node standBtn;
+    Node hitBtn;
+    Node doubleBtn;
+    Node minBtn;
+    Node maxBtn;
+    Node clearBtn;
+    Node chip1BetBtn;
+    Node chip2BetBtn;
+    Node chip3BetBtn;
 
     BetSection(Table table, PlayerController playerController) {
         this.playerController = playerController;
@@ -40,20 +51,20 @@ public class BetSection extends Group {
         progress.getStylesheets().add("css/style.css");
         progress.getStyleClass().add("progress-bar");
 
-        timeText = FXGL.getUIFactoryService().newText("time", Color.WHITE, FontType.GAME, 20);
+        Text timeText = FXGL.getUIFactoryService().newText("time", Color.WHITE, FontType.GAME, 20);
 
         var textureBalance = texture("bet_section/balance_box.png");
         var textureChipSection = texture("bet_section/chip_section.png");
-        var confirmBtn = Button.create("bet_section/confirm_btn", () -> System.out.println("Confirm"));
-        var standBtn = Button.create("bet_section/stand_btn", playerController::canConfirmBet);
-        var hitBtn = Button.create("bet_section/hit_btn", playerController::canConfirmBet);
-        var doubleBtn = Button.create("bet_section/double_btn", playerController::canConfirmBet);
-        var minBtn = Button.create("bet_section/min_btn", playerController::canConfirmBet);
-        var maxBtn = Button.create("bet_section/max_btn", playerController::canConfirmBet);
-        var clearBtn = Button.create("bet_section/clear_btn", playerController::canConfirmBet);
-        var chip1BetBtn = Button.create("bet_section/chip1_bet_btn", playerController::canConfirmBet);
-        var chip2BetBtn = Button.create("bet_section/chip2_bet_btn", playerController::canConfirmBet);
-        var chip3BetBtn = Button.create("bet_section/chip3_bet_btn", playerController::canConfirmBet);
+        confirmBtn = Button.create("bet_section/confirm_btn", () -> System.out.println("Confirm"));
+        standBtn = Button.create("bet_section/stand_btn", playerController::canConfirmBet);
+        hitBtn = Button.create("bet_section/hit_btn", playerController::canConfirmBet);
+        doubleBtn = Button.create("bet_section/double_btn", playerController::canConfirmBet);
+        minBtn = Button.create("bet_section/min_btn", playerController::canConfirmBet);
+        maxBtn = Button.create("bet_section/max_btn", playerController::canConfirmBet);
+        clearBtn = Button.create("bet_section/clear_btn", playerController::canConfirmBet);
+        chip1BetBtn = Button.create("bet_section/chip1_bet_btn", playerController::canConfirmBet);
+        chip2BetBtn = Button.create("bet_section/chip2_bet_btn", playerController::canConfirmBet);
+        chip3BetBtn = Button.create("bet_section/chip3_bet_btn", playerController::canConfirmBet);
 
         var disableGroup = new Group();
         var timerGroup = new Group();
