@@ -36,18 +36,17 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         });
     }
 
-    @Override
-    public synchronized boolean join(co.yunchao.base.models.Player player) {
-        if (this.players.size() < 4) return false;
+    public boolean join(co.yunchao.base.models.Player player) {
+        if (this.players.size() >= 4) return false;
+        System.out.println("Room > " + getId() + " > Player " + player.getName() +" has been join" );
         Player pl = (Player) player;
-        broadcastPlayerJoin(pl);
         player.setGame(this);
         this.players.add(pl);
+        broadcastPlayerJoin(pl);
         return true;
     }
 
-    @Override
-    public synchronized void leave(co.yunchao.base.models.Player player) {
+    public void leave(co.yunchao.base.models.Player player) {
         Player pl = (Player) player;
         broadcastPlayerLeave(pl);
         player.setGame(null);
@@ -55,16 +54,17 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
     }
 
     public void broadcastPlayerJoin(Player player) {
-        PlayerJoinPacket packet = new PlayerJoinPacket();
-        packet.id = player.getId();
-        packet.name = player.getName();
-        putPacket(packet);
-
         GameMetadataPacket gameMetadataPacket = new GameMetadataPacket();
         gameMetadataPacket.id = getId();
         gameMetadataPacket.state = getState();
         gameMetadataPacket.tick = tick;
         player.putPacket(gameMetadataPacket);
+
+        PlayerJoinPacket packet = new PlayerJoinPacket();
+        packet.id = player.getId();
+        packet.name = player.getName();
+        packet.isDealer = player.isDealer();
+        putPacket(packet);
 
         players.forEach(pl -> {
             PlayerMetadataPacket playerMetadataPacket = new PlayerMetadataPacket();
@@ -98,7 +98,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
     }
 
     public int countPlayers() {
-        return players.size();
+        return players.size() - (getState().equals(GameState.IN_GAME) ? 1 : 0);
     }
 
     private boolean paused = false;
@@ -126,10 +126,15 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                 checkPaused();
                 broadcastGameState();
                 System.out.println(getState() + " > " + tick);
+                if (countPlayers() < 1 && !getState().equals(GameState.WAITING)) {
+                    System.out.println("No one in game");
+                    Thread.sleep(1000);
+                    continue;
+                }
                 switch (getState()) {
                     case WAITING:
-                        if (this.players.size() > 0) {
-                            this.tick = 15;
+                        if (countPlayers() > 0) {
+                            this.tick = 20;
                             setState(GameState.BET);
                         }
                         break;

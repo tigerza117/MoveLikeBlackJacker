@@ -11,15 +11,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-import java.util.HashMap;
-
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class Table extends Group {
     private final Music music;
     Text room_id;
     private final BetSection betSection;
-    private final HashMap<String, Seat> seats;
     private final GameController gameController;
 
     public Table(GameController gameController) {
@@ -36,14 +33,6 @@ public class Table extends Group {
         room_id.setTextAlignment(TextAlignment.CENTER);
 
         getChildren().addAll(bg, roomID, room_id);
-        seats = new HashMap<>(){{
-            put("dealer", new Seat(876, 40));
-            put("player1", new Seat( 432,294));
-            put("player2", new Seat( 729,377));
-            put("player3", new Seat( 1024,375));
-            put("player4", new Seat( 1319,293));
-        }};
-        seats.get("dealer").setIsDealer(true);
 
         betSection = new BetSection(this);
 
@@ -68,9 +57,5 @@ public class Table extends Group {
 
     public BetSection getBetSection() {
         return betSection;
-    }
-
-    public HashMap<String, Seat> getSeats() {
-        return seats;
     }
 }

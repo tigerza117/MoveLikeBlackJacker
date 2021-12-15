@@ -48,7 +48,7 @@ public class Server implements Runnable {
         }
     }
 
-    private synchronized Game newGame() {
+    private Game newGame() {
         Random rand = new Random();
         while (true) {
             rand.setSeed(System.currentTimeMillis());
@@ -62,7 +62,8 @@ public class Server implements Runnable {
         }
     }
 
-    public synchronized void join(Player player, String roomId) {
+    public void join(Player player, String roomId) {
+        System.out.println("Join > " + player.getId() + " <> " + roomId);
         if (roomId.equals("000A")) {
             players.add(player);
             enqueue(player);
@@ -77,12 +78,12 @@ public class Server implements Runnable {
         }
     }
 
-    public synchronized void leave(Player player) {
+    public void leave(Player player) {
         players.remove(player);
         queue.remove(player);
     }
 
-    private synchronized void enqueue(Player player) {
+    private void enqueue(Player player) {
         queue.add(player);
     }
 }

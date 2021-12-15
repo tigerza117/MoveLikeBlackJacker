@@ -9,17 +9,20 @@ public class PlayerJoinPacket extends DataPacket {
 
     public String name;
     public UUID id;
+    public boolean isDealer;
 
     @Override
     public void encode(ByteBuf buf) {
         writeString(buf, this.name);
         writeString(buf, this.id.toString());
+        buf.writeBoolean(this.isDealer);
     }
 
     @Override
     public void decode(ByteBuf buf) {
         this.name = readString(buf);
         this.id = UUID.fromString(readString(buf));
+        this.isDealer = buf.readBoolean();
     }
 
     @Override

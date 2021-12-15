@@ -1,22 +1,20 @@
 package co.yunchao.client.net;
 
-import co.yunchao.client.controllers.GameController;
-import co.yunchao.client.controllers.PlayerController;
 import co.yunchao.net.packets.*;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-
-import java.text.SimpleDateFormat;
+import javafx.application.Platform;
 
 public class NetworkHandler extends SimpleChannelInboundHandler<DataPacket> {
-    private final GameController gameController;
+    private final Interface anInterface;
 
-    public NetworkHandler(GameController gameController) {
-        this.gameController = gameController;
+    public NetworkHandler(Interface anInterface) {
+        this.anInterface = anInterface;
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DataPacket packet) throws Exception {
-        gameController.handler(packet);
+        System.out.println("Receiver channel > " + ctx.channel() + " > " + packet.getClass());
+        Platform.runLater(() -> anInterface.getOnHandler().run(packet));
     }
 }

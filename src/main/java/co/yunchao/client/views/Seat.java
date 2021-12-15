@@ -22,7 +22,7 @@ public class Seat extends Group {
     private final Text textDealerScore;
     private boolean isDealer = false;
 
-    Seat(double offsetX, double offsetY) {
+    public Seat(double offsetX, double offsetY) {
         this.textName = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 16);
         this.textBetTotal = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 28);
         this.cardEntities = new ArrayList<>();
@@ -57,8 +57,6 @@ public class Seat extends Group {
         textDealerScore.setTextAlignment(TextAlignment.CENTER);
 
         getChildren().addAll(textName, textureIcon, textureDealerScore, textDealerScore, textBetTotal);
-
-        getGameScene().getContentRoot().getChildren().add(this);
     }
 
     public void addCard(CardEntity cardEntity) {
@@ -81,9 +79,16 @@ public class Seat extends Group {
         chipEntity.spawn();
     }
 
-    public void clearCard() {
-        cardEntities.forEach(CardEntity::deSpawn);
-        chipEntityBet.forEach(ChipEntity::deSpawn);
+    public void removeCard(CardEntity cardEntity) {
+        cardEntities.remove(cardEntity);
+    }
+
+    public void removeChip(ChipEntity chip) {
+        chipEntityBet.remove(chip);
+    }
+
+    public void setName(String name) {
+        this.textName.setText(name);
     }
 
     public void sit() {
@@ -98,6 +103,11 @@ public class Seat extends Group {
             textBetTotal.setVisible(true);
             textureIcon.setVisible(true);
         }
+        getGameScene().getContentRoot().getChildren().add(this);
+    }
+
+    public void close() {
+        getGameScene().getContentRoot().getChildren().remove(this);
     }
 
     public boolean isDealer() {

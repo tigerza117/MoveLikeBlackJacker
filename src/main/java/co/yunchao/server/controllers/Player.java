@@ -44,10 +44,12 @@ public class Player extends co.yunchao.base.models.Player {
 
     @Override
     public void handler(DataPacket packet) {
+        System.out.println("Handle packet > " + packet.getClass());
         switch (packet.pid()) {
             case ProtocolInfo.JOIN_ROOM_PACKET:
                 JoinRoomPacket joinRoomPacket = (JoinRoomPacket) packet;
-                getServer().join(this, joinRoomPacket.getRoomId());
+                System.out.println("can join ?");
+                getServer().join(this, joinRoomPacket.roomId);
                 break;
             case ProtocolInfo.PLAYER_ACTION_PACKET:
                 PlayerActionPacket actionPacket = (PlayerActionPacket) packet;
@@ -83,6 +85,7 @@ public class Player extends co.yunchao.base.models.Player {
     @Override
     public void putPacket(DataPacket packet) {
         if (channel != null) {
+            System.out.println("Send channel > " + packet.getClass());
             channel.writeAndFlush(packet);
         }
     }

@@ -5,6 +5,7 @@ import co.yunchao.client.controllers.GameController;
 import co.yunchao.client.controllers.PlayerController;
 import co.yunchao.net.Network;
 import co.yunchao.net.handler.*;
+import co.yunchao.net.packets.DataPacket;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -16,9 +17,13 @@ import java.util.concurrent.TimeUnit;
 
 public class Interface {
     private final EventLoopGroup ioGroup = new NioEventLoopGroup();
-    private Channel channel;
+    private final Channel channel;
+    private final Network network = new Network();
+    private onHandler onHandler;
 
-    public Interface(GameController gameController, InetSocketAddress adder) throws Exception {
+    public Interface() throws Exception {
+        final InetSocketAddress adder = new InetSocketAddress("localhost", 31747);
+        NetworkHandler handler = new NetworkHandler(this);
         try {
             channel = new Bootstrap()
                     .group(ioGroup)
@@ -32,7 +37,7 @@ public class Interface {
                             ch.pipeline()
                                     .addLast(new PacketEncoder())
                                     .addLast(new PacketDecoder())
-                                    .addLast(new NetworkHandler(gameController));
+                                    .addLast(handler);
                         }
                     }).connect(adder).sync().channel();
         }  catch (Exception e) {
@@ -41,8 +46,20 @@ public class Interface {
         }
     }
 
-    public Channel getChannel() {
-        return channel;
+    public void setOnHandler(onHandler onHandler) {
+        this.onHandler = onHandler;
+    }
+
+    protected onHandler getOnHandler() {
+        return onHandler;
+    }
+
+    public void putPacket(DataPacket packet) {
+        try {
+            channel.writeAndFlush(packet).sync();
+        } catch (InterruptedException e) {
+            System.out.println("Fail to send packet");
+        }
     }
 
     public void shutdown() throws InterruptedException {
@@ -53,5 +70,9 @@ public class Interface {
         if (!ioGroup.isShutdown()) {
             ioGroup.shutdownGracefully();
         }
+    }
+
+    public interface onHandler {
+        void run(DataPacket packet);
     }
 }

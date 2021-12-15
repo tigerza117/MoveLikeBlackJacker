@@ -8,6 +8,7 @@ import java.util.UUID;
 public class CardSpawnPacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.CARD_SPAWN_PACKET;
 
+    public UUID playerId;
     public UUID id;
     public CardSuit suit;
     public int number;
@@ -15,6 +16,7 @@ public class CardSpawnPacket extends DataPacket {
 
     @Override
     public void encode(ByteBuf buf) {
+        writeString(buf, playerId.toString());
         writeString(buf, id.toString());
         buf.writeInt(suit.ordinal());
         buf.writeInt(number);
@@ -23,6 +25,7 @@ public class CardSpawnPacket extends DataPacket {
 
     @Override
     public void decode(ByteBuf buf) {
+        this.playerId = UUID.fromString(readString(buf));
         this.id = UUID.fromString(readString(buf));
         this.suit = CardSuit.values()[buf.readInt()];
         this.number = buf.readInt();

@@ -17,7 +17,7 @@ public class Interface {
     final Channel channel;
     final Network network = new Network();
 
-    public Interface(InetSocketAddress adder) throws InterruptedException {
+    public Interface(InetSocketAddress adder, Server server) throws InterruptedException {
         channel = new ServerBootstrap()
                 .group(ioGroup)
                 .channel(RakNetServer.CHANNEL)
@@ -29,7 +29,7 @@ public class Interface {
                         ch.pipeline()
                                 .addLast(new PacketEncoder())
                                 .addLast(new PacketDecoder())
-                                .addLast(new NetworkHandler(new Server()));
+                                .addLast(new NetworkHandler(server));
                     }
                 }).bind(adder).sync().channel();
     }

@@ -9,17 +9,30 @@ import java.util.UUID;
 
 public class PlayerController extends Player {
     private Seat seat;
+    private GameController gameController;
 
     public PlayerController(UUID id, String name, boolean isDealer) {
         super(id, name, isDealer);
     }
 
-    private void sit() {
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
+    }
+
+    public void sit(Seat seat) {
+        this.seat = seat;
         seat.sit();
     }
 
     public Seat getSeat() {
         return seat;
+    }
+
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+        seat.setName(name);
     }
 
     @Override

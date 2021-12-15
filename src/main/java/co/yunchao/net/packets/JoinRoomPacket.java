@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 public class JoinRoomPacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.JOIN_ROOM_PACKET;
 
-    private String roomId;
+    public String roomId;
 
     @Override
     public void encode(ByteBuf buf) {
@@ -15,10 +15,6 @@ public class JoinRoomPacket extends DataPacket {
     @Override
     public void decode(ByteBuf buf) {
         this.roomId = readString(buf);
-    }
-
-    public String getRoomId() {
-        return roomId;
     }
 
     @Override

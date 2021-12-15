@@ -12,7 +12,7 @@ public abstract class Player{
     private final boolean isDealer;
     private String name;
     private double chips;
-    private PlayerInGameState state;
+    private PlayerInGameState state = PlayerInGameState.IDLE;
     private int currentBetStage = 0;
     private Game game;
 

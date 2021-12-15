@@ -3,9 +3,9 @@ package co.yunchao.client.net;
 import com.almasb.fxgl.core.EngineService;
 
 public class NetworkEngine extends EngineService {
-    private static Network network;
+    private static Interface network;
 
-    public static void setNetwork(Network n) {
+    public static void setNetwork(Interface n) {
         network = n;
     }
 
@@ -13,7 +13,7 @@ public class NetworkEngine extends EngineService {
     public void onExit() {
         if (network != null) {
             try {
-                network.close();
+                network.shutdown();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

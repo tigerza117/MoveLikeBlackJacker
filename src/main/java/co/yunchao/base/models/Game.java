@@ -28,8 +28,4 @@ public abstract class Game {
     }
 
     public abstract void putPacket(DataPacket packet);
-
-    public abstract boolean join(Player player);
-
-    public abstract void leave(Player player);
 }

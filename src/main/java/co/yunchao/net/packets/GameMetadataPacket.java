@@ -21,6 +21,7 @@ public class GameMetadataPacket extends DataPacket {
     public void decode(ByteBuf buf) {
         this.id = readString(buf);
         this.state = GameState.values()[buf.readInt()];
+        this.tick = buf.readInt();
     }
 
     @Override
