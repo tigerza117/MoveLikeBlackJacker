@@ -4,6 +4,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FontType;
 import javafx.scene.Group;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -125,5 +126,18 @@ public class Seat extends Group {
     public void clearScore() {
         textDealerScore.setText("");
         textureDealerScore.setVisible(false);
+    }
+
+    public void myTurn() {
+        DropShadow playerGlow = new DropShadow();
+        playerGlow.setRadius(80.0);
+        playerGlow.setOffsetX(0.0);
+        playerGlow.setOffsetY(5.0);
+        playerGlow.setColor(Color.rgb(239, 184, 32));
+        textureIcon.setEffect(playerGlow);
+    }
+
+    public void notMyTurn() {
+        textureIcon.setEffect(null);
     }
 }
