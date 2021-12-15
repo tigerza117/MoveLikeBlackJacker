@@ -36,7 +36,10 @@ public class Button {
         linearTransition.setCycleCount(1);
         linearTransition.setAutoReverse(true);
 
-        btn.setOnMouseEntered( e -> linearTransition.playFromStart());
+        btn.setOnMouseEntered( e -> {
+            linearTransition.playFromStart();
+            btn.setCursor(CursorCall.getCursorClick());
+        });
 
         btn.setOnMouseExited( e -> {
             linearTransition.setRate(-1);
