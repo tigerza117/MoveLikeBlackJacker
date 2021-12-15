@@ -23,8 +23,8 @@ public class Table extends Group {
         this.gameController = gameController;
         this.music = getAssetLoader().load(AssetType.MUSIC, "in-game_bg.mp3");
 
-        Texture bg = texture("game_background.png", getAppWidth(), getAppHeight());
-        Texture roomID = texture("enterRoom/roomID.png");
+        Texture bg = texture("bet_section/game_background.png", getAppWidth(), getAppHeight());
+        Texture roomID = texture("enter_play/room_pane.png");
         roomID.setLayoutX(30);
 
         room_id = FXGL.getUIFactoryService().newText("ARCTIC505", Color.BLACK, FontType.GAME, 22);

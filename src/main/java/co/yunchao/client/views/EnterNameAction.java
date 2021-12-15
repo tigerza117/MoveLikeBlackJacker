@@ -23,16 +23,16 @@ public class EnterNameAction extends SubScene {
         shadow.setFill(Color.BLACK);
         shadow.setOpacity(0.65);
 
-        var namePane = texture("enterName/namePanel.png", getAppWidth(), 306);
+        var namePane = texture("enter_name/name_pane.png", getAppWidth(), 306);
         namePane.setLayoutY((getAppHeight() / 2.0)-(namePane.getHeight() / 2));
 
-        var textField = texture("enterName/textField.png");
+        var textField = texture("enter_name/text_field.png");
         textField.setLayoutY((getAppHeight() / 2.0)-((textField.getHeight() / 2)-50));
         textField.setLayoutX((getAppWidth()/2.0) - (textField.getWidth()/2.0));
 
-        var confirmBtn = Button.create("enterName/confirmBtn", () -> onConfirm.confirm(nameField.getText()));
+        var confirmBtn = Button.create("enter_name/confirm_btn", () -> onConfirm.confirm(nameField.getText()));
 
-        var BackBtn = Button.create("mainResources/backBtn", this::close);
+        var BackBtn = Button.create("main/back_btn", this::close);
 
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-50));
         confirmBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)-200));

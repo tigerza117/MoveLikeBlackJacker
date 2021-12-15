@@ -8,9 +8,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
-
 import java.util.ArrayList;
+
+import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 
 public class Seat extends Group {
     private final ArrayList<CardEntity> cardEntities;
@@ -27,8 +27,8 @@ public class Seat extends Group {
         this.textBetTotal = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 28);
         this.cardEntities = new ArrayList<>();
         this.chipEntityBet = new ArrayList<>();
-        this.textureIcon = FXGL.texture("player_icon.png");
-        this.textureDealerScore = FXGL.texture("Dealer Score.png");
+        this.textureIcon = FXGL.texture("bet_section/player_icon.png");
+        this.textureDealerScore = FXGL.texture("bet_section/dealer_score.png");
         this.textDealerScore = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 22);
 
         setTranslateX(offsetX);

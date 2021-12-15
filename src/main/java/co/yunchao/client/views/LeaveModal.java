@@ -21,11 +21,11 @@ public class LeaveModal extends SubScene {
         shadow.setFill(Color.BLACK);
         shadow.setOpacity(0.65);
 
-        var quitPane = texture("leaveGame/leavePane.png", getAppWidth(), 290);
+        var quitPane = texture("enter_leave/leave_pane.png", getAppWidth(), 290);
         quitPane.setLayoutY((getAppHeight() / 2.0)-(quitPane.getHeight() / 2));
 
-        var yesBtn = Button.create("leaveGame/yesBtn", runnable);
-        var noBtn = Button.create("leaveGame/noBtn", this::close);
+        var yesBtn = Button.create("enter_leave/yes_btn", runnable);
+        var noBtn = Button.create("enter_leave/no_btn", this::close);
         noBtn.setLayoutX(200);
 
         Group leaveMenu = new Group(yesBtn, noBtn);

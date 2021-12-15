@@ -24,18 +24,18 @@ public class PlayModal extends SubScene {
         shadow.setOpacity(0.65);
 
         var playMenu = new Group();
-        var enterName = new EnterNameAction();
+        var setName = new EnterNameAction();
 
-        var banner = texture("enterRoom/yellow_banner.png", getAppWidth(), 500);
+        var banner = texture("enter_play/yellow_banner.png", getAppWidth(), 500);
         banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
-        var orSep = texture("enterRoom/Or.png");
+        var orSep = texture("enter_play/or_separate.png");
         orSep.setLayoutY(-180);
 
-        var enterCodeBtn = texture("enterName/textField.png");
+        var enterCodeBtn = texture("enter_name/text_field.png");
         enterCodeBtn.setTranslateY(-50);
 
-        var backBtn = Button.create("mainResources/backBtn", this::close);
+        var backBtn = Button.create("main/back_btn", this::close);
         backBtn.setTranslateX((getAppWidth()/2.0) - (backBtn.getBoundsInLocal().getWidth() / 2.0));
         backBtn.setTranslateY((getAppHeight()/2.0) + 220);
 
@@ -45,12 +45,12 @@ public class PlayModal extends SubScene {
         codeField.getStyleClass().add("text-field");
         codeField.setLayoutY((getAppHeight() / 2.0) - ((codeField.getHeight() / 2)-92));
 
-        var confirmBtn = Button.create("enterName/confirmBtn", () -> {
-            enterName.setOnConfirm((name -> {
+        var confirmBtn = Button.create("enter_name/confirm_btn", () -> {
+            setName.setOnConfirm((name -> {
                 onConfirm.confirm(codeField.getText(), name);
             }));
             getSceneService().popSubScene();
-            getSceneService().pushSubScene(enterName);
+            getSceneService().pushSubScene(setName);
         });
 
         confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-130));
@@ -75,12 +75,12 @@ public class PlayModal extends SubScene {
             confirmBtn.setVisible(codeField.getText().length() == 4);
         });
 
-        var createBtn = Button.create("enterRoom/createRoom", () -> {
-            enterName.setOnConfirm((name -> {
+        var createBtn = Button.create("enter_play/create_room_btn", () -> {
+            setName.setOnConfirm((name -> {
                 onConfirm.confirm("000A", name);
             }));
             getSceneService().popSubScene();
-            getSceneService().pushSubScene(enterName);
+            getSceneService().pushSubScene(setName);
         });
         createBtn.setTranslateY(-300);
 

@@ -22,7 +22,7 @@ public class OptionsModal extends SubScene {
         shadow.setFill(Color.BLACK);
         shadow.setOpacity(0.65);
 
-        var banner = texture("options/optionPane.png", getGameScene().getAppWidth(), 684);
+        var banner = texture("options/option_pane.png", getGameScene().getAppWidth(), 684);
         banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
         CheckBox fullScreen = new CheckBox();
@@ -31,16 +31,16 @@ public class OptionsModal extends SubScene {
         Slider sfxVol = new Slider(0, 100, 0);
         fullScreen.getStyleClass().add("big-check-box");
 
-        var fullHD_btn = Button.create("options/Full_HDRes", () -> {
+        var fullHD_btn = Button.create("options/full_hd", () -> {
             System.out.println("FULL HD RESOLUTION SELECTED!");
         });
-        var HD_btn = Button.create("options/HDRes", () -> {
+        var HD_btn = Button.create("options/hd_btn", () -> {
             System.out.println("HD RESOLUTION SELECTED!");
         });
-        var SD_btn = Button.create("options/SDRes", () -> {
+        var SD_btn = Button.create("options/sd_btn", () -> {
             System.out.println("SD RESOLUTION SELECTED!");
         });
-        var saveBtn = Button.create("options/saveBtn", () -> {
+        var saveBtn = Button.create("options/save_btn", () -> {
             System.out.println("master vol. : " + (int) masterVol.getValue());
             System.out.println("music vol. : " + (int) mscVol.getValue());
             System.out.println("sfx vol. : " + (int) sfxVol.getValue());
@@ -67,16 +67,16 @@ public class OptionsModal extends SubScene {
 
         var resolutionText = texture("options/resolution.png");
         resolutionText.setLayoutY(-220);
-        var fullScreenText = texture("options/fullText.png");
+        var fullScreenText = texture("options/full_text.png");
         fullScreenText.setLayoutY(-120);
-        var masText = texture("options/masterText.png");
+        var masText = texture("options/master_text.png");
         masText.setLayoutY(-40);
-        var mscText = texture("options/musicText.png");
+        var mscText = texture("options/music_text.png");
         mscText.setLayoutY(40);
-        var sfxText = texture("options/sfxV.png");
+        var sfxText = texture("options/sfx_text.png");
         sfxText.setLayoutY(120);
 
-        var separateLine = texture("options/sepLine.png");
+        var separateLine = texture("options/separate_line.png");
         separateLine.setLayoutX((getAppWidth()/2.0)-250);
         separateLine.setLayoutY(310);
 

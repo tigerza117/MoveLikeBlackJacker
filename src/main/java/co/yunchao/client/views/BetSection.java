@@ -26,11 +26,11 @@ public class BetSection extends Group {
     BetSection(Table table) {
         balanceText = FXGL.getUIFactoryService().newText("0$", Color.WHITE, FontType.GAME, 52);
 
-        var optionBtn = Button.create("in_game_option_btn", () -> {
+        var optionBtn = Button.create("bet_section/in_game_option_btn", () -> {
             System.out.println("Options");
             getSceneService().pushSubScene(new OptionsModal());
         });
-        var leaveBtn = Button.create("leave_btn", () -> {
+        var leaveBtn = Button.create("bet_section/leave_btn", () -> {
             System.out.println("Leave Game");
             getSceneService().pushSubScene(new LeaveModal(() -> {
                 getGameController().gotoMainMenu();
@@ -53,18 +53,18 @@ public class BetSection extends Group {
 
         timeText = FXGL.getUIFactoryService().newText("time", Color.WHITE, FontType.GAME, 20);
 
-        var textureBalance = texture("balance_box.png");
-        var confirmBtn = Button.create("confirm_btn", () -> System.out.println("Confirm"));
-        var standBtn = Button.create("stand_btn", () -> System.out.println("Stand"));
-        var hitBtn = Button.create("hit_btn", () -> System.out.println("Hit"));
-        var doubleBtn = Button.create("double_btn", () -> System.out.println("Double"));
-        var textureChipSection = texture("chip_section.png");
-        var minBtn = Button.create("min_btn", () -> System.out.println("Min Bet"));
-        var maxBtn = Button.create("max_btn", () -> System.out.println("Max Bet"));
-        var clearBtn = Button.create("clear_btn", () -> System.out.println("Clear"));
-        var chip1BetBtn = Button.create("chip1_bet_btn", () -> System.out.println("Chip 25$"));
-        var chip2BetBtn = Button.create("chip2_bet_btn", () -> System.out.println("Chip 100$"));
-        var chip3BetBtn = Button.create("chip3_bet_btn", () -> System.out.println("Chip 500$"));
+        var textureBalance = texture("bet_section/balance_box.png");
+        var confirmBtn = Button.create("bet_section/confirm_btn", () -> System.out.println("Confirm"));
+        var standBtn = Button.create("bet_section/stand_btn", () -> System.out.println("Stand"));
+        var hitBtn = Button.create("bet_section/hit_btn", () -> System.out.println("Hit"));
+        var doubleBtn = Button.create("bet_section/double_btn", () -> System.out.println("Double"));
+        var textureChipSection = texture("bet_section/chip_section.png");
+        var minBtn = Button.create("bet_section/min_btn", () -> System.out.println("Min Bet"));
+        var maxBtn = Button.create("bet_section/max_btn", () -> System.out.println("Max Bet"));
+        var clearBtn = Button.create("bet_section/clear_btn", () -> System.out.println("Clear"));
+        var chip1BetBtn = Button.create("bet_section/chip1_bet_btn", () -> System.out.println("Chip 25$"));
+        var chip2BetBtn = Button.create("bet_section/chip2_bet_btn", () -> System.out.println("Chip 100$"));
+        var chip3BetBtn = Button.create("bet_section/chip3_bet_btn", () -> System.out.println("Chip 500$"));
 
         var disableGroup = new Group();
         var timerGroup = new Group();
