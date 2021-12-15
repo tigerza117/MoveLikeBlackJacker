@@ -26,7 +26,7 @@ public class Button {
             action.run();
         });
 
-        ScaleTransition linearTransition = new ScaleTransition(new Duration(180), btn);
+        ScaleTransition linearTransition = new ScaleTransition(new Duration(50), btn);
         linearTransition.setFromX(btn.getScaleX());
         linearTransition.setToX(1.1 * btn.getScaleX());
         linearTransition.setFromY(btn.getScaleY());
