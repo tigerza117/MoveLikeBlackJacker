@@ -2,6 +2,7 @@ package co.yunchao.server.controllers;
 
 import co.yunchao.base.enums.ChipType;
 import co.yunchao.base.enums.Result;
+import co.yunchao.base.models.Card;
 import co.yunchao.base.models.Chip;
 import co.yunchao.base.models.Inventory;
 import co.yunchao.net.packets.*;
@@ -189,7 +190,9 @@ public class Player extends co.yunchao.base.models.Player {
 
     public void pickUpCard() {
         var inv = getInventory();
-        inv.putCard(getGame().getDeck().pickTopCard());
+        var card = getGame().getDeck().pickTopCard();
+        card.setFlip(true);
+        inv.putCard(card);
         if (inv.isBlackJack()) {
             setState(PlayerInGameState.WINING);
             log("is wining");

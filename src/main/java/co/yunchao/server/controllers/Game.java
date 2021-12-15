@@ -79,7 +79,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         }
         player.setBalance(5000);
         this.players.put(player.getId(), player);
-        players.values().forEach(pl -> {
+        for (Player pl : players.values()) {
             PlayerJoinPacket playerJoinPacket = new PlayerJoinPacket();
             playerJoinPacket.id = pl.getId();
             playerJoinPacket.name = pl.getName();
@@ -98,7 +98,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
             player.putPacket(playerMetadataPacket);
 
             pl.sendData(player);
-        });
+        }
         return true;
     }
 
@@ -156,7 +156,9 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         if (this.tick == 0) {
                             dealer.reset();
                             //clear card
-                            players.values().forEach(Player::skip);
+                            for (Player player : players.values()) {
+                                player.skip();
+                            }
                             setState(GameState.HAND_OUT);
                         } else {
                             this.tick--;
@@ -164,14 +166,16 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         break;
                     case HAND_OUT:
                         for (int i = 0; i < 2; i++) {
-                            players.values().forEach(player -> {
-                                player.pickUpCard();
-                                try {
+                            Iterator<Player> it = players.values().iterator();
+                            while (it.hasNext()) {
+                                Player player = it.next();
+                                if (!player.isDealer() && player.isOnline()) {
+                                    player.pickUpCard();
                                     Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
                                 }
-                            });
+                            }
+                            dealer.pickUpCard();
+                            Thread.sleep(1000);
                         }
                         if (dealer.isWining()) {
                             //flip card dealer
@@ -183,7 +187,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         }
                         break;
                     case IN_GAME:
-                        players.values().forEach((player) -> {
+                        for (Player player : players.values()) {
                             if (!player.isDealer() && player.isOnline()) {
                                 this.tick = 15;
                                 this.maxTick = 15;
@@ -194,6 +198,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                         case BUST:
                                             System.out.println("BUST!!!");
                                         case SKIP:
+                                        case IDLE:
                                         case WINING:
                                         case DOUBLE:
                                         case STAND:
@@ -220,42 +225,46 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                     }
                                 }
                             }
-                        });
+                        }
                         playerTurn = dealer.getId();
                         while (dealer.getInventory().getPoint() < 17) {
                             dealer.pickUpCard();
+                            Thread.sleep(1000);
                         }
                         setState(GameState.PAY_OUT);
                         playerTurn = UUID.randomUUID();
                         break;
                     case PAY_OUT:
-                        players.remove(dealer.getId());
-                        players.values().forEach(player -> {
-                            var result = player.getResult(dealer);
-                            var ratio = 0.0;
-                            if (result != Result.LOSE) {
-                                System.out.println(player.getName() + " Wining");
-                                switch (result) {
-                                    case BLACKJACK:
-                                        ratio = 2.5;
-                                        break;
-                                    case DRAW:
-                                        ratio = 1;
-                                        break;
-                                    case Card5:
-                                    case HIGH_POINT:
-                                        ratio = 2;
-                                        break;
-                                    default:
-                                        ratio = 0;
+                        for (Player player : players.values()) {
+                            if (!player.isDealer()) {
+                                var result = player.getResult(dealer);
+                                var ratio = 0.0;
+                                if (result != Result.LOSE) {
+                                    System.out.println(player.getName() + " Wining");
+                                    switch (result) {
+                                        case BLACKJACK:
+                                            ratio = 2.5;
+                                            break;
+                                        case DRAW:
+                                            ratio = 1;
+                                            break;
+                                        case Card5:
+                                        case HIGH_POINT:
+                                            ratio = 2;
+                                            break;
+                                        default:
+                                            ratio = 0;
+                                    }
                                 }
-                            }
 
-                            player.getReward(ratio);
-                            player.reset();
-                            this.tick = 5;
-                            setState(GameState.WAITING);
-                        });
+                                player.getReward(ratio);
+                                player.reset();
+                                this.tick = 5;
+                                setState(GameState.WAITING);
+                            } else {
+                                player.reset();
+                            }
+                        }
                         break;
                 }
                 Thread.sleep(1000);

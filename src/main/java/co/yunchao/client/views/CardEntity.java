@@ -11,8 +11,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class CardEntity extends Group {
     public CardEntity(String name, boolean flip) {
-        double width = 84;
-        double height = 122;
+        double width = 86;
+        double height = 121;
         var front = texture("card/" + name.toLowerCase() + ".png", width, height);
         var back = texture("card/card_back.png", width, height);
         getChildren().addAll(front, back);

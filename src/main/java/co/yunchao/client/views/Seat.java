@@ -104,6 +104,8 @@ public class Seat extends Group {
     }
 
     public void close() {
+        cardEntities.clear();
+        chipEntityBet.clear();
         getGameScene().getContentRoot().getChildren().remove(this);
     }
 

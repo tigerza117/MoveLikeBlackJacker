@@ -57,7 +57,7 @@ public class PlayerController extends Player {
 
     @Override
     public void close() {
-
+        getSeat().close();
     }
 
     @Override

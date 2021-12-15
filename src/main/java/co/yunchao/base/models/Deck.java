@@ -19,9 +19,11 @@ public class Deck {
 
     public void generateCards() {
         this.cards.clear();
-        for (int i = 1; i <= 13; i++) {
-            for (CardSuit suit : CardSuit.values()) {
-                cards.add(new Card(i, suit));
+        for (int j = 0; j < 4; j++) {
+            for (int i = 1; i <= 13; i++) {
+                for (CardSuit suit : CardSuit.values()) {
+                    cards.add(new Card(i, suit));
+                }
             }
         }
         Collections.shuffle(this.cards);
