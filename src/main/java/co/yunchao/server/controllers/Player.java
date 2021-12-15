@@ -232,7 +232,7 @@ public class Player extends co.yunchao.base.models.Player {
     public void sendData(Player player) {
         getInventory().getCards().forEach(card -> {
             CardSpawnPacket packet = new CardSpawnPacket();
-            packet.playerId = player.getId();
+            packet.playerId = getId();
             packet.id = card.getId();
             packet.number = card.getNumber();
             packet.suit = card.getSuit();
