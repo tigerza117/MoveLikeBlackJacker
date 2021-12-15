@@ -9,7 +9,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 public class PacketEncoder extends MessageToByteEncoder<DataPacket> {
     @Override
     protected void encode(ChannelHandlerContext ctx, DataPacket packet, ByteBuf out) throws Exception {
-        out.writeInt(packet.pid());
+        out.writeByte(packet.pid());
         packet.encode(out);
     }
 }

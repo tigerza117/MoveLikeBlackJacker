@@ -11,7 +11,7 @@ import java.util.List;
 public class PacketDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> output) throws Exception {
-        int id = in.readInt();
+        byte id = in.readByte();
         DataPacket packet = Network.getPacket(id);
         if (packet == null) throw new NullPointerException("Couldn't find id of packet " + id);
 

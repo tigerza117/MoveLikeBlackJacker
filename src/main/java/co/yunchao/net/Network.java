@@ -9,8 +9,8 @@ public class Network {
         this.registerPackets();
     }
 
-    public static DataPacket getPacket(int id) {
-        Class<? extends DataPacket> clazz = packetPool[id];
+    public static DataPacket getPacket(byte id) {
+        Class<? extends DataPacket> clazz = packetPool[id & 0xff];
         if (clazz != null) {
             try {
                 return clazz.getDeclaredConstructor().newInstance();
@@ -38,6 +38,7 @@ public class Network {
         this.registerPacket(ProtocolInfo.PLAYER_ACTION_PACKET, PlayerActionPacket.class);
         this.registerPacket(ProtocolInfo.PLAYER_JOIN_PACKET, PlayerJoinPacket.class);
         this.registerPacket(ProtocolInfo.PLAYER_LEAVE_PACKET, PlayerLeavePacket.class);
+        this.registerPacket(ProtocolInfo.PLAYER_METADATA_PACKET, PlayerMetadataPacket.class);
     }
 
 }
