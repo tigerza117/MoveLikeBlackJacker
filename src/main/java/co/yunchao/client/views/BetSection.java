@@ -43,17 +43,17 @@ public class BetSection extends Group {
         timeText = FXGL.getUIFactoryService().newText("time", Color.WHITE, FontType.GAME, 20);
 
         var textureBalance = texture("bet_section/balance_box.png");
-        var confirmBtn = Button.create("bet_section/confirm_btn", () -> System.out.println("Confirm"));
-        var standBtn = Button.create("bet_section/stand_btn", () -> System.out.println("Stand"));
-        var hitBtn = Button.create("bet_section/hit_btn", () -> System.out.println("Hit"));
-        var doubleBtn = Button.create("bet_section/double_btn", () -> System.out.println("Double"));
         var textureChipSection = texture("bet_section/chip_section.png");
-        var minBtn = Button.create("bet_section/min_btn", () -> System.out.println("Min Bet"));
-        var maxBtn = Button.create("bet_section/max_btn", () -> System.out.println("Max Bet"));
-        var clearBtn = Button.create("bet_section/clear_btn", () -> System.out.println("Clear"));
-        var chip1BetBtn = Button.create("bet_section/chip1_bet_btn", () -> System.out.println("Chip 25$"));
-        var chip2BetBtn = Button.create("bet_section/chip2_bet_btn", () -> System.out.println("Chip 100$"));
-        var chip3BetBtn = Button.create("bet_section/chip3_bet_btn", () -> System.out.println("Chip 500$"));
+        var confirmBtn = Button.create("bet_section/confirm_btn", () -> System.out.println("Confirm"));
+        var standBtn = Button.create("bet_section/stand_btn", playerController::canConfirmBet);
+        var hitBtn = Button.create("bet_section/hit_btn", playerController::canConfirmBet);
+        var doubleBtn = Button.create("bet_section/double_btn", playerController::canConfirmBet);
+        var minBtn = Button.create("bet_section/min_btn", playerController::canConfirmBet);
+        var maxBtn = Button.create("bet_section/max_btn", playerController::canConfirmBet);
+        var clearBtn = Button.create("bet_section/clear_btn", playerController::canConfirmBet);
+        var chip1BetBtn = Button.create("bet_section/chip1_bet_btn", playerController::canConfirmBet);
+        var chip2BetBtn = Button.create("bet_section/chip2_bet_btn", playerController::canConfirmBet);
+        var chip3BetBtn = Button.create("bet_section/chip3_bet_btn", playerController::canConfirmBet);
 
         var disableGroup = new Group();
         var timerGroup = new Group();
