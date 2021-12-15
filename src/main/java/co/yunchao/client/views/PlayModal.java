@@ -41,14 +41,13 @@ public class PlayModal extends SubScene {
 
         codeField = new TextField("");
         codeField.setMaxWidth(300);
+        codeField.setPromptText("Join Room");
         codeField.getStylesheets().add("/css/style.css");
         codeField.getStyleClass().add("text-field");
         codeField.setLayoutY((getAppHeight() / 2.0) - ((codeField.getHeight() / 2)-92));
 
         var confirmBtn = Button.create("enter_name/confirm_btn", () -> {
-            setName.setOnConfirm((name -> {
-                onConfirm.confirm(codeField.getText(), name);
-            }));
+            setName.setOnConfirm((name -> onConfirm.confirm(codeField.getText(), name)));
             getSceneService().popSubScene();
             getSceneService().pushSubScene(setName);
         });
@@ -59,6 +58,7 @@ public class PlayModal extends SubScene {
 
         codeField.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth()/2.0)+200));
 
+        confirmBtn.setVisible(false);
         codeField.setOnKeyTyped(ev -> {
             String txt = codeField.getText();
             if (txt.length() > 0) {
@@ -76,9 +76,7 @@ public class PlayModal extends SubScene {
         });
 
         var createBtn = Button.create("enter_play/create_room_btn", () -> {
-            setName.setOnConfirm((name -> {
-                onConfirm.confirm("000A", name);
-            }));
+            setName.setOnConfirm((name -> onConfirm.confirm("000A", name)));
             getSceneService().popSubScene();
             getSceneService().pushSubScene(setName);
         });
