@@ -61,10 +61,21 @@ public class GameController extends Game {
     public void handler(DataPacket packet) {
         switch (packet.pid()) {
             case ProtocolInfo.DISCONNECT_PACKET:
+            case ProtocolInfo.JOIN_ROOM_PACKET:
+            case ProtocolInfo.PLAYER_LEAVE_PACKET:
+            case ProtocolInfo.PLAYER_BET_STACK_PACKET:
+            case ProtocolInfo.PLAYER_ACTION_PACKET:
+            case ProtocolInfo.PLAYER_METADATA_PACKET:
+            case ProtocolInfo.GAME_METADATA_PACKET:
+            case ProtocolInfo.CARD_TOGGLE_FLIP_PACKET:
+            case ProtocolInfo.CARD_SPAWN_PACKET:
+            case ProtocolInfo.CARD_DE_SPAWN_PACKET:
+            case ProtocolInfo.CHIP_SPAWN_PACKET:
+            case ProtocolInfo.CHIP_DE_SPAWN_PACKET:
                 break;
             case ProtocolInfo.PLAYER_JOIN_PACKET:
                 PlayerJoinPacket playerJoinPacket = (PlayerJoinPacket) packet;
-                /*System.out.println("Player " + playerJoinPacket.id + " has been join the game.");*/
+                System.out.println("Player " + playerJoinPacket.id + " has been join the game.");
                 break;
             default:
                 System.out.println("Unknown packet");
