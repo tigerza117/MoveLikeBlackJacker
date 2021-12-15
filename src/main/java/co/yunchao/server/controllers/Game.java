@@ -5,21 +5,22 @@ import co.yunchao.base.enums.GameState;
 import co.yunchao.base.enums.Result;
 import co.yunchao.net.packets.*;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Game extends co.yunchao.base.models.Game implements Runnable {
-    private final ArrayList<Player> players;
+    private final HashMap<UUID,Player> players;
     private final Deck deck;
     private final Thread thread;
     private final Player dealer;
     private int tick = 20;
     private int maxTick = 5;
-    private int playerTurnIndex = 0;
+    private UUID playerTurn = UUID.randomUUID();
+    private boolean isRunning = true;
 
     public Game(String id) {
         super(id);
-        this.players = new ArrayList<>();
+        this.players = new HashMap<>();
         this.deck = new Deck();
         this.thread = new Thread(this);
         this.dealer = new Player(UUID.randomUUID(),"Dealer",true);
@@ -32,7 +33,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
 
     @Override
     public void putPacket(DataPacket packet) {
-        players.forEach(player -> {
+        players.values().forEach(player -> {
             player.putPacket(packet);
         });
     }
@@ -56,8 +57,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
             packet.isDealer = player.isDealer();
             putPacket(packet);
         }
-        this.players.add(player);
-        players.forEach(pl -> {
+        this.players.put(player.getId(), player);
+        players.values().forEach(pl -> {
             PlayerJoinPacket playerJoinPacket = new PlayerJoinPacket();
             playerJoinPacket.id = pl.getId();
             playerJoinPacket.name = pl.getName();
@@ -72,6 +73,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
             playerMetadataPacket.isDealer = pl.isDealer();
             playerMetadataPacket.currentBetStage = pl.getCurrentBetStage();
             player.putPacket(playerMetadataPacket);
+            pl.sendData(player);
         });
         return true;
     }
@@ -79,7 +81,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
     public void leave(Player player) {
         broadcastPlayerLeave(player);
         player.setGame(null);
-        this.players.remove(player);
+        this.players.remove(player.getId());
     }
 
     public void broadcastPlayerLeave(Player player) {
@@ -106,34 +108,15 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         return players.size() - (getState().equals(GameState.IN_GAME) ? 1 : 0);
     }
 
-    private boolean paused = false;
-
-    private synchronized void checkPaused() {
-        try{
-            while(paused){
-                this.wait();
-            }
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public synchronized void pauseThread() {
-        this.paused = !this.paused;
-        if(!this.paused) this.notify();
-    }
-
     @Override
     public void run() {
         try {
-            while (true) {
-                checkPaused();
+            while (isRunning) {
                 broadcastGameState();
                 System.out.println(getState() + " > " + tick);
                 if (countPlayers() < 1 && !getState().equals(GameState.WAITING)) {
                     System.out.println("No one in game");
-                    Thread.sleep(1000);
+                    wait(1000);
                     continue;
                 }
                 switch (getState()) {
@@ -147,7 +130,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         if (this.tick == 0) {
                             dealer.reset();
                             //clear card
-                            players.forEach(Player::skip);
+                            players.values().forEach(Player::skip);
                             setState(GameState.HAND_OUT);
                         } else {
                             this.tick--;
@@ -155,7 +138,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         break;
                     case HAND_OUT:
                         for (int i = 0; i < 2; i++) {
-                            players.forEach(player -> {
+                            players.values().forEach(player -> {
                                 if (player.isReady()) {
                                     player.pickUpCard();
                                 }
@@ -166,53 +149,57 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             setState(GameState.PAY_OUT);
                         } else {
                             setState(GameState.IN_GAME);
-                            this.playerTurnIndex = 1;
                             this.tick = 15;
                         }
                         break;
                     case IN_GAME:
-                        if (players.size() == playerTurnIndex) {
-//                            while (dealer.getInventory().getPoint() < 17) {
-//                                dealer.pickUpCard();
-//                            }
-                            setState(GameState.PAY_OUT);
-                        } else {
-                            var player = this.players.get(playerTurnIndex);
-                            if (this.tick != 0) {
-                                System.out.println(player.getName() + "[" + player.getInventory().getPoint() + "] Turn > " + player.getState());
-                                switch (player.getState()) {
-                                    case BUST:
-                                        System.out.println("BUST!!!");
-                                        //Remove card
-                                        //Remove bet state
-                                    case SKIP:
-                                    case WINING:
-                                    case DOUBLE:
-                                    case STAND:
-                                        this.tick = 0;
-                                        break;
-                                    case HIT:
-                                    case READY:
-                                        this.tick--;
-                                        if (player.isDealer()) {
+                        players.values().forEach((player) -> {
+                            if (!player.isDealer() && player.isOnline()) {
+                                this.tick = 5;
+                                playerTurn = player.getId();
+                                while (this.tick != 0) {
+                                    System.out.println(player.getName() + "[" + player.getInventory().getPoint() + "] Turn > " + player.getState());
+                                    switch (player.getState()) {
+                                        case BUST:
+                                            System.out.println("BUST!!!");
+                                        case SKIP:
+                                        case WINING:
+                                        case DOUBLE:
+                                        case STAND:
                                             this.tick = 0;
-                                        }
-                                        break;
-                                }
-                                if (tick == 0) {
-                                    if (player.isReady()) {
-                                        player.stand();
+                                            break;
+                                        case HIT:
+                                        case READY:
+                                            this.tick--;
+                                            if (player.isDealer()) {
+                                                this.tick = 0;
+                                            }
+                                            break;
                                     }
-                                    this.playerTurnIndex++;
-                                    this.tick = 5;
-                                    continue;
+                                    if (tick == 0) {
+                                        if (player.isReady()) {
+                                            player.stand();
+                                        }
+                                        continue;
+                                    }
+                                    try {
+                                        wait(1000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
+                        });
+                        playerTurn = dealer.getId();
+                        while (dealer.getInventory().getPoint() < 17) {
+                            dealer.pickUpCard();
                         }
+                        setState(GameState.PAY_OUT);
+                        playerTurn = UUID.randomUUID();
                         break;
                     case PAY_OUT:
-                        players.remove(dealer);
-                        players.forEach(player -> {
+                        players.remove(dealer.getId());
+                        players.values().forEach(player -> {
                             var result = player.getResult(dealer);
                             var ratio = 0.0;
                             if (result != Result.LOSE) {
@@ -240,7 +227,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         });
                         break;
                 }
-                Thread.sleep(1000);
+                wait(1000);
             }
         } catch (Exception e) {
             e.printStackTrace();

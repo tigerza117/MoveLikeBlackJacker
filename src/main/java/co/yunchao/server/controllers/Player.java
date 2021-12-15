@@ -229,6 +229,25 @@ public class Player extends co.yunchao.base.models.Player {
         getInventory().clearChips();
     }
 
+    public void sendData(Player player) {
+        getInventory().getCards().forEach(card -> {
+            CardSpawnPacket packet = new CardSpawnPacket();
+            packet.playerId = player.getId();
+            packet.id = card.getId();
+            packet.number = card.getNumber();
+            packet.suit = card.getSuit();
+            packet.flip = card.isFlip();
+            player.putPacket(packet);
+        });
+        getInventory().getChips().forEach(chip -> {
+            ChipSpawnPacket packet = new ChipSpawnPacket();
+            packet.playerId = player.getId();
+            packet.id = chip.getId();
+            packet.type = chip.getType();
+            player.putPacket(packet);
+        });
+    }
+
     public void kick(String message) {
         kick(message, false);
     }

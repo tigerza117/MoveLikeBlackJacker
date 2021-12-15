@@ -14,6 +14,7 @@ public abstract class Player{
     private PlayerInGameState state = PlayerInGameState.IDLE;
     private int currentBetStage = 0;
     private Game game;
+    private boolean isOnline = true;
 
     public Player(UUID id, String name, boolean isDealer){
         this.id = id;
@@ -67,6 +68,14 @@ public abstract class Player{
 
     public Game getGame() {
         return game;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 
     public boolean isReady() {
