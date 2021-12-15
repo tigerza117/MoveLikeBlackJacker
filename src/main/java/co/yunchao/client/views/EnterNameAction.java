@@ -40,7 +40,7 @@ public class EnterNameAction extends SubScene {
         BackBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)+30));
 
         nameField = new TextField("");
-        nameField.setPromptText("Your Name");
+        nameField.setPromptText("your name");
         nameField.setMaxWidth(380);
         nameField.getStylesheets().add("css/style.css");
         nameField.getStyleClass().add("text-field");

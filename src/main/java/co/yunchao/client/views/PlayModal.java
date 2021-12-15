@@ -42,7 +42,7 @@ public class PlayModal extends SubScene {
 
         codeField = new TextField("");
         codeField.setMaxWidth(300);
-        codeField.setPromptText("Join Room");
+        codeField.setPromptText("join room");
         codeField.getStylesheets().add("/css/style.css");
         codeField.getStyleClass().add("text-field");
         codeField.setLayoutY((getAppHeight() / 2.0) - ((codeField.getHeight() / 2)-92));
