@@ -1,7 +1,10 @@
 package co.yunchao.client.views;
 
+import com.almasb.fxgl.animation.Interpolators;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -19,7 +22,14 @@ public class CardEntity extends Group {
 
     public void spawn() {
         play("Cards_Action.wav");
+        var animation = animationBuilder(getGameScene())
+                .interpolator(Interpolators.LINEAR.EASE_OUT())
+                .duration(Duration.seconds(1))
+                .translate(this)
+                .from(new Point2D((getAppWidth() / 2.0 + getBoundsInLocal().getWidth() /2) - getLayoutX(), -(getLayoutY() + getBoundsInLocal().getHeight())))
+                .to(new Point2D(getTranslateX(), getTranslateY()));
         setVisible(true);
+        animation.buildAndPlay();
     }
 
     public void deSpawn() {
