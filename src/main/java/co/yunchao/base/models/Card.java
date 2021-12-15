@@ -37,13 +37,11 @@ public class Card implements Serializable {
 
         String name = "Ace";
 
-        String[] names = new String[]{"Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"};
+        String[] names = new String[]{"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"};
 
         if (number <= names.length) {
-            name = names[number - 1];
+            name = suit + "_" + names[number - 1];
         }
-
-        name = suit + "_" + name;
 
         this.name = name;
         this.point = number;
