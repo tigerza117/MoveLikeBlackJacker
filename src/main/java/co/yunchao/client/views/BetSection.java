@@ -19,6 +19,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class BetSection extends Group {
     private final Text balanceText;
+    Duration time;
 
     BetSection(Table table) {
         balanceText = FXGL.getUIFactoryService().newText("0$", Color.WHITE, FontType.GAME, 52);
@@ -40,7 +41,7 @@ public class BetSection extends Group {
         progress.progressProperty().bind(mills.divide(60000.0));
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(mills, 60000.0)),
-                new KeyFrame(Duration.minutes(.5), e-> System.out.println("Minute over"), new KeyValue(mills, 0))
+                new KeyFrame(setTimeLimit(time), e-> System.out.println("Minute over"), new KeyValue(mills, 0))
         );
         timeline.setCycleCount(1);
         timeline.play();
@@ -116,5 +117,10 @@ public class BetSection extends Group {
 
     public void setBalance(int number) {
         balanceText.setText(number + "$");
+    }
+
+    public Duration setTimeLimit(Duration time) {
+        time = Duration.seconds(30); // min 0 - max 60
+        return time;
     }
 }
