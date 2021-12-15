@@ -9,14 +9,6 @@ public class Offset {
         this.y = y;
     }
 
-    public void setX(int offsetX) {
-        this.x = offsetX;
-    }
-
-    public void setY(int offsetY) {
-        this.y = offsetY;
-    }
-
     public int getX() {
         return x;
     }

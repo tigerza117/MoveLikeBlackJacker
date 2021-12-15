@@ -9,7 +9,7 @@ public class PlayerJoinPacket extends DataPacket {
 
     public String name;
     public UUID id;
-    public boolean isDealer;
+    public boolean isDealer = false;
     public int offsetX;
     public int offsetY;
 
@@ -27,8 +27,8 @@ public class PlayerJoinPacket extends DataPacket {
         this.name = readString(buf);
         this.id = UUID.fromString(readString(buf));
         this.isDealer = buf.readBoolean();
-        this.offsetY = buf.readInt();
         this.offsetX = buf.readInt();
+        this.offsetY = buf.readInt();
     }
 
     @Override

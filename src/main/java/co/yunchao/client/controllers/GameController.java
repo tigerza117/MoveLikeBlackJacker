@@ -34,6 +34,7 @@ public class GameController extends Game {
         this.chips = new HashMap<>();
         this.cards = new HashMap<>();
         this.playerController = playerController;
+        System.out.println("MY ID IS " + playerController.getId());
     }
 
     public void setNetwork(Interface network) {

@@ -19,8 +19,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
     private boolean isRunning = true;
     private int maxPlayer;
     private final Queue<Offset> seatOffset = new LinkedList<>(List.of(
-            new Offset( 294, 432),
-            new Offset( 377,729),
+            new Offset( 432,294),
+            new Offset( 729,377),
             new Offset( 1024,375),
             new Offset( 1319,293)
     ));
@@ -36,6 +36,9 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         this.deck.generateCards();
         thread.start();
         join(dealer);
+        seatOffset.forEach(offset -> {
+            System.out.println("Offset > X:Y > " + offset.getX() + ":" + offset.getY());
+        });
     }
 
     @Override
@@ -50,7 +53,12 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         System.out.println("Room > " + getId() + " > Player " + player.getName() +" has been join" );
         player.setGame(this);
         if (!player.isDealer()) {
-            player.setOffset(seatOffset.poll());
+            var v = seatOffset.poll();
+            if (v == null) {
+                return false;
+            }
+            player.setOffset(v);
+            System.out.println("X: " + v.getX() + " Y:" + v.getY());
         }
 
         {
@@ -65,8 +73,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
             packet.id = player.getId();
             packet.name = player.getName();
             packet.isDealer = player.isDealer();
-            packet.offsetY = player.getOffset().getY();
             packet.offsetX = player.getOffset().getX();
+            packet.offsetY = player.getOffset().getY();
             putPacket(packet);
         }
         player.setBalance(5000);
