@@ -42,7 +42,6 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         if (this.players.size() >= 5) return false;
         System.out.println("Room > " + getId() + " > Player " + player.getName() +" has been join" );
         player.setGame(this);
-        player.setBalance(5000);
         {
             GameMetadataPacket packet = new GameMetadataPacket();
             packet.id = getId();
@@ -57,6 +56,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
             packet.isDealer = player.isDealer();
             putPacket(packet);
         }
+        player.setBalance(5000);
         this.players.put(player.getId(), player);
         players.values().forEach(pl -> {
             PlayerJoinPacket playerJoinPacket = new PlayerJoinPacket();
@@ -116,7 +116,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                 System.out.println(getState() + " > " + tick);
                 if (countPlayers() < 1 && !getState().equals(GameState.WAITING)) {
                     System.out.println("No one in game");
-                    wait(1000);
+                    Thread.sleep(1000);
                     continue;
                 }
                 switch (getState()) {
@@ -183,7 +183,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                         continue;
                                     }
                                     try {
-                                        wait(1000);
+                                        Thread.sleep(1000);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -227,7 +227,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         });
                         break;
                 }
-                wait(1000);
+                Thread.sleep(1000);
             }
         } catch (Exception e) {
             e.printStackTrace();
