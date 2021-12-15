@@ -136,6 +136,16 @@ public class GameController extends Game {
                     view.render();
                     getSceneService().popSubScene();
                 }
+                players.forEach((uuid, player) -> {
+                    if (!player.isDealer()) {
+                        System.out.println(gameMetadataPacket.currentPlayerTurn.equals(player.getId()) + "");
+                        if (gameMetadataPacket.currentPlayerTurn.equals(player.getId())) {
+                            player.getSeat().myTurn();
+                        } else {
+                            player.getSeat().notMyTurn();
+                        }
+                    }
+                });
                 view.update();
                 break;
             }
