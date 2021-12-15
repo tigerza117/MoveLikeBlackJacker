@@ -1,5 +1,6 @@
 package co.yunchao.client.views;
 
+import co.yunchao.base.models.Offset;
 import com.almasb.fxgl.animation.Interpolators;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -26,7 +27,7 @@ public class CardEntity extends Group {
                 .interpolator(Interpolators.LINEAR.EASE_OUT())
                 .duration(Duration.seconds(1))
                 .translate(this)
-                .from(new Point2D(0, -200))
+                .from(new Point2D(((getAppWidth()/2.0)/2.0)-200, -500))
                 .to(new Point2D(getTranslateX(),getTranslateY()));
         setVisible(true);
         animation.buildAndPlay();
