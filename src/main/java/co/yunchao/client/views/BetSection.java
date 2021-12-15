@@ -20,6 +20,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class BetSection extends Group {
     private final Text balanceText;
     Duration time;
+    Double timeDecrease;
+    Text timeText;
 
     BetSection(Table table) {
         balanceText = FXGL.getUIFactoryService().newText("0$", Color.WHITE, FontType.GAME, 52);
@@ -40,7 +42,7 @@ public class BetSection extends Group {
         IntegerProperty mills = new SimpleIntegerProperty();
         progress.progressProperty().bind(mills.divide(60000.0));
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(mills, 60000.0)),
+                new KeyFrame(Duration.ZERO, new KeyValue(mills, setMax(timeDecrease))),
                 new KeyFrame(setTimeLimit(time), e-> System.out.println("Minute over"), new KeyValue(mills, 0))
         );
         timeline.setCycleCount(1);
@@ -49,7 +51,7 @@ public class BetSection extends Group {
         progress.getStylesheets().add("css/style.css");
         progress.getStyleClass().add("progress-bar");
 
-        Text time = FXGL.getUIFactoryService().newText("time", Color.WHITE, FontType.GAME, 20);
+        timeText = FXGL.getUIFactoryService().newText("time", Color.WHITE, FontType.GAME, 20);
 
         var textureBalance = texture("balance_box.png");
         var confirmBtn = Button.create("confirm_btn", () -> System.out.println("Confirm"));
@@ -93,10 +95,10 @@ public class BetSection extends Group {
         clearBtn.setTranslateX(286);
         progress.setTranslateY(35);
         progress.setTranslateX((getAppWidth()/2.0)+190);
-        time.setTranslateY(25);
-        time.setTranslateX((getAppWidth()/2.0)+515);
+        timeText.setTranslateY(25);
+        timeText.setTranslateX((getAppWidth()/2.0)+515);
 
-        timerGroup.getChildren().addAll(time, progress);
+        timerGroup.getChildren().addAll(timeText, progress);
         chipSection.getChildren().addAll(textureChipSection, chip1BetBtn, chip2BetBtn, chip3BetBtn);
         topGroup.getChildren().addAll(minBtn, maxBtn, clearBtn);
         bottomGroup.getChildren().addAll(optionBtn, leaveBtn, textureBalance, confirmBtn, chipSection, standBtn, hitBtn, doubleBtn, balanceText);
@@ -120,7 +122,18 @@ public class BetSection extends Group {
     }
 
     public Duration setTimeLimit(Duration time) {
-        time = Duration.seconds(30); // min 0 - max 60
+        int setTime = 60; // Set Duration LENGTH From Here (second)
+        time = Duration.seconds(setTime);
         return time;
+    }
+
+    public Double setMax(Double timeDecrease) {
+        var getMax = 60; // Set Max/Start From Here (second)
+        var getTime = 30; // Time set e.g. for this case, max - time_set = 30 second which is 30000.0 millis
+        double maxTime = getMax * 1000.0;
+        double setTime = getTime * 1000.0;
+        timeDecrease = maxTime - setTime;
+        System.out.println(timeDecrease);
+        return timeDecrease;
     }
 }
