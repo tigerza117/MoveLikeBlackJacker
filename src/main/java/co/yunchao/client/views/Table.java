@@ -1,6 +1,8 @@
 package co.yunchao.client.views;
 
 import co.yunchao.client.controllers.GameController;
+import co.yunchao.client.controllers.PlayerController;
+import co.yunchao.server.controllers.Player;
 import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.core.asset.AssetType;
 import com.almasb.fxgl.dsl.FXGL;
@@ -18,9 +20,11 @@ public class Table extends Group {
     Text room_id;
     private final BetSection betSection;
     private final GameController gameController;
+    private final PlayerController playerController;
 
-    public Table(GameController gameController) {
+    public Table(GameController gameController, PlayerController playerController) {
         this.gameController = gameController;
+        this.playerController = playerController;
         this.music = getAssetLoader().load(AssetType.MUSIC, "in-game_bg.mp3");
 
         Texture bg = texture("bet_section/game_background.png", getAppWidth(), getAppHeight());
@@ -34,7 +38,7 @@ public class Table extends Group {
 
         getChildren().addAll(bg, roomID, room_id);
 
-        betSection = new BetSection(this);
+        betSection = new BetSection(this, playerController);
 
         getChildren().add(betSection);
     }
@@ -57,5 +61,9 @@ public class Table extends Group {
 
     public BetSection getBetSection() {
         return betSection;
+    }
+
+    public void update() {
+        betSection.update();
     }
 }

@@ -19,8 +19,8 @@ public class GameController extends Game {
     private final Table view;
     private final PlayerController playerController;
     private final HashMap<UUID, PlayerController> players;
-    private HashMap<UUID, ChipController> chips;
-    private HashMap<UUID, CardController> cards;
+    private final HashMap<UUID, ChipController> chips;
+    private final HashMap<UUID, CardController> cards;
     private final Queue<Seat> seats;
     private final Seat dealerSeat = new Seat(876, 40);
     public static Scene scene;
@@ -30,7 +30,7 @@ public class GameController extends Game {
 
     public GameController(String id, PlayerController playerController) {
         super(id);
-        this.view = new Table(this);
+        this.view = new Table(this, playerController);
         this.players = new HashMap<>();
         this.chips = new HashMap<>();
         this.cards = new HashMap<>();
@@ -127,7 +127,7 @@ public class GameController extends Game {
                 player.setName(playerMetadataPacket.name);
                 player.setCurrentBetStage(playerMetadataPacket.currentBetStage);
                 if (player.getId().equals(playerController.getId())) {
-                    view.getBetSection().setBalance((int) player.getBalance());
+                    view.update();
                 }
                 break;
             }
@@ -141,6 +141,7 @@ public class GameController extends Game {
                     view.render();
                     getSceneService().popSubScene();
                 }
+                view.update();
                 break;
             }
             case ProtocolInfo.CARD_TOGGLE_FLIP_PACKET: {

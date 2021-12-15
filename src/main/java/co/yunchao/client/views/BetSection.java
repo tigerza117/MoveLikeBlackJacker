@@ -1,25 +1,26 @@
 package co.yunchao.client.views;
 
+import co.yunchao.client.controllers.PlayerController;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FontType;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Group;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class BetSection extends Group {
     private final Text balanceText;
-    Duration time;
-    Double timeDecrease;
     Text timeText;
     ProgressBar progress;
+    PlayerController playerController;
 
-    BetSection(Table table) {
+    BetSection(Table table, PlayerController playerController) {
+        this.playerController = playerController;
         balanceText = FXGL.getUIFactoryService().newText("0$", Color.WHITE, FontType.GAME, 52);
 
         var optionBtn = Button.create("bet_section/in_game_option_btn", () -> {
@@ -98,6 +99,8 @@ public class BetSection extends Group {
         disableGroup.setEffect(desaturate);
         disableGroup.setTranslateY(62);
 
+        confirmBtn.disableProperty().bind(Bindings.createBooleanBinding(() -> !playerController.canConfirmBet()));
+
         getChildren().addAll(bottomGroup, disableGroup, timerGroup); //remove and add something to test
         setLayoutX(32);
         setLayoutY(842);
@@ -105,8 +108,8 @@ public class BetSection extends Group {
         prefHeight(202);
     }
 
-    public void setBalance(int number) {
-        balanceText.setText(number + "$");
+    public void update() {
+        balanceText.setText(playerController.getBalance() + "$");
     }
 
     public void setProgress(double percent) {
