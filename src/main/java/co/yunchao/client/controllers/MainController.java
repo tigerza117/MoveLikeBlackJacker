@@ -75,7 +75,7 @@ public class MainController extends GameApplication {
         getPrimaryStage().setHeight(720);
         getPrimaryStage().setMaxWidth(1920);
         getPrimaryStage().setMaxHeight(1080);
-        getPrimaryStage().setFullScreen(false);
+        getPrimaryStage().setFullScreen(true);
     }
 
     @Override

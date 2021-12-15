@@ -96,6 +96,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
             playerMetadataPacket.isDealer = pl.isDealer();
             playerMetadataPacket.currentBetStage = pl.getCurrentBetStage();
             player.putPacket(playerMetadataPacket);
+
             pl.sendData(player);
         });
         return true;
