@@ -133,10 +133,11 @@ public class Seat extends Group {
 
     public void myTurn() {
         DropShadow playerGlow = new DropShadow();
-        playerGlow.setRadius(80.0);
+        playerGlow.setRadius(80);
         playerGlow.setOffsetX(0.0);
         playerGlow.setOffsetY(5.0);
         playerGlow.setColor(Color.rgb(239, 184, 32));
+        playerGlow.setSpread(0.5);
         textureIcon.setEffect(playerGlow);
     }
 
