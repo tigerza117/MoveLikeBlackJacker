@@ -3,6 +3,7 @@ package co.yunchao.client.views;
 import com.almasb.fxgl.scene.Scene;
 import com.almasb.fxgl.scene.SubScene;
 import javafx.animation.FadeTransition;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
@@ -45,6 +46,7 @@ public class PlayModal extends SubScene {
         codeField.getStylesheets().add("/css/style.css");
         codeField.getStyleClass().add("text-field");
         codeField.setLayoutY((getAppHeight() / 2.0) - ((codeField.getHeight() / 2)-92));
+        codeField.setAlignment(Pos.CENTER);
 
         var confirmBtn = Button.create("enter_name/confirm_btn", () -> {
             setName.setOnConfirm((name -> onConfirm.confirm(codeField.getText(), name)));
@@ -56,7 +58,7 @@ public class PlayModal extends SubScene {
         confirmBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth()/2.0)-200));
         confirmBtn.setVisible(false);
 
-        codeField.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth()/2.0)+200));
+        codeField.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth()/2.0)+110));
 
         confirmBtn.setVisible(false);
         codeField.setOnKeyTyped(ev -> {
@@ -87,7 +89,7 @@ public class PlayModal extends SubScene {
         playMenu.setLayoutY((getAppHeight() / 2.0)+(playMenu.getBoundsInLocal().getHeight() / 3));
         playMenu.setLayoutX((getAppWidth() / 2.0)-((playMenu.getBoundsInLocal().getWidth() / 2)-10));
 
-        Group group = new Group(shadow, banner, playMenu, confirmBtn, codeField, backBtn);
+        Group group = new Group(shadow, banner, playMenu, codeField, confirmBtn, backBtn);
         fade = SubSceneAnimation.fade(group);
         getContentRoot().getChildren().addAll(group);
     }
