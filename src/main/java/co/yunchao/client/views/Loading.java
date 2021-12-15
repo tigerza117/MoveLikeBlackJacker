@@ -13,7 +13,7 @@ public class Loading extends LoadingScene {
 
     public Loading() {
         var bg = texture("main/loading_background.png", getAppWidth(), getAppHeight());
-
+        getContentRoot().setCursor(CursorCall.getCursor());
         getContentRoot().getChildren().addAll(bg);
     }
 }

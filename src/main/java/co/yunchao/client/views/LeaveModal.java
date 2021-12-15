@@ -3,7 +3,10 @@ package co.yunchao.client.views;
 import com.almasb.fxgl.scene.Scene;
 import com.almasb.fxgl.scene.SubScene;
 import javafx.animation.FadeTransition;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +39,10 @@ public class LeaveModal extends SubScene {
         Group group = new Group(shadow, quitPane, leaveMenu);
         fade = SubSceneAnimation.fade(group);
         getContentRoot().getChildren().addAll(group);
+
+        Image im = new Image("assets/ui/cursors/gold_cursor.png");
+        Cursor cursor = new ImageCursor(im);
+        getContentRoot().setCursor(cursor);
     }
 
     @Override
