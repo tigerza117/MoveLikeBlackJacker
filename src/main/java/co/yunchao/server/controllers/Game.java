@@ -3,10 +3,10 @@ package co.yunchao.server.controllers;
 import co.yunchao.base.models.Deck;
 import co.yunchao.base.enums.GameState;
 import co.yunchao.base.enums.Result;
+import co.yunchao.base.models.Offset;
 import co.yunchao.net.packets.*;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class Game extends co.yunchao.base.models.Game implements Runnable {
     private final HashMap<UUID,Player> players;
@@ -17,6 +17,13 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
     private int maxTick = 5;
     private UUID playerTurn = UUID.randomUUID();
     private boolean isRunning = true;
+    private int maxPlayer;
+    private final Queue<Offset> seatOffset = new LinkedList<>(List.of(
+            new Offset( 294, 432),
+            new Offset( 377,729),
+            new Offset( 1024,375),
+            new Offset( 1319,293)
+    ));
 
     public Game(String id) {
         super(id);
@@ -42,6 +49,10 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         if (this.players.size() >= 5) return false;
         System.out.println("Room > " + getId() + " > Player " + player.getName() +" has been join" );
         player.setGame(this);
+        if (!player.isDealer()) {
+            player.setOffset(seatOffset.poll());
+        }
+
         {
             GameMetadataPacket packet = new GameMetadataPacket();
             packet.id = getId();
@@ -54,6 +65,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
             packet.id = player.getId();
             packet.name = player.getName();
             packet.isDealer = player.isDealer();
+            packet.offsetY = player.getOffset().getY();
+            packet.offsetX = player.getOffset().getX();
             putPacket(packet);
         }
         player.setBalance(5000);
@@ -63,6 +76,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
             playerJoinPacket.id = pl.getId();
             playerJoinPacket.name = pl.getName();
             playerJoinPacket.isDealer = pl.isDealer();
+            playerJoinPacket.offsetX = pl.getOffset().getX();
+            playerJoinPacket.offsetY = pl.getOffset().getY();
             player.putPacket(playerJoinPacket);
 
             PlayerMetadataPacket playerMetadataPacket = new PlayerMetadataPacket();
@@ -81,6 +96,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
     public void leave(Player player) {
         broadcastPlayerLeave(player);
         player.setGame(null);
+        seatOffset.add(player.getOffset());
         this.players.remove(player.getId());
     }
 
@@ -122,7 +138,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                 switch (getState()) {
                     case WAITING:
                         if (countPlayers() > 0) {
-                            this.tick = 5;
+                            this.tick = 30;
+                            this.maxTick = 30;
                             setState(GameState.BET);
                         }
                         break;
@@ -139,9 +156,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                     case HAND_OUT:
                         for (int i = 0; i < 2; i++) {
                             players.values().forEach(player -> {
-                                if (player.isReady()) {
-                                    player.pickUpCard();
-                                }
+                                player.pickUpCard();
                             });
                         }
                         if (dealer.isWining()) {
@@ -149,13 +164,15 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             setState(GameState.PAY_OUT);
                         } else {
                             setState(GameState.IN_GAME);
-                            this.tick = 15;
+                            this.tick = 30;
+                            this.maxTick = 30;
                         }
                         break;
                     case IN_GAME:
                         players.values().forEach((player) -> {
                             if (!player.isDealer() && player.isOnline()) {
-                                this.tick = 5;
+                                this.tick = 15;
+                                this.maxTick = 15;
                                 playerTurn = player.getId();
                                 while (this.tick != 0) {
                                     System.out.println(player.getName() + "[" + player.getInventory().getPoint() + "] Turn > " + player.getState());

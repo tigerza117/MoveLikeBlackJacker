@@ -15,11 +15,17 @@ public abstract class Player{
     private int currentBetStage = 0;
     private Game game;
     private boolean isOnline = true;
+    private Offset offset;
 
     public Player(UUID id, String name, boolean isDealer){
+        this(id, name, isDealer, new Offset(0,0));
+    }
+
+    public Player(UUID id, String name, boolean isDealer, Offset offset){
         this.id = id;
         this.name = name;
         this.isDealer = isDealer;
+        this.offset = offset;
     }
 
     public void setBalance(double chip){
@@ -36,6 +42,14 @@ public abstract class Player{
 
     public UUID getId() {
         return id;
+    }
+
+    public void setOffset(Offset offset) {
+        this.offset = offset;
+    }
+
+    public Offset getOffset() {
+        return offset;
     }
 
     public void setName(String name) {

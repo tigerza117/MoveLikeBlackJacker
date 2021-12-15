@@ -1,5 +1,6 @@
 package co.yunchao.client.views;
 
+import co.yunchao.base.models.Offset;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FontType;
@@ -23,7 +24,7 @@ public class Seat extends Group {
     private final Text textDealerScore;
     private boolean isDealer = false;
 
-    public Seat(double offsetX, double offsetY) {
+    public Seat(Offset offset) {
         this.textName = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 16);
         this.textBetTotal = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 28);
         this.cardEntities = new ArrayList<>();
@@ -32,8 +33,8 @@ public class Seat extends Group {
         this.textureDealerScore = FXGL.texture("bet_section/dealer_score.png");
         this.textDealerScore = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 22);
 
-        setTranslateX(offsetX);
-        setTranslateY(offsetY);
+        setTranslateX(offset.getX());
+        setTranslateY(offset.getY());
 
         textureIcon.setTranslateX(43);
         textureIcon.setTranslateY(295);

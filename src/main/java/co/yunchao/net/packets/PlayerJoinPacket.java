@@ -10,12 +10,16 @@ public class PlayerJoinPacket extends DataPacket {
     public String name;
     public UUID id;
     public boolean isDealer;
+    public int offsetX;
+    public int offsetY;
 
     @Override
     public void encode(ByteBuf buf) {
         writeString(buf, this.name);
         writeString(buf, this.id.toString());
         buf.writeBoolean(this.isDealer);
+        buf.writeInt(this.offsetX);
+        buf.writeInt(this.offsetY);
     }
 
     @Override
@@ -23,6 +27,8 @@ public class PlayerJoinPacket extends DataPacket {
         this.name = readString(buf);
         this.id = UUID.fromString(readString(buf));
         this.isDealer = buf.readBoolean();
+        this.offsetY = buf.readInt();
+        this.offsetX = buf.readInt();
     }
 
     @Override

@@ -6,6 +6,7 @@ import co.yunchao.client.controllers.PlayerController;
 import co.yunchao.net.Network;
 import co.yunchao.net.handler.*;
 import co.yunchao.net.packets.DataPacket;
+import co.yunchao.net.packets.DisconnectPacket;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -22,7 +23,7 @@ public class Interface {
     private onHandler onHandler;
 
     public Interface() throws Exception {
-        final InetSocketAddress adder = new InetSocketAddress("103.91.205.130", 7856);
+        final InetSocketAddress adder = new InetSocketAddress("localhost", 7856);
         NetworkHandler handler = new NetworkHandler(this);
         try {
             channel = new Bootstrap()
@@ -63,8 +64,8 @@ public class Interface {
     }
 
     public void shutdown() throws InterruptedException {
-        System.out.println("shutdown");
         if (channel.isActive()) {
+            channel.writeAndFlush(new DisconnectPacket());
             channel.close().sync();
         }
         if (!ioGroup.isShutdown()) {

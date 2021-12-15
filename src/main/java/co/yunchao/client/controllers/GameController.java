@@ -1,6 +1,7 @@
 package co.yunchao.client.controllers;
 
 import co.yunchao.base.models.Game;
+import co.yunchao.base.models.Offset;
 import co.yunchao.client.net.Interface;
 import co.yunchao.client.net.NetworkEngine;
 import co.yunchao.client.views.*;
@@ -21,8 +22,6 @@ public class GameController extends Game {
     private final HashMap<UUID, PlayerController> players;
     private final HashMap<UUID, ChipController> chips;
     private final HashMap<UUID, CardController> cards;
-    private final Queue<Seat> seats;
-    private final Seat dealerSeat = new Seat(876, 40);
     public static Scene scene;
     private boolean alreadyRender = false;
 
@@ -35,12 +34,6 @@ public class GameController extends Game {
         this.chips = new HashMap<>();
         this.cards = new HashMap<>();
         this.playerController = playerController;
-        dealerSeat.setIsDealer(true);
-        seats = new LinkedList<>();
-        seats.add(new Seat( 432,294));
-        seats.add(new Seat( 729,377));
-        seats.add(new Seat( 1024,375));
-        seats.add(new Seat( 1319,293));
     }
 
     public void setNetwork(Interface network) {
@@ -100,14 +93,15 @@ public class GameController extends Game {
                 System.out.println("Player " + playerJoinPacket.id + " has been join the game.");
                 if (playerJoinPacket.id != playerController.getId()) {
                     player = new PlayerController(playerJoinPacket.id, playerJoinPacket.name, playerJoinPacket.isDealer);
+                    player.setOffset(new Offset(playerJoinPacket.offsetX, playerJoinPacket.offsetY));
                 }
                 if (!player.isDealer()) {
-                    Seat seat = seats.poll();
-                    if (seat != null) {
-                        player.sit(seat);
-                    }
+                    System.out.println("Offset " + player.getOffset().getX() + ":" + player.getOffset().getY());
+                    player.sit(new Seat(player.getOffset()));
                 } else {
-                    player.sit(dealerSeat);
+                    Seat seat = new Seat(new Offset(876, 40));
+                    seat.setIsDealer(true);
+                    player.sit(seat);
                 }
 
                 players.put(player.getId(), player);
