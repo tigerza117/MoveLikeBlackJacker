@@ -25,11 +25,16 @@ public class OptionsModal extends SubScene {
         var banner = texture("options/option_pane.png", getGameScene().getAppWidth(), 684);
         banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
+
+
         CheckBox fullScreen = new CheckBox();
         Slider masterVol = new Slider(0, 100, 0);
         Slider mscVol = new Slider(0, 100, 0);
         Slider sfxVol = new Slider(0, 100, 0);
         fullScreen.getStyleClass().add("big-check-box");
+
+        mscVol.valueProperty().bindBidirectional(getSettings().globalMusicVolumeProperty());
+        sfxVol.valueProperty().bindBidirectional(getSettings().globalSoundVolumeProperty());
 
         var fullHD_btn = Button.create("options/full_hd", () -> {
             System.out.println("FULL HD RESOLUTION SELECTED!");
