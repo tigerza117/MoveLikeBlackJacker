@@ -8,13 +8,15 @@ public class GameMetadataPacket extends DataPacket {
 
     public String id;
     public GameState state;
-    public int tick;
+    public int tick = 5;
+    public int maxTick = 5;
 
     @Override
     public void encode(ByteBuf buf) {
         writeString(buf, id);
         buf.writeInt(state.ordinal());
         buf.writeInt(tick);
+        buf.writeInt(maxTick);
     }
 
     @Override
@@ -22,6 +24,7 @@ public class GameMetadataPacket extends DataPacket {
         this.id = readString(buf);
         this.state = GameState.values()[buf.readInt()];
         this.tick = buf.readInt();
+        this.maxTick = buf.readInt();
     }
 
     @Override

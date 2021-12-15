@@ -3,13 +3,19 @@ package co.yunchao.client.controllers;
 import co.yunchao.base.enums.CardSuit;
 import co.yunchao.base.models.Card;
 import co.yunchao.client.views.CardEntity;
+import co.yunchao.client.views.Seat;
+
+import java.util.UUID;
 
 public class CardController extends Card {
     private final CardEntity view;
+    private final Seat seat;
 
-    public CardController(int number, CardSuit suit) {
-        super(number, suit);
-        this.view = new CardEntity(getName());
+    public CardController(UUID id, int number, CardSuit suit, boolean flip, Seat seat) {
+        super(id, number, suit);
+        this.seat = seat;
+        this.view = new CardEntity(getName(), flip);
+        seat.addCard(view);
     }
 
     public void spawn() {
@@ -22,5 +28,6 @@ public class CardController extends Card {
 
     public void deSpawn() {
         view.deSpawn();
+        seat.removeCard(view);
     }
 }

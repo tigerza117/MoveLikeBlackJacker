@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.UUID;
 
 public class Card implements Serializable {
-    private final UUID id;
+    private UUID id;
     private final CardSuit suit;
     private final String name;
     private final int number;
@@ -15,6 +15,11 @@ public class Card implements Serializable {
 
     private final int HIGH_ACE_POINT = 11;
     private final int LOW_ACE_POINT = 1;
+
+    public Card(UUID id ,int number, CardSuit suit) {
+        this(number, suit);
+        this.id = id;
+    }
 
     public Card(int number, CardSuit suit){
         this.id = UUID.randomUUID();
@@ -35,7 +40,7 @@ public class Card implements Serializable {
         String[] names = new String[]{"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"};
 
         if (number <= names.length) {
-            name = names[number - 1];
+            name = suit + "_" + names[number - 1];
         }
 
         this.name = name;

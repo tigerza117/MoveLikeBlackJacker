@@ -15,9 +15,13 @@ public class PlayerController extends Player {
         super(id, name, isDealer);
     }
 
+    public GameController getGame() {
+        return (GameController) super.getGame();
+    }
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
+        setGame(gameController);
     }
 
     public void sit(Seat seat) {
@@ -36,12 +40,19 @@ public class PlayerController extends Player {
     }
 
     @Override
+    public void setCurrentBetStage(int currentBetStage) {
+        super.setCurrentBetStage(currentBetStage);
+        getSeat().setBetStack(currentBetStage > 0 ? currentBetStage + "$" : "");
+    }
+
+    @Override
     public void handler(DataPacket packet) {
+
     }
 
     @Override
     public void putPacket(DataPacket packet) {
-
+        gameController.putPacket(packet);
     }
 
     @Override

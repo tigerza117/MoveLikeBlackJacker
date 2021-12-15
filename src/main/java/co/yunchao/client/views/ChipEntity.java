@@ -13,11 +13,11 @@ public class ChipEntity extends Group {
     }
 
     public void spawn() {
-        getGameScene().getContentRoot().getChildren().add(this);
+        setVisible(true);
         play("Cards_Action.wav");
     }
 
     public void deSpawn() {
-        getGameScene().getContentRoot().getChildren().remove(this);
+        setVisible(false);
     }
 }

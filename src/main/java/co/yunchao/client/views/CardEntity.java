@@ -6,22 +6,24 @@ import javafx.scene.Node;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class CardEntity extends Group {
-    public CardEntity(String name) {
+    public CardEntity(String name, boolean flip) {
         double width = 84;
         double height = 122;
-        var front = texture("card/Card_Deck-" + name + ".png", width, height);
-        var back = texture("card/Card_Back.png", width, height);
+        var front = texture("card/" + name.toLowerCase() + ".png", width, height);
+        var back = texture("card/card_back.png", width, height);
         getChildren().addAll(front, back);
-        toggleFlip();
+        if (flip) {
+            toggleFlip();
+        }
     }
 
     public void spawn() {
         play("Cards_Action.wav");
-        getGameScene().getContentRoot().getChildren().add(this);
+        setVisible(true);
     }
 
     public void deSpawn() {
-        getGameScene().getContentRoot().getChildren().remove(this);
+        setVisible(false);
     }
 
     public void toggleFlip() {

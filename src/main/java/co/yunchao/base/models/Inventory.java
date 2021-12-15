@@ -26,6 +26,7 @@ public class Inventory {
     public void putCard(Card card) {
         if (player.getGame() != null) {
             CardSpawnPacket packet = new CardSpawnPacket();
+            packet.playerId = player.getId();
             packet.id = card.getId();
             packet.number = card.getNumber();
             packet.suit = card.getSuit();
@@ -38,6 +39,7 @@ public class Inventory {
     public void putChip(Chip chip) {
         if (player.getGame() != null) {
             ChipSpawnPacket packet = new ChipSpawnPacket();
+            packet.playerId = player.getId();
             packet.id = chip.getId();
             packet.type = chip.getType();
             player.getGame().putPacket(packet);
@@ -72,7 +74,6 @@ public class Inventory {
         if (player.getGame() != null) {
             CardToggleFlipPacket packet = new CardToggleFlipPacket();
             packet.id = card.getId();
-            packet.flip = card.isFlip();
             player.getGame().putPacket(packet);
         }
     }

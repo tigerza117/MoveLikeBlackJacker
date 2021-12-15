@@ -2,11 +2,6 @@ package co.yunchao.client.views;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FontType;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Group;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.ColorAdjust;
@@ -22,6 +17,7 @@ public class BetSection extends Group {
     Duration time;
     Double timeDecrease;
     Text timeText;
+    ProgressBar progress;
 
     BetSection(Table table) {
         balanceText = FXGL.getUIFactoryService().newText("0$", Color.WHITE, FontType.GAME, 52);
@@ -38,15 +34,7 @@ public class BetSection extends Group {
             }));
         });
 
-        ProgressBar progress = new ProgressBar();
-        IntegerProperty mills = new SimpleIntegerProperty();
-        progress.progressProperty().bind(mills.divide(60000.0));
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(mills, setMax(timeDecrease))),
-                new KeyFrame(setTimeLimit(time), e-> System.out.println("Minute over"), new KeyValue(mills, 0))
-        );
-        timeline.setCycleCount(1);
-        timeline.play();
+        progress = new ProgressBar();
         progress.setPrefWidth(703);
         progress.getStylesheets().add("css/style.css");
         progress.getStyleClass().add("progress-bar");
@@ -121,19 +109,7 @@ public class BetSection extends Group {
         balanceText.setText(number + "$");
     }
 
-    public Duration setTimeLimit(Duration time) {
-        int setTime = 60; // Set Duration LENGTH From Here (second)
-        time = Duration.seconds(setTime);
-        return time;
-    }
-
-    public Double setMax(Double timeDecrease) {
-        var getMax = 60; // Set Max/Start From Here (second)
-        var getTime = 30; // Time set e.g. for this case, max - time_set = 30 second which is 30000.0 millis
-        double maxTime = getMax * 1000.0;
-        double setTime = getTime * 1000.0;
-        timeDecrease = maxTime - setTime;
-        System.out.println(timeDecrease);
-        return timeDecrease;
+    public void setProgress(double percent) {
+        progress.setProgress(percent);
     }
 }

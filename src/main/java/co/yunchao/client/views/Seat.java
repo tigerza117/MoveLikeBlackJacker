@@ -62,12 +62,11 @@ public class Seat extends Group {
     public void addCard(CardEntity cardEntity) {
         var bounds = cardEntity.getBoundsInLocal();
         var size = cardEntities.size();
-        cardEntity.setLayoutX((bounds.getWidth() * size * 0.6));
-        cardEntity.setLayoutY(65 + (bounds.getHeight() * size * -0.1));
+        cardEntity.setTranslateX((bounds.getWidth() * size * 0.6));
+        cardEntity.setTranslateY(65 + (bounds.getHeight() * size * -0.1));
 
         getChildren().add(cardEntity);
         cardEntities.add(cardEntity);
-        cardEntity.spawn();
     }
 
     public void addChipBet(ChipEntity chipEntity) {
@@ -76,7 +75,6 @@ public class Seat extends Group {
         chipEntity.setLayoutY(216 - (6 * size));
         getChildren().add(chipEntity);
         chipEntityBet.add(chipEntity);
-        chipEntity.spawn();
     }
 
     public void removeCard(CardEntity cardEntity) {
@@ -92,17 +90,14 @@ public class Seat extends Group {
     }
 
     public void sit() {
-        textDealerScore.setText("9/19");
-        textureDealerScore.setVisible(true);
         textDealerScore.setVisible(true);
 
         if (!isDealer) {
-            textName.setText("TIGER");
             textName.setVisible(true);
-            textBetTotal.setText("0$");
             textBetTotal.setVisible(true);
             textureIcon.setVisible(true);
         }
+
         getGameScene().getContentRoot().getChildren().add(this);
     }
 
@@ -116,5 +111,19 @@ public class Seat extends Group {
 
     public void setIsDealer(boolean isDealer) {
         this.isDealer = isDealer;
+    }
+
+    public void setBetStack(String text) {
+        textBetTotal.setText(text);
+    }
+
+    public void setScore(String text) {
+        textDealerScore.setText(text);
+        textureDealerScore.setVisible(true);
+    }
+
+    public void clearScore() {
+        textDealerScore.setText("");
+        textureDealerScore.setVisible(false);
     }
 }

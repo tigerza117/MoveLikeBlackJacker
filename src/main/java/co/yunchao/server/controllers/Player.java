@@ -8,19 +8,21 @@ import co.yunchao.net.packets.*;
 import co.yunchao.base.enums.PlayerInGameState;
 import io.netty.channel.Channel;
 
+import java.util.UUID;
+
 public class Player extends co.yunchao.base.models.Player {
     private Server server;
     private Channel channel;
     private final Inventory inventory;
 
-    public Player(String name, Channel channel, Server server) {
-        this(name, false);
+    public Player(UUID uuid, String name, Channel channel, Server server) {
+        this(uuid, name, false);
         this.channel = channel;
         this.server = server;
     }
 
-    public Player(String name, boolean isDealer) {
-        super(name, isDealer);
+    public Player(UUID uuid, String name, boolean isDealer) {
+        super(uuid, name, isDealer);
         this.inventory = new Inventory(this);
     }
 
@@ -37,9 +39,13 @@ public class Player extends co.yunchao.base.models.Player {
     }
 
     @Override
-    public void setChips(double chip) {
-        super.setChips(chip);
+    public void setBalance(double chip) {
+        super.setBalance(chip);
         updateMetadata();
+    }
+
+    public Game getGame() {
+        return (Game) super.getGame();
     }
 
     @Override
@@ -102,7 +108,7 @@ public class Player extends co.yunchao.base.models.Player {
 
     public void getReward(double ratio) {
         var reward = this.getCurrentBetStage() * ratio;
-        this.setChips(this.getChips() + (reward));
+        this.setBalance(this.getBalance() + (reward));
         log("get reward " + reward + "$");
     }
 
@@ -122,7 +128,7 @@ public class Player extends co.yunchao.base.models.Player {
     @Override
     public void confirmBet() {
         if (canConfirmBet()) {
-            this.setChips(getChips() - getCurrentBetStage());
+            this.setBalance(getBalance() - getCurrentBetStage());
             setState(PlayerInGameState.READY);
             log("Confirm bet success " + getCurrentBetStage() + "$");
         }
@@ -169,7 +175,7 @@ public class Player extends co.yunchao.base.models.Player {
             PlayerMetadataPacket packet = new PlayerMetadataPacket();
             packet.id = getId();
             packet.name = getName();
-            packet.chips = getChips();
+            packet.chips = getBalance();
             packet.state = getState();
             packet.isDealer = isDealer();
             packet.currentBetStage = getCurrentBetStage();

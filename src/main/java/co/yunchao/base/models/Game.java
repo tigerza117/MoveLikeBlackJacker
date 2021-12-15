@@ -5,7 +5,7 @@ import co.yunchao.net.packets.DataPacket;
 
 public abstract class Game {
     private GameState state;
-    private final String id;
+    private String id;
 
     public Game(String id) {
         this.id = id;
@@ -17,6 +17,10 @@ public abstract class Game {
 
     public GameState getState() {
         return state;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setState(GameState state) {

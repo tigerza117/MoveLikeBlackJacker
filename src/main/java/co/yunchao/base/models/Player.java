@@ -3,7 +3,6 @@ package co.yunchao.base.models;
 import co.yunchao.base.enums.ChipType;
 import co.yunchao.base.enums.PlayerInGameState;
 import co.yunchao.net.packets.DataPacket;
-import co.yunchao.server.controllers.Game;
 
 import java.util.UUID;
 
@@ -11,7 +10,7 @@ public abstract class Player{
     private final UUID id;
     private final boolean isDealer;
     private String name;
-    private double chips;
+    private double balance;
     private PlayerInGameState state = PlayerInGameState.IDLE;
     private int currentBetStage = 0;
     private Game game;
@@ -22,18 +21,12 @@ public abstract class Player{
         this.isDealer = isDealer;
     }
 
-    public Player(String name, boolean isDealer){
-        this.id = UUID.randomUUID();
-        this.name = name;
-        this.isDealer = isDealer;
+    public void setBalance(double chip){
+        this.balance = chip;
     }
 
-    public void setChips(double chip){
-        this.chips = chip;
-    }
-
-    public double getChips() {
-        return chips;
+    public double getBalance() {
+        return balance;
     }
 
     public String getName() {
@@ -129,7 +122,7 @@ public abstract class Player{
     }
 
     public boolean canStackCurrentBetStage(int amount) {
-        return getChips() - (getCurrentBetStage() + amount) >= 0;
+        return getBalance() - (getCurrentBetStage() + amount) >= 0;
     }
 
     public abstract void handler(DataPacket packet);

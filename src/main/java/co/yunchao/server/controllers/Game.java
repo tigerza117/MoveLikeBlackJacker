@@ -6,6 +6,7 @@ import co.yunchao.base.enums.Result;
 import co.yunchao.net.packets.*;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Game extends co.yunchao.base.models.Game implements Runnable {
     private final ArrayList<Player> players;
@@ -13,6 +14,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
     private final Thread thread;
     private final Player dealer;
     private int tick = 20;
+    private int maxTick = 5;
     private int playerTurnIndex = 0;
 
     public Game(String id) {
@@ -20,13 +22,12 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         this.players = new ArrayList<>();
         this.deck = new Deck();
         this.thread = new Thread(this);
-        this.dealer = new Player("Dealer",true);
+        this.dealer = new Player(UUID.randomUUID(),"Dealer",true);
+        dealer.setGame(this);
         setState(GameState.WAITING);
-        for(Player player: this.players){
-            player.getInventory().clearCards();
-        }
         this.deck.generateCards();
         thread.start();
+        join(dealer);
     }
 
     @Override
@@ -36,46 +37,49 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         });
     }
 
-    public boolean join(co.yunchao.base.models.Player player) {
-        if (this.players.size() >= 4) return false;
+    public boolean join(Player player) {
+        if (this.players.size() >= 5) return false;
         System.out.println("Room > " + getId() + " > Player " + player.getName() +" has been join" );
-        Player pl = (Player) player;
         player.setGame(this);
-        this.players.add(pl);
-        broadcastPlayerJoin(pl);
-        return true;
-    }
-
-    public void leave(co.yunchao.base.models.Player player) {
-        Player pl = (Player) player;
-        broadcastPlayerLeave(pl);
-        player.setGame(null);
-        this.players.remove(pl);
-    }
-
-    public void broadcastPlayerJoin(Player player) {
-        GameMetadataPacket gameMetadataPacket = new GameMetadataPacket();
-        gameMetadataPacket.id = getId();
-        gameMetadataPacket.state = getState();
-        gameMetadataPacket.tick = tick;
-        player.putPacket(gameMetadataPacket);
-
-        PlayerJoinPacket packet = new PlayerJoinPacket();
-        packet.id = player.getId();
-        packet.name = player.getName();
-        packet.isDealer = player.isDealer();
-        putPacket(packet);
-
+        player.setBalance(5000);
+        {
+            GameMetadataPacket packet = new GameMetadataPacket();
+            packet.id = getId();
+            packet.state = getState();
+            packet.tick = tick;
+            player.putPacket(packet);
+        }
+        {
+            PlayerJoinPacket packet = new PlayerJoinPacket();
+            packet.id = player.getId();
+            packet.name = player.getName();
+            packet.isDealer = player.isDealer();
+            putPacket(packet);
+        }
+        this.players.add(player);
         players.forEach(pl -> {
+            PlayerJoinPacket playerJoinPacket = new PlayerJoinPacket();
+            playerJoinPacket.id = pl.getId();
+            playerJoinPacket.name = pl.getName();
+            playerJoinPacket.isDealer = pl.isDealer();
+            player.putPacket(playerJoinPacket);
+
             PlayerMetadataPacket playerMetadataPacket = new PlayerMetadataPacket();
             playerMetadataPacket.id = pl.getId();
             playerMetadataPacket.name = pl.getName();
-            playerMetadataPacket.chips = pl.getChips();
+            playerMetadataPacket.chips = pl.getBalance();
             playerMetadataPacket.state = pl.getState();
             playerMetadataPacket.isDealer = pl.isDealer();
             playerMetadataPacket.currentBetStage = pl.getCurrentBetStage();
             player.putPacket(playerMetadataPacket);
         });
+        return true;
+    }
+
+    public void leave(Player player) {
+        broadcastPlayerLeave(player);
+        player.setGame(null);
+        this.players.remove(player);
     }
 
     public void broadcastPlayerLeave(Player player) {
@@ -90,6 +94,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         packet.id = getId();
         packet.state = getState();
         packet.tick = tick;
+        packet.maxTick = maxTick;
         putPacket(packet);
     }
 
@@ -134,14 +139,13 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                 switch (getState()) {
                     case WAITING:
                         if (countPlayers() > 0) {
-                            this.tick = 20;
+                            this.tick = 5;
                             setState(GameState.BET);
                         }
                         break;
                     case BET:
                         if (this.tick == 0) {
                             dealer.reset();
-                            players.add(dealer);
                             //clear card
                             players.forEach(Player::skip);
                             setState(GameState.HAND_OUT);
@@ -162,21 +166,19 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             setState(GameState.PAY_OUT);
                         } else {
                             setState(GameState.IN_GAME);
-                            this.playerTurnIndex = 0;
+                            this.playerTurnIndex = 1;
                             this.tick = 15;
                         }
                         break;
                     case IN_GAME:
                         if (players.size() == playerTurnIndex) {
+//                            while (dealer.getInventory().getPoint() < 17) {
+//                                dealer.pickUpCard();
+//                            }
                             setState(GameState.PAY_OUT);
                         } else {
                             var player = this.players.get(playerTurnIndex);
                             if (this.tick != 0) {
-                                if (player.isDealer()) {
-                                    while (player.getInventory().getPoint() < 17) {
-                                        player.pickUpCard();
-                                    }
-                                }
                                 System.out.println(player.getName() + "[" + player.getInventory().getPoint() + "] Turn > " + player.getState());
                                 switch (player.getState()) {
                                     case BUST:
@@ -202,7 +204,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                         player.stand();
                                     }
                                     this.playerTurnIndex++;
-                                    this.tick = 15;
+                                    this.tick = 5;
                                     continue;
                                 }
                             }
