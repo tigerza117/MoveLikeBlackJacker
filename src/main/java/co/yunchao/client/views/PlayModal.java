@@ -92,6 +92,7 @@ public class PlayModal extends SubScene {
         Group group = new Group(shadow, banner, playMenu, codeField, confirmBtn, backBtn);
         fade = SubSceneAnimation.fade(group);
         getContentRoot().getChildren().addAll(group);
+        getContentRoot().setCursor(CursorCall.getCursor());
     }
 
     @Override

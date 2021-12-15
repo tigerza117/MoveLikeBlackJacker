@@ -2,7 +2,6 @@ package co.yunchao.client.views;
 
 import co.yunchao.client.controllers.GameController;
 import co.yunchao.client.controllers.PlayerController;
-import co.yunchao.server.controllers.Player;
 import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.core.asset.AssetType;
 import com.almasb.fxgl.dsl.FXGL;

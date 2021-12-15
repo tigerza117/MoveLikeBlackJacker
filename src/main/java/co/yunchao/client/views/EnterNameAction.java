@@ -67,6 +67,7 @@ public class EnterNameAction extends SubScene {
         Group group = new Group(shadow, namePane, enterPane);
         fade = SubSceneAnimation.fade(group);
         getContentRoot().getChildren().addAll(group);
+        getContentRoot().setCursor(CursorCall.getCursor());
     }
 
     @Override

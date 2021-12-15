@@ -103,6 +103,7 @@ public class OptionsModal extends SubScene {
         Group group = new Group(shadow, banner, options, text, fullScreen, sliders, saveBtn, separateLine);
         fade = SubSceneAnimation.fade(group);
         getContentRoot().getChildren().addAll(group);
+        getContentRoot().setCursor(CursorCall.getCursor());
     }
 
     @Override

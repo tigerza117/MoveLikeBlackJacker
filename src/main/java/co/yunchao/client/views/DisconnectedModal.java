@@ -25,5 +25,6 @@ public class DisconnectedModal extends SubScene {
         errorMsg.setTranslateY(535);
 
         getContentRoot().getChildren().addAll(disPane, okBtn, errorMsg);
+        getContentRoot().setCursor(CursorCall.getCursor());
     }
 }

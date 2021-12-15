@@ -28,6 +28,8 @@ public class MainMenu extends FXGLMenu {
         var body = createBody();
 
         group = new Group(bg, logo, body);
+        getContentRoot().setCursor(CursorCall.getCursor());
+        getGameScene().setCursor(CursorCall.getCursor());
     }
 
     @Override
