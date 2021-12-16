@@ -274,8 +274,11 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                             break;
                                         default:
                                             ratio = 0;
-                                            player.playSound("Player_Lose.wav");
                                     }
+                                }
+
+                                if (ratio == 0 && !player.isBust()) {
+                                    player.playSound("Player_Lose.wav");
                                 }
 
                                 player.getReward(ratio);

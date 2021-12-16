@@ -112,6 +112,7 @@ public class GameController extends Game {
                 PlayerController player = players.get(playerLeavePacket.id);
                 if (player != null) {
                     player.close();
+                    play("Player_Leave.wav");
                 }
                 break;
             }
