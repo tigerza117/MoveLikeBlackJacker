@@ -207,15 +207,14 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                 }
                             }
 
+                            boolean isFlip = i == 0 && dealer.getInventory().getCards().size() == 1;
                             if (dealer.getInventory().getCards().size() < 2) {
-                                boolean isFlip = i == 0;
                                 dealer.pickUpCard(isFlip);
                             }
                             Thread.sleep(1000);
                         }
                         if (dealer.isWining()) {
                             Thread.sleep(1000);
-                            dealer.getInventory().toggleFlipCard(dealer.getInventory().getCards().get(1));
                             setState(GameState.PAY_OUT);
                         } else {
                             setState(GameState.IN_GAME);
@@ -265,7 +264,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         }
                         Thread.sleep(1000);
                         setPlayerTurn(dealer.getId());
-                        dealer.getInventory().toggleFlipCard(dealer.getInventory().getCards().get(1));
+                        dealer.showCard();
                         dealer.setScore(dealer.getInventory().getPoint() + "");
                         Thread.sleep(1000);
                         while (dealer.getInventory().getPoint() < 17) {
@@ -323,7 +322,6 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                 System.out.println("+++ Exception +++");
             }
         }
-
     }
 }
 

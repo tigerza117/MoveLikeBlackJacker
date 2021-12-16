@@ -225,7 +225,7 @@ public class Player extends co.yunchao.base.models.Player {
         } else if(inv.isBust()) {
             setState(PlayerInGameState.BUST);
             setScore("Busted", ScoreColorType.RED);
-            playSound("Player_Lose");
+            playSound("Player_Lose.wav");
         } else {
             if (isDealer() && inv.getCards().size() == 2) {
                 setScore(inv.getCards().get(0).getPoint() + " + ?");
@@ -330,6 +330,12 @@ public class Player extends co.yunchao.base.models.Player {
             packet.text = text;
             packet.colorType = colorType;
             game.putPacket(packet);
+        }
+    }
+
+    public void showCard() {
+        if (isDealer()) {
+            getInventory().toggleFlipCard(getInventory().getCards().get(1));
         }
     }
 }
