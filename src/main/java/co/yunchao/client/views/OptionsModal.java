@@ -47,7 +47,7 @@ public class OptionsModal extends SubScene {
         fullScreen = new CheckBox();
         fullScreen.getStyleClass().add("big-check-box");
 
-        fullHD_btn = Button.create("options/full_hd", () -> {
+        fullHD_btn = OptionsBtn.create("options/full_hd", () -> {
             System.out.println("FULL HD RESOLUTION SELECTED!");
             fullHD_btn.setEffect(glow);
             HD_btn.setEffect(null);
@@ -55,14 +55,14 @@ public class OptionsModal extends SubScene {
             fullScreenCheck = "1";
             fullHD_btn.effectProperty().setValue(glow);
         });
-        HD_btn = Button.create("options/hd_btn", () -> {
+        HD_btn = OptionsBtn.create("options/hd_btn", () -> {
             System.out.println("HD RESOLUTION SELECTED!");
             HD_btn.setEffect(glow);
             fullHD_btn.setEffect(null);
             SD_btn.setEffect(null);
             fullScreenCheck = "2";
         });
-        SD_btn = Button.create("options/sd_btn", () -> {
+        SD_btn = OptionsBtn.create("options/sd_btn", () -> {
             System.out.println("SD RESOLUTION SELECTED!");
             SD_btn.setEffect(glow);
             fullHD_btn.setEffect(null);
