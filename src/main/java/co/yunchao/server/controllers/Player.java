@@ -214,6 +214,7 @@ public class Player extends co.yunchao.base.models.Player {
         inv.putCard(card);
         if (inv.isBlackJack()) {
             setState(PlayerInGameState.WINING);
+            playSound("Game_Win_3.wav");
             log("is wining");
         } else if(inv.isBust()) {
             setState(PlayerInGameState.BUST);
@@ -284,6 +285,11 @@ public class Player extends co.yunchao.base.models.Player {
     public void playSound(String name) {
         PlaySoundPacket packet = new PlaySoundPacket();
         packet.name = name;
+        putPacket(packet);
+    }
+
+    public void stopSound() {
+        StopSoundPacket packet = new StopSoundPacket();
         putPacket(packet);
     }
 

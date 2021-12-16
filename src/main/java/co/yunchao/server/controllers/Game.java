@@ -115,6 +115,12 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         });
     }
 
+    public void broadcastStopSound() {
+        players.forEach((uuid, player) -> {
+            player.stopSound();
+        });
+    }
+
     public void broadcastGameState() {
         GameMetadataPacket packet = new GameMetadataPacket();
         packet.id = getId();
@@ -168,6 +174,17 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             }
                             setState(GameState.HAND_OUT);
                         } else {
+                            if (this.tick >= 8) {
+                                boolean allReady = true;
+                                for (Player player : players.values()) {
+                                    if (!player.isReady()) {
+                                        allReady = false;
+                                    }
+                                }
+                                if (allReady) {
+                                    this.tick = 7;
+                                }
+                            }
                             if (this.tick == 7) {
                                 broadcastSound("7s_Countdown.wav");
                             }
@@ -178,12 +195,14 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         for (int i = 0; i < 2; i++) {
                             for (Iterator<Player> it = players.values().iterator(); it.hasNext(); ) {
                                 Player player = it.next();
-                                if (!player.isDealer() && player.isOnline() && player.isReady()) {
+                                if (!player.isDealer() && player.isOnline() && player.isReady() && player.getInventory().getCards().size() < 2) {
                                     player.pickUpCard();
                                     Thread.sleep(1000);
                                 }
                             }
-                            dealer.pickUpCard();
+                            if (dealer.getInventory().getCards().size() < 2) {
+                                dealer.pickUpCard();
+                            }
                             Thread.sleep(1000);
                         }
                         if (dealer.isWining()) {
@@ -199,6 +218,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             if (!player.isDealer() && player.isOnline()) {
                                 this.tick = 15;
                                 this.maxTick = 15;
+                                broadcastStopSound();
                                 player.playSound("Interface_Select.wav");
                                 setPlayerTurn(player.getId());
                                 while (this.tick != 0) {
@@ -209,7 +229,6 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                     switch (player.getState()) {
                                         case BUST:
                                             player.playSound("Player_Lose.wav");
-                                            System.out.println("BUST!!!");
                                         case SKIP:
                                         case IDLE:
                                         case WINING:
@@ -261,7 +280,6 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                     switch (result) {
                                         case BLACKJACK:
                                             ratio = 2.5;
-                                            player.playSound("Game_Win_3.wav");
                                             break;
                                         case DRAW:
                                             ratio = 1;
