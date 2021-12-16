@@ -8,7 +8,7 @@ public class ChipEntity extends Group {
     public ChipEntity(String name) {
         double width = 42;
         double height = 42;
-        var image = texture(name + "_call_bet.png", width, height);
+        var image = texture("bet_section/" + name + "_call_bet.png", width, height);
         getChildren().add(image);
     }
 

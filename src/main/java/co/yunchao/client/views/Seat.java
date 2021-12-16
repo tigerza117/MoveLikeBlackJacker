@@ -64,8 +64,8 @@ public class Seat extends Group {
     public void addCard(CardEntity cardEntity) {
         var bounds = cardEntity.getBoundsInLocal();
         var size = cardEntities.size();
-        cardEntity.setTranslateX((bounds.getWidth() * size * 0.6));
-        cardEntity.setTranslateY(65 + (bounds.getHeight() * size * -0.1));
+        cardEntity.setLayoutX((bounds.getWidth() * size * 0.6));
+        cardEntity.setLayoutY(65 + (bounds.getHeight() * size * -0.1));
 
         getChildren().add(cardEntity);
         cardEntities.add(cardEntity);

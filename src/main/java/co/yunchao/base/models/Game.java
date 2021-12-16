@@ -27,6 +27,10 @@ public abstract class Game {
         this.state = state;
     }
 
+    public boolean isInBet() {
+        return getState().equals(GameState.BET);
+    }
+
     public boolean isInGame() {
         return getState().equals(GameState.IN_GAME);
     }

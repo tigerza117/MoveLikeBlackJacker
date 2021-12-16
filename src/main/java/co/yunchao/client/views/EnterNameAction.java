@@ -51,7 +51,6 @@ public class EnterNameAction extends SubScene {
         nameField.setOnKeyTyped(ev -> {
             String txt = nameField.getText();
             if (txt.length() > 0) {
-                System.out.println(txt.matches("^[a-zA-Z0-9_]*$"));
                 if (!txt.matches("^[a-zA-Z0-9_]*$")) {
                     nameField.deletePreviousChar();
                 }

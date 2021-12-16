@@ -53,14 +53,12 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         System.out.println("Room > " + getId() + " > Player " + player.getName() +" has been join" );
         player.setGame(this);
         if (!player.isDealer()) {
-            var v = seatOffset.poll();
-            if (v == null) {
+            var offset = seatOffset.poll();
+            if (offset == null) {
                 return false;
             }
-            player.setOffset(v);
-            System.out.println("X: " + v.getX() + " Y:" + v.getY());
+            player.setOffset(offset);
         }
-
         {
             GameMetadataPacket packet = new GameMetadataPacket();
             packet.id = getId();
@@ -153,8 +151,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                 switch (getState()) {
                     case WAITING:
                         if (countPlayers() > 0) {
-                            this.tick = 30;
-                            this.maxTick = 30;
+                            this.tick = 5;
+                            this.maxTick = 5;
                             setState(GameState.BET);
                         }
                         break;
@@ -181,19 +179,18 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             Thread.sleep(1000);
                         }
                         if (dealer.isWining()) {
-                            //flip card dealer
                             setState(GameState.PAY_OUT);
                         } else {
                             setState(GameState.IN_GAME);
-                            this.tick = 30;
-                            this.maxTick = 30;
+                            this.tick = 5;
+                            this.maxTick = 5;
                         }
                         break;
                     case IN_GAME:
                         for (Player player : players.values()) {
                             if (!player.isDealer() && player.isOnline()) {
-                                this.tick = 15;
-                                this.maxTick = 15;
+                                this.tick = 5;
+                                this.maxTick = 5;
                                 while (this.tick != 0) {
                                     System.out.println(player.getName() + "[" + player.getInventory().getPoint() + "] Turn > " + player.getState());
                                     switch (player.getState()) {
@@ -204,8 +201,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                         case WINING:
                                         case DOUBLE:
                                         case STAND:
-//                                            this.tick = 0;
-//                                            break;
+                                            this.tick = 0;
+                                            break;
                                         case HIT:
                                         case READY:
                                             setPlayerTurn(player.getId());
@@ -243,7 +240,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             if (!player.isDealer()) {
                                 var result = player.getResult(dealer);
                                 var ratio = 0.0;
-                                if (result != Result.LOSE) {
+                                if (!result.equals(Result.LOSE)) {
                                     System.out.println(player.getName() + " Wining");
                                     switch (result) {
                                         case BLACKJACK:
