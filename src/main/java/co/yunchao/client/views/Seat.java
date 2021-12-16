@@ -1,6 +1,6 @@
 package co.yunchao.client.views;
 
-import co.yunchao.base.models.Offset;
+import co.yunchao.client.controllers.PlayerController;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FontType;
@@ -19,12 +19,15 @@ public class Seat extends Group {
     private final ArrayList<ChipEntity> chipEntityBet;
     private final Text textName;
     private final Text textBetTotal;
+    private final Text balance;
     private final Texture textureIcon;
     private final Texture textureDealerScore;
     private final Text textDealerScore;
     private boolean isDealer = false;
+    private PlayerController player;
 
-    public Seat(Offset offset) {
+    public Seat(PlayerController player) {
+        this.player= player;
         this.textName = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 16);
         this.textBetTotal = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 28);
         this.cardEntities = new ArrayList<>();
@@ -32,9 +35,15 @@ public class Seat extends Group {
         this.textureIcon = FXGL.texture("bet_section/player_icon.png");
         this.textureDealerScore = FXGL.texture("bet_section/dealer_score.png");
         this.textDealerScore = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 22);
+        this.balance = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 22);
 
-        setTranslateX(offset.getX());
-        setTranslateY(offset.getY());
+        setTranslateX(player.getOffset().getX());
+        setTranslateY(player.getOffset().getY());
+
+        balance.setText("");
+        balance.setTranslateX(40);
+        balance.setTranslateY(450);
+        balance.setVisible(false);
 
         textureIcon.setTranslateX(43);
         textureIcon.setTranslateY(295);
@@ -45,9 +54,9 @@ public class Seat extends Group {
         textBetTotal.setTranslateX(143);
         textBetTotal.setVisible(false);
 
-        textName.setTranslateX(textureIcon.getTranslateX());
+        textName.setTranslateX(textureIcon.getTranslateX()-25);
         textName.setTranslateY(textureIcon.getTranslateY() + textureIcon.getHeight() + 25);
-        textName.setWrappingWidth(textureIcon.getWidth());
+        textName.setWrappingWidth(textureIcon.getWidth()+50);
         textName.setTextAlignment(TextAlignment.CENTER);
         textName.setVisible(false);
 
@@ -58,7 +67,7 @@ public class Seat extends Group {
         textDealerScore.setWrappingWidth(textureDealerScore.getWidth());
         textDealerScore.setTextAlignment(TextAlignment.CENTER);
 
-        getChildren().addAll(textName, textureIcon, textureDealerScore, textDealerScore, textBetTotal);
+        getChildren().addAll(textName, textureIcon, textureDealerScore, textDealerScore, textBetTotal, balance);
     }
 
     public void addCard(CardEntity cardEntity) {
@@ -98,6 +107,7 @@ public class Seat extends Group {
             textName.setVisible(true);
             textBetTotal.setVisible(true);
             textureIcon.setVisible(true);
+            balance.setVisible(true);
         }
 
         getGameScene().getContentRoot().getChildren().add(this);
@@ -143,5 +153,9 @@ public class Seat extends Group {
 
     public void notMyTurn() {
         textureIcon.setEffect(null);
+    }
+
+    public void updateBalance() {
+        balance.setText(player.getBalance() + "$");
     }
 }
