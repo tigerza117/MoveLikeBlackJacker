@@ -42,7 +42,7 @@ public class Network {
         this.registerPacket(ProtocolInfo.PLAYER_BET_STACK_PACKET, PlayerBetStackPacket.class);
         this.registerPacket(ProtocolInfo.PLAY_SOUND_PACKET, PlaySoundPacket.class);
         this.registerPacket(ProtocolInfo.STOP_SOUND_PACKET, StopSoundPacket.class);
-        this.registerPacket(ProtocolInfo.STOP_SOUND_PACKET, SetScorePacket.class);
+        this.registerPacket(ProtocolInfo.SET_SCORE_PACKET, SetScorePacket.class);
     }
 
 }
