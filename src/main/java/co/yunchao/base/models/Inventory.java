@@ -105,10 +105,6 @@ public class Inventory {
         return getPoint() == 21 && getCards().size() == 2;
     }
 
-    public boolean is5Card() {
-        return getCards().size() == 5 && getPoint() <= 21;
-    }
-
     public boolean isBust() {
         return getPoint() > 21;
     }

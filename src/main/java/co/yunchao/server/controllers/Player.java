@@ -224,7 +224,7 @@ public class Player extends co.yunchao.base.models.Player {
             setScore("BlackJack");
         } else if(inv.isBust()) {
             setState(PlayerInGameState.BUST);
-            setScore("Bust", ScoreColorType.RED);
+            setScore("Busted", ScoreColorType.RED);
         } else {
             if (isDealer() && inv.getCards().size() == 2) {
                 setScore(inv.getCards().get(0).getPoint() + " + ?");
@@ -243,8 +243,6 @@ public class Player extends co.yunchao.base.models.Player {
             return Result.DEALER_BUST;
         } else if (inv.isBlackJack()) {
             return Result.BLACKJACK;
-        } else if (inv.is5Card()) {
-            return Result.Card5;
         } else if (inv.getPoint() > dealerInv.getPoint()) {
             return Result.HIGH_POINT;
         } else if (inv.getPoint() == dealerInv.getPoint()) {

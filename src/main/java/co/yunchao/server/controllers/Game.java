@@ -265,6 +265,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         Thread.sleep(1000);
                         setPlayerTurn(dealer.getId());
                         dealer.getInventory().toggleFlipCard(dealer.getInventory().getCards().get(1));
+                        dealer.setScore(dealer.getInventory().getPoint() + "");
                         Thread.sleep(1000);
                         while (dealer.getInventory().getPoint() < 17) {
                             dealer.pickUpCard();
@@ -276,19 +277,19 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         break;
                     case PAY_OUT:
                         for (Player player : clonedPlayer) {
-                            if (!player.isDealer()) {
+                            if (!player.isDealer() && !player.isSkip()) {
                                 var result = player.getResult(dealer);
                                 var ratio = 0.0;
-                                if (!result.equals(Result.LOSE) && !player.isBust()) {
+                                if (!player.isBust()) {
                                     switch (result) {
                                         case BLACKJACK:
                                             ratio = 2.5;
                                             break;
                                         case DRAW:
+                                            player.setScore("Draw - " + player.getInventory().getPoint());
                                             ratio = 1;
                                             break;
                                         case DEALER_BUST:
-                                        case Card5:
                                         case HIGH_POINT:
                                             ratio = 2;
                                             player.playSound("Small_Win.wav");
@@ -301,7 +302,6 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
 
                                 if (ratio == 0 && !player.isBust()) {
                                     player.playSound("Player_Lose.wav");
-                                    player.setScore("Lose - " + player.getInventory().getPoint());
                                 }
 
                                 player.getReward(ratio);
