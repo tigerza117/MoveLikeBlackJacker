@@ -41,8 +41,8 @@ public class Seat extends Group {
         setTranslateY(player.getOffset().getY());
 
         balance.setText("");
-        balance.setTranslateX(40);
-        balance.setTranslateY(450);
+        balance.setTranslateX(41);
+        balance.setTranslateY(435);
         balance.setVisible(false);
 
         textureIcon.setTranslateX(43);
