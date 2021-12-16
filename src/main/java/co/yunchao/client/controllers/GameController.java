@@ -4,14 +4,15 @@ import co.yunchao.base.models.Game;
 import co.yunchao.base.models.Offset;
 import co.yunchao.client.net.Interface;
 import co.yunchao.client.net.NetworkEngine;
-import co.yunchao.client.views.*;
+import co.yunchao.client.views.DisconnectedModal;
+import co.yunchao.client.views.LoadingModal;
+import co.yunchao.client.views.Seat;
+import co.yunchao.client.views.Table;
 import co.yunchao.net.packets.*;
 import com.almasb.fxgl.scene.Scene;
 import javafx.util.Duration;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.UUID;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -95,9 +96,10 @@ public class GameController extends Game {
                 }
                 if (!player.isDealer()) {
                     player.setOffset(new Offset(playerJoinPacket.offsetX, playerJoinPacket.offsetY));
-                    player.sit(new Seat(player.getOffset()));
+                    player.sit(new Seat(player));
                 } else {
-                    Seat seat = new Seat(new Offset(876, 40));
+                    player.setOffset(new Offset(876, 40));
+                    Seat seat = new Seat(player);
                     seat.setIsDealer(true);
                     player.sit(seat);
                 }
@@ -121,6 +123,7 @@ public class GameController extends Game {
                     player.setBalance(playerMetadataPacket.chips);
                     player.setName(playerMetadataPacket.name);
                     player.setCurrentBetStage(playerMetadataPacket.currentBetStage);
+                    player.getSeat().updateBalance();
                     if (player.getId().equals(playerController.getId())) {
                         view.update();
                     }
@@ -162,10 +165,8 @@ public class GameController extends Game {
                 CardSpawnPacket cardSpawnPacket = (CardSpawnPacket) packet;
                 PlayerController player = players.get(cardSpawnPacket.playerId);
                 var card = new CardController(cardSpawnPacket.id ,cardSpawnPacket.number, cardSpawnPacket.suit, cardSpawnPacket.flip, player.getSeat());
-                if (card != null) {
-                    cards.put(card.getId(), card);
-                    card.spawn();
-                }
+                cards.put(card.getId(), card);
+                card.spawn();
                 break;
             }
             case ProtocolInfo.CARD_DE_SPAWN_PACKET: {
