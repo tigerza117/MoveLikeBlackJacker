@@ -40,7 +40,7 @@ public class MainController extends GameApplication {
         settings.setPreserveResizeRatio(false);
         settings.setTitle("Legendary Blackjack");
         settings.setVersion("1.0");
-        settings.setAppIcon("icon.png");
+        settings.setAppIcon("main/home_logo.png");
         settings.setSceneFactory(new SceneFactory() {
             @NotNull
             @Override
