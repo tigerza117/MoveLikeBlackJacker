@@ -280,28 +280,27 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             if (!player.isDealer() && !player.isSkip()) {
                                 var result = player.getResult(dealer);
                                 var ratio = 0.0;
-                                if (!player.isBust()) {
-                                    switch (result) {
-                                        case BLACKJACK:
-                                            ratio = 2.5;
-                                            break;
-                                        case DRAW:
-                                            player.setScore("Draw - " + player.getInventory().getPoint());
-                                            ratio = 1;
-                                            break;
-                                        case DEALER_BUST:
-                                        case HIGH_POINT:
-                                            ratio = 2;
-                                            player.playSound("Small_Win.wav");
-                                            player.setScore("High score - " + player.getInventory().getPoint());
-                                            break;
-                                        default:
-                                            ratio = 0;
-                                    }
-                                }
 
-                                if (ratio == 0 && !player.isBust()) {
-                                    player.playSound("Player_Lose.wav");
+                                switch (result) {
+                                    case BLACKJACK:
+                                        ratio = 2.5;
+                                        break;
+                                    case DRAW:
+                                        player.setScore("Draw - " + player.getInventory().getPoint());
+                                        ratio = 1;
+                                        break;
+                                    case DEALER_BUST:
+                                    case HIGH_POINT:
+                                        ratio = 2;
+                                        player.playSound("Small_Win.wav");
+                                        player.setScore("High score - " + player.getInventory().getPoint());
+                                        break;
+                                    case BUST:
+                                        break;
+                                    default:
+                                        ratio = 0;
+                                        player.playSound("Player_Lose.wav");
+                                        player.setScore("Lost - " + player.getInventory().getPoint());
                                 }
 
                                 player.getReward(ratio);

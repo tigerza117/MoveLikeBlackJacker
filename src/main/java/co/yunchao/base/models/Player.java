@@ -10,7 +10,7 @@ public abstract class Player {
     private final UUID id;
     private final boolean isDealer;
     private String name;
-    private double balance;
+    private int balance;
     private PlayerInGameState state = PlayerInGameState.IDLE;
     private int currentBetStage = 0;
     private Game game;
@@ -28,11 +28,11 @@ public abstract class Player {
         this.offset = offset;
     }
 
-    public void setBalance(double chip){
+    public void setBalance(int chip){
         this.balance = chip;
     }
 
-    public double getBalance() {
+    public int getBalance() {
         return balance;
     }
 

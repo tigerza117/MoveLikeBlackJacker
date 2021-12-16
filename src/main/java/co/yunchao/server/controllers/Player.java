@@ -42,7 +42,7 @@ public class Player extends co.yunchao.base.models.Player {
     }
 
     @Override
-    public void setBalance(double chip) {
+    public void setBalance(int chip) {
         super.setBalance(chip);
         updateMetadata();
     }
@@ -111,7 +111,7 @@ public class Player extends co.yunchao.base.models.Player {
     public void getReward(double ratio) {
         var reward = getCurrentBetStage() * ratio;
         log("get reward " + reward + "$ from " + getBalance() + " to " + getBalance() + reward);
-        setBalance(getBalance() + reward);
+        setBalance((int) (getBalance() + reward));
     }
 
     @Override
@@ -229,7 +229,7 @@ public class Player extends co.yunchao.base.models.Player {
             if (isDealer() && inv.getCards().size() == 2) {
                 setScore(inv.getCards().get(0).getPoint() + " + ?");
             } else {
-                setScore(inv.getPoint() + "");
+                setScore(inv.getPoint() == 101 ? "11" : inv.getPoint() + "");
             }
         }
     }
@@ -239,10 +239,10 @@ public class Player extends co.yunchao.base.models.Player {
         var dealerInv = dealer.getInventory();
         if (inv.isBust()) {
             return Result.BUST;
-        } else if (dealerInv.isBust()) {
-            return Result.DEALER_BUST;
         } else if (inv.isBlackJack()) {
             return Result.BLACKJACK;
+        } else if (dealerInv.isBust()) {
+            return Result.DEALER_BUST;
         } else if (inv.getPoint() > dealerInv.getPoint()) {
             return Result.HIGH_POINT;
         } else if (inv.getPoint() == dealerInv.getPoint()) {

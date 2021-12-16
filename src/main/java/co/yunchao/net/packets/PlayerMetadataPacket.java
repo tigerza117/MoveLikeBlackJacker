@@ -11,7 +11,7 @@ public class PlayerMetadataPacket extends DataPacket {
     public UUID id;
     public String name;
     public PlayerInGameState state;
-    public double chips;
+    public int chips;
     public int currentBetStage;
     public boolean isDealer;
 
@@ -20,7 +20,7 @@ public class PlayerMetadataPacket extends DataPacket {
         writeString(buf, this.name);
         writeString(buf, this.id.toString());
         buf.writeInt(state.ordinal());
-        buf.writeDouble(chips);
+        buf.writeInt(chips);
         buf.writeInt(this.currentBetStage);
         buf.writeBoolean(isDealer);
     }
@@ -30,7 +30,7 @@ public class PlayerMetadataPacket extends DataPacket {
         this.name = readString(buf);
         this.id = UUID.fromString(readString(buf));
         this.state = PlayerInGameState.values()[buf.readInt()];
-        this.chips = buf.readDouble();
+        this.chips = buf.readInt();
         this.currentBetStage = buf.readInt();
         this.isDealer = buf.readBoolean();
     }
