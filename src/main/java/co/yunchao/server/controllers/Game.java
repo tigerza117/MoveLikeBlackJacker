@@ -18,6 +18,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
     private int maxTick = 5;
     private boolean isRunning = true;
     private int maxPlayer;
+
     private final Queue<Offset> seatOffset = new LinkedList<>(List.of(
             new Offset(432, 294),
             new Offset(729, 377),
@@ -71,7 +72,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
             packet.offsetY = player.getOffset().getY();
             putPacket(packet);
         }
-        player.setBalance(5000);
+        player.setBalance(10000);
         this.players.put(player.getId(), player);
         for (Player pl : players.values()) {
             PlayerJoinPacket playerJoinPacket = new PlayerJoinPacket();
