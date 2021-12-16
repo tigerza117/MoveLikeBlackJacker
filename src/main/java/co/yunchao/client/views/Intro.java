@@ -23,6 +23,7 @@ public class Intro extends IntroScene {
             if (file != null) {
                 Media media = new Media(file.toString());
                 MediaPlayer player = new MediaPlayer(media);
+                player.setVolume(0.7);
                 player.setAutoPlay(true);
                 player.setOnPlaying(() -> {
                     viewer = new MediaView(player);
