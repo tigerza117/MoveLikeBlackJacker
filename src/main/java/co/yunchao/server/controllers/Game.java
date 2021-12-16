@@ -36,9 +36,6 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         this.deck.generateCards();
         thread.start();
         join(dealer);
-        seatOffset.forEach(offset -> {
-            System.out.println("Offset > X:Y > " + offset.getX() + ":" + offset.getY());
-        });
     }
 
     @Override
@@ -141,18 +138,19 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
     public void run() {
         try {
             while (isRunning) {
+                var clonedPlayer = players.values();
                 broadcastGameState();
                 System.out.println(getState() + " > " + tick);
                 if (countPlayers() < 1 && !getState().equals(GameState.WAITING)) {
                     System.out.println("No one in game");
                     Thread.sleep(1000);
-                    continue;
+                    break;
                 }
                 switch (getState()) {
                     case WAITING:
                         if (countPlayers() > 0) {
-                            this.tick = 5;
-                            this.maxTick = 5;
+                            this.tick = 20;
+                            this.maxTick = 20;
                             setState(GameState.BET);
                         }
                         break;
@@ -187,7 +185,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         }
                         break;
                     case IN_GAME:
-                        for (Player player : players.values()) {
+                        for (Player player : clonedPlayer) {
                             if (!player.isDealer() && player.isOnline()) {
                                 this.tick = 5;
                                 this.maxTick = 5;
@@ -229,19 +227,31 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         }
                         setPlayerTurn(dealer.getId());
                         while (dealer.getInventory().getPoint() < 17) {
+                            System.out.println("====================================================");
+                            System.out.println("Before pickup point " + dealer.getInventory().getPoint());
+                            System.out.println("====================================================");
+                            dealer.getInventory().getCards().forEach(card -> {
+                                System.out.println("+++ " + card.getName() + ":" + card.getNumber() + "[" + card.getPoint() + "]" + " +++");
+                            });
                             dealer.pickUpCard();
                             Thread.sleep(1000);
+                            System.out.println("====================================================");
+                            System.out.println("After pickup "+ dealer.getInventory().getPoint());
+                            System.out.println("====================================================");
+                            dealer.getInventory().getCards().forEach(card -> {
+                                System.out.println(card.getName());
+                            });
                         }
                         setState(GameState.PAY_OUT);
                         setPlayerTurn(UUID.randomUUID());
                         break;
                     case PAY_OUT:
-                        for (Player player : players.values()) {
+                        for (Player player : clonedPlayer) {
                             if (!player.isDealer()) {
                                 var result = player.getResult(dealer);
                                 var ratio = 0.0;
-                                if (!result.equals(Result.LOSE)) {
-                                    System.out.println(player.getName() + " Wining");
+                                if (!result.equals(Result.LOSE) && !player.isBust()) {
+                                    System.out.println(player.getName() + " " + result.name() + " Wining");
                                     switch (result) {
                                         case BLACKJACK:
                                             ratio = 2.5;
@@ -249,6 +259,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                         case DRAW:
                                             ratio = 1;
                                             break;
+                                        case DEALER_BUST:
                                         case Card5:
                                         case HIGH_POINT:
                                             ratio = 2;
@@ -259,12 +270,13 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                 }
 
                                 player.getReward(ratio);
-                                player.reset();
                                 this.tick = 5;
                                 setState(GameState.WAITING);
-                            } else {
-                                player.reset();
                             }
+                        }
+                        Thread.sleep(10000);
+                        for (Player player : clonedPlayer) {
+                            player.reset();
                         }
                         break;
                 }

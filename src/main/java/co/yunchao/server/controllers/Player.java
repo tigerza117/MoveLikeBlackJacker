@@ -2,7 +2,6 @@ package co.yunchao.server.controllers;
 
 import co.yunchao.base.enums.ChipType;
 import co.yunchao.base.enums.Result;
-import co.yunchao.base.models.Card;
 import co.yunchao.base.models.Chip;
 import co.yunchao.base.models.Inventory;
 import co.yunchao.net.packets.*;
@@ -51,7 +50,6 @@ public class Player extends co.yunchao.base.models.Player {
 
     @Override
     public void handler(DataPacket packet) {
-        System.out.println("Handle packet > " + packet.getClass());
         switch (packet.pid()) {
             case ProtocolInfo.JOIN_ROOM_PACKET:
                 JoinRoomPacket joinRoomPacket = (JoinRoomPacket) packet;
@@ -94,7 +92,6 @@ public class Player extends co.yunchao.base.models.Player {
     @Override
     public void putPacket(DataPacket packet) {
         if (channel != null) {
-            System.out.println("Send channel > " + packet.getClass());
             channel.writeAndFlush(packet);
         }
     }
@@ -110,17 +107,21 @@ public class Player extends co.yunchao.base.models.Player {
     }
 
     public void getReward(double ratio) {
-        var reward = this.getCurrentBetStage() * ratio;
-        this.setBalance(this.getBalance() + (reward));
-        log("get reward " + reward + "$");
+        var reward = getCurrentBetStage() * ratio;
+        log("get reward " + reward + "$ from " + getBalance() + " to " + getBalance() + reward);
+        setBalance(getBalance() + reward);
     }
 
     @Override
     public void skip() {
         if(!isReady()){
             if (!isDealer()) {
-                setState(PlayerInGameState.SKIP);
-                setCurrentBetStage(0);
+                if (getCurrentBetStage() > 0) {
+                    confirmBet();
+                    setState(PlayerInGameState.READY);
+                } else {
+                    setState(PlayerInGameState.SKIP);
+                }
                 log("Skip success");
             } else {
                 setState(PlayerInGameState.READY);
@@ -163,8 +164,12 @@ public class Player extends co.yunchao.base.models.Player {
 
     @Override
     public void clearBet() {
-        getInventory().clearChips();
-        setBalance(getBalance() + getCurrentBetStage());
+        System.out.println("Call!");
+        if (canConfirmBet()) {
+            getInventory().clearChips();
+            setBalance(getBalance() + getCurrentBetStage());
+            setCurrentBetStage(0);
+        }
     }
 
     @Override
@@ -174,6 +179,7 @@ public class Player extends co.yunchao.base.models.Player {
             for (int i = 0; i < amount; i++) {
                 getInventory().putChip(new Chip(chipType));
             }
+            setBalance(getBalance() - total);
             setCurrentBetStage(getCurrentBetStage() + total);
             log("stack bet " + total + "$ total bet " + getCurrentBetStage() + "$");
         }

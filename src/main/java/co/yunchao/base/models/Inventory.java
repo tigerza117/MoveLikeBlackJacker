@@ -90,7 +90,7 @@ public class Inventory {
         }
         for (Object obj: aceStack.toArray()) {
             Card card = (Card) obj;
-            if (points + 11 + aceStack.size() > 21) {
+            if (points + 11 + (aceStack.size() - 1) > 21) {
                 points+=aceStack.size();
                 break;
             } else {

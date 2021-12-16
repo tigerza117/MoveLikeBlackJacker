@@ -6,7 +6,7 @@ import co.yunchao.net.packets.DataPacket;
 
 import java.util.UUID;
 
-public abstract class Player{
+public abstract class Player {
     private final UUID id;
     private final boolean isDealer;
     private String name;
@@ -74,7 +74,6 @@ public abstract class Player{
 
     public void setCurrentBetStage(int currentBetStage) {
         this.currentBetStage = currentBetStage;
-        setBalance(getBalance() - currentBetStage);
     }
 
     public void setGame(Game game) {
@@ -130,7 +129,7 @@ public abstract class Player{
     }
 
     public boolean canHit() {
-        return (isReady() || isHit()) && game.isInGame();
+        return (isReady() || isHit()) && getGame() != null && game.isInGame();
     }
 
     public boolean canStand() {
@@ -138,15 +137,16 @@ public abstract class Player{
     }
 
     public boolean canDoubleDown() {
-        return isReady() && game.isInGame();
+        return isReady() && getGame() != null  && game.isInGame();
     }
 
     public boolean canConfirmBet() {
-        return isIdle() && isBet() && getCurrentBetStage() > 0;
+        return isIdle() && isBet() && (getCurrentBetStage() > 0) && getGame() != null && getGame().isInBet();
     }
 
     public boolean canStackCurrentBetStage(int amount) {
-        return isIdle() && getBalance() - (getCurrentBetStage() + amount) >= 0 && (getCurrentBetStage() + amount <= 2000);
+        var totalAfter = getCurrentBetStage() + amount;
+        return isIdle() && ((getBalance() - amount) >= 0) && (totalAfter <= 2000) && getGame() != null && getGame().isInBet();
     }
 
     public void stackCurrentBetStage(ChipType chipType) {

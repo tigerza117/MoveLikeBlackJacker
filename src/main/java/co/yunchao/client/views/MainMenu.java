@@ -40,8 +40,6 @@ public class MainMenu extends FXGLMenu {
         getSettings().globalMusicVolumeProperty().setValue((OptionsModal.getMasterVol().getValue()/100)*(OptionsModal.getMscVol().getValue()/100));
         getAudioPlayer().loopMusic(music);
 
-        System.out.println(OptionsModal.getMasterVol().getValue() + " " + OptionsModal.getMscVol().getValue());
-
         getContentRoot().getChildren().add(group);
     }
 

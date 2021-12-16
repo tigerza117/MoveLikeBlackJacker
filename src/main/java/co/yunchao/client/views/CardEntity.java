@@ -22,7 +22,6 @@ public class CardEntity extends Group {
 
     public void spawn() {
         play("Cards_Action.wav");
-        System.out.println(-(getTranslateX() - 990));
         var animation = animationBuilder(getGameScene())
                 .interpolator(Interpolators.LINEAR.EASE_OUT())
                 .duration(Duration.seconds(1))

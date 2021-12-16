@@ -20,13 +20,12 @@ public class NetworkHandler extends SimpleChannelInboundHandler<DataPacket> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        System.out.println("Connect channel > " + ctx.channel());
+        //System.out.println("Connect channel > " + ctx.channel());
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DataPacket packet) throws Exception {
         var player = players.get(ctx.channel());
-        System.out.println("Receiver channel > " + ctx.channel() + " > " + packet.getClass());
         switch (packet.pid()) {
             case ProtocolInfo.LOGIN_PACKET:
                 LoginPacket loginPacket = (LoginPacket) packet;

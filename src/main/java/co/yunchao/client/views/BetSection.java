@@ -36,11 +36,9 @@ public class BetSection extends Group {
         balanceText = FXGL.getUIFactoryService().newText("0$", Color.WHITE, FontType.GAME, 52);
 
         var optionBtn = Button.create("bet_section/in_game_option_btn", () -> {
-            System.out.println("Options");
             getSceneService().pushSubScene(new OptionsModal());
         });
         var leaveBtn = Button.create("bet_section/leave_btn", () -> {
-            System.out.println("Leave Game");
             getSceneService().pushSubScene(new LeaveModal(() -> {
                 getGameController().gotoMainMenu();
                 table.close();
@@ -56,24 +54,44 @@ public class BetSection extends Group {
 
         var textureBalance = texture("bet_section/balance_box.png");
         var textureChipSection = texture("bet_section/chip_section.png");
-        confirmBtn = Button.create("bet_section/confirm_btn", player::confirmBet);
-        standBtn = Button.create("bet_section/stand_btn", player::stand);
-        hitBtn = Button.create("bet_section/hit_btn", player::hit);
-        doubleBtn = Button.create("bet_section/double_btn", player::doubleDown);
+        confirmBtn = Button.create("bet_section/confirm_btn", () -> {
+            disable(confirmBtn, true);
+            player.confirmBet();
+        });
+        standBtn = Button.create("bet_section/stand_btn", () -> {
+            disable(standBtn, true);
+            player.stand();
+        });
+        hitBtn = Button.create("bet_section/hit_btn", () -> {
+            disable(hitBtn, true);
+            player.hit();
+        });
+        doubleBtn = Button.create("bet_section/double_btn", () -> {
+            disable(doubleBtn, true);
+            player.doubleDown();
+        });
         minBtn = Button.create("bet_section/min_btn", () -> {
+            disable(minBtn, true);
             player.stackCurrentBetStage(ChipType.CHIP_SMALL);
         });
         maxBtn = Button.create("bet_section/max_btn", () -> {
+            disable(maxBtn, true);
             player.stackCurrentBetStage(ChipType.CHIP_LARGE, 4);
         });
-        clearBtn = Button.create("bet_section/clear_btn", player::canConfirmBet);
+        clearBtn = Button.create("bet_section/clear_btn", () -> {
+            disable(clearBtn, true);
+            player.clearBet();
+        });
         chip1BetBtn = Button.create("bet_section/chip1_bet_btn", () -> {
+            disable(chip1BetBtn, true);
             player.stackCurrentBetStage(ChipType.CHIP_SMALL);
         });
         chip2BetBtn = Button.create("bet_section/chip2_bet_btn", () -> {
+            disable(chip2BetBtn, true);
             player.stackCurrentBetStage(ChipType.CHIP_MEDIUM);
         });
         chip3BetBtn = Button.create("bet_section/chip3_bet_btn", () -> {
+            disable(chip3BetBtn, true);
             player.stackCurrentBetStage(ChipType.CHIP_LARGE);
         });
 
@@ -137,7 +155,6 @@ public class BetSection extends Group {
     }
 
     public void update() {
-        System.out.println("Update balance " + player.getBalance());
         balanceText.setText(player.getBalance() + "$");
         disable(confirmBtn, !player.canConfirmBet());
         disable(standBtn, !player.canStand());
