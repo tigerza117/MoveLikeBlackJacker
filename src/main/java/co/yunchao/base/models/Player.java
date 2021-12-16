@@ -104,10 +104,6 @@ public abstract class Player {
         return state.equals(PlayerInGameState.IDLE);
     }
 
-    public boolean isBet() {
-        return state.equals(PlayerInGameState.IDLE);
-    }
-
     public boolean isStan() {
         return state.equals(PlayerInGameState.STAND);
     }
@@ -129,7 +125,7 @@ public abstract class Player {
     }
 
     public boolean canHit() {
-        return (isReady() || isHit()) && getGame() != null && game.isInGame();
+        return (isReady() || isHit()) && getGame() != null && game.isInGame() && isMyTurn();
     }
 
     public boolean canStand() {
@@ -137,16 +133,20 @@ public abstract class Player {
     }
 
     public boolean canDoubleDown() {
-        return isReady() && getGame() != null  && game.isInGame();
+        return isReady() && getGame() != null  && game.isInGame() && isMyTurn() && (getBalance() - getCurrentBetStage() >= 0);
     }
 
     public boolean canConfirmBet() {
-        return isIdle() && isBet() && (getCurrentBetStage() > 0) && getGame() != null && getGame().isInBet();
+        return isIdle() && (getCurrentBetStage() > 0) && getGame() != null && getGame().isInBet();
     }
 
     public boolean canStackCurrentBetStage(int amount) {
         var totalAfter = getCurrentBetStage() + amount;
-        return isIdle() && ((getBalance() - amount) >= 0) && (totalAfter <= 2000) && getGame() != null && getGame().isInBet();
+        return isIdle() && ((getBalance() - amount) >= 0) && (totalAfter <= 2000) && getGame() != null && getGame().isInBet() && isMyTurn();
+    }
+
+    public boolean isMyTurn() {
+        return getGame() != null && getGame().isPlayerTurn(this);
     }
 
     public void stackCurrentBetStage(ChipType chipType) {

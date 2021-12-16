@@ -92,7 +92,11 @@ public class Player extends co.yunchao.base.models.Player {
     @Override
     public void putPacket(DataPacket packet) {
         if (channel != null) {
-            channel.writeAndFlush(packet);
+            try {
+                channel.writeAndFlush(packet).sync();
+            } catch (InterruptedException e) {
+                System.out.println("Fail to send packet");
+            }
         }
     }
 
@@ -156,8 +160,13 @@ public class Player extends co.yunchao.base.models.Player {
 
     public void doubleDown() {
         if (canDoubleDown()) {
-            this.setState(PlayerInGameState.DOUBLE);
-            this.pickUpCard();
+            setState(PlayerInGameState.DOUBLE);
+            pickUpCard();
+            setBalance(getBalance() - getCurrentBetStage());
+            setCurrentBetStage(getCurrentBetStage() * 2);
+            getInventory().getChips().forEach((chip) -> {
+                getInventory().putChip(new Chip(chip.getType()));
+            });
             log("Double down success");
         }
     }

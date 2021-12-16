@@ -15,7 +15,6 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
     private final Player dealer;
     private int tick = 20;
     private int maxTick = 5;
-    private UUID playerTurn = UUID.randomUUID();
     private boolean isRunning = true;
     private int maxPlayer;
     private final Queue<Offset> seatOffset = new LinkedList<>(List.of(
@@ -117,7 +116,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         packet.state = getState();
         packet.tick = tick;
         packet.maxTick = maxTick;
-        packet.currentPlayerTurn = playerTurn;
+        packet.currentPlayerTurn = getPlayerTurn();
         putPacket(packet);
     }
 
@@ -129,8 +128,9 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         return players.size() - (getState().equals(GameState.IN_GAME) ? 1 : 0);
     }
 
+    @Override
     public void setPlayerTurn(UUID playerTurn) {
-        this.playerTurn = playerTurn;
+        super.setPlayerTurn(playerTurn);
         broadcastGameState();
     }
 
@@ -149,8 +149,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                 switch (getState()) {
                     case WAITING:
                         if (countPlayers() > 0) {
-                            this.tick = 20;
-                            this.maxTick = 20;
+                            this.tick = 30;
+                            this.maxTick = 30;
                             setState(GameState.BET);
                         }
                         break;
@@ -168,7 +168,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         for (int i = 0; i < 2; i++) {
                             for (Iterator<Player> it = players.values().iterator(); it.hasNext();) {
                                 Player player = it.next();
-                                if (!player.isDealer() && player.isOnline()) {
+                                if (!player.isDealer() && player.isOnline() && player.isReady()) {
                                     player.pickUpCard();
                                     Thread.sleep(1000);
                                 }
@@ -180,15 +180,15 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             setState(GameState.PAY_OUT);
                         } else {
                             setState(GameState.IN_GAME);
-                            this.tick = 5;
-                            this.maxTick = 5;
+                            this.tick = 15;
+                            this.maxTick = 15;
                         }
                         break;
                     case IN_GAME:
                         for (Player player : clonedPlayer) {
                             if (!player.isDealer() && player.isOnline()) {
-                                this.tick = 5;
-                                this.maxTick = 5;
+                                this.tick = 15;
+                                this.maxTick = 15;
                                 while (this.tick != 0) {
                                     System.out.println(player.getName() + "[" + player.getInventory().getPoint() + "] Turn > " + player.getState());
                                     switch (player.getState()) {

@@ -3,9 +3,12 @@ package co.yunchao.base.models;
 import co.yunchao.base.enums.GameState;
 import co.yunchao.net.packets.DataPacket;
 
+import java.util.UUID;
+
 public abstract class Game {
     private GameState state;
     private String id;
+    private UUID playerTurn = UUID.randomUUID();
 
     public Game(String id) {
         this.id = id;
@@ -21,6 +24,18 @@ public abstract class Game {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isPlayerTurn(Player player) {
+        return playerTurn.equals(player.getId());
+    }
+
+    public void setPlayerTurn(UUID playerTurn) {
+        this.playerTurn = playerTurn;
+    }
+
+    public UUID getPlayerTurn() {
+        return playerTurn;
     }
 
     public void setState(GameState state) {
