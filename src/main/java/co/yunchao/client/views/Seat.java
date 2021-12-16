@@ -149,7 +149,7 @@ public class Seat extends Group {
 
     public void setScore(String text, ScoreColorType colorType) {
         textEachScore.setText(text);
-        textEachScore.setStyle("-fx-text-inner-color: " + colorType.name().toLowerCase() + ";");
+        textEachScore.setFill(Color.valueOf(colorType.name()));
         scorePane.setVisible(!text.isBlank());
     }
 }
