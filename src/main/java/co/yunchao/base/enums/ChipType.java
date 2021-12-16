@@ -10,7 +10,7 @@ public enum ChipType {
     CHIP_MEDIUM {
         @Override
         public int getAmount() {
-            return 150;
+            return 100;
         }
     },
     CHIP_LARGE {
