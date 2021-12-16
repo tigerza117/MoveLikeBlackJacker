@@ -15,4 +15,5 @@ public interface ProtocolInfo {
     byte CARD_DE_SPAWN_PACKET = 0x12;
     byte CHIP_SPAWN_PACKET = 0x13;
     byte CHIP_DE_SPAWN_PACKET = 0x14;
+    byte PLAY_SOUND_PACKET = 0x15;
 }

@@ -109,6 +109,12 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
         putPacket(packet);
     }
 
+    public void broadcastSound(String name) {
+        players.forEach((uuid, player) -> {
+            player.playSound(name);
+        });
+    }
+
     public void broadcastGameState() {
         GameMetadataPacket packet = new GameMetadataPacket();
         packet.id = getId();
@@ -162,6 +168,9 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             }
                             setState(GameState.HAND_OUT);
                         } else {
+                            if (this.tick == 7) {
+                                broadcastSound("7s_Countdown.wav");
+                            }
                             this.tick--;
                         }
                         break;
@@ -191,9 +200,13 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                 this.tick = 15;
                                 this.maxTick = 15;
                                 while (this.tick != 0) {
+                                    if (this.tick == 7) {
+                                        broadcastSound("7s_Countdown.wav");
+                                    }
                                     System.out.println(player.getName() + "[" + player.getInventory().getPoint() + "] Turn > " + player.getState());
                                     switch (player.getState()) {
                                         case BUST:
+                                            player.playSound("Player_Lose.wav");
                                             System.out.println("BUST!!!");
                                         case SKIP:
                                         case IDLE:
@@ -204,6 +217,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                             break;
                                         case HIT:
                                         case READY:
+                                            player.playSound("Interface_Select.wav");
                                             setPlayerTurn(player.getId());
                                             this.tick--;
                                             if (player.isDealer()) {
@@ -228,17 +242,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         }
                         setPlayerTurn(dealer.getId());
                         while (dealer.getInventory().getPoint() < 17) {
-                            System.out.println("====================================================");
-                            System.out.println("Before pickup point " + dealer.getInventory().getPoint());
-                            System.out.println("====================================================");
-                            dealer.getInventory().getCards().forEach(card -> {
-                                System.out.println("+++ " + card.getName() + ":" + card.getNumber() + "[" + card.getPoint() + "]" + " +++");
-                            });
                             dealer.pickUpCard();
                             Thread.sleep(1000);
-                            System.out.println("====================================================");
-                            System.out.println("After pickup " + dealer.getInventory().getPoint());
-                            System.out.println("====================================================");
                             dealer.getInventory().getCards().forEach(card -> {
                                 System.out.println(card.getName());
                             });
@@ -256,6 +261,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                     switch (result) {
                                         case BLACKJACK:
                                             ratio = 2.5;
+                                            player.playSound("Game_Win_3.wav");
                                             break;
                                         case DRAW:
                                             ratio = 1;
@@ -264,6 +270,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                         case Card5:
                                         case HIGH_POINT:
                                             ratio = 2;
+                                            player.playSound("Small_Win.wav");
                                             break;
                                         default:
                                             ratio = 0;
@@ -274,8 +281,9 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                 this.tick = 5;
                             }
                         }
-                        Thread.sleep(10000);
+                        Thread.sleep(3000);
                         for (Player player : clonedPlayer) {
+                            broadcastSound("Cards_Shuffle.wav");
                             player.reset();
                         }
                         setState(GameState.WAITING);

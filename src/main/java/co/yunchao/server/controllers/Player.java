@@ -53,7 +53,6 @@ public class Player extends co.yunchao.base.models.Player {
         switch (packet.pid()) {
             case ProtocolInfo.JOIN_ROOM_PACKET:
                 JoinRoomPacket joinRoomPacket = (JoinRoomPacket) packet;
-                System.out.println("can join ?");
                 getServer().join(this, joinRoomPacket.roomId);
                 break;
             case ProtocolInfo.PLAYER_ACTION_PACKET:
@@ -280,6 +279,12 @@ public class Player extends co.yunchao.base.models.Player {
         pk.message = message;
         pk.showDialog = showMsg;
         putPacket(pk);
+    }
+
+    public void playSound(String name) {
+        PlaySoundPacket packet = new PlaySoundPacket();
+        packet.name = name;
+        putPacket(packet);
     }
 
     public Server getServer() {

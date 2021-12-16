@@ -40,6 +40,7 @@ public class Network {
         this.registerPacket(ProtocolInfo.PLAYER_LEAVE_PACKET, PlayerLeavePacket.class);
         this.registerPacket(ProtocolInfo.PLAYER_METADATA_PACKET, PlayerMetadataPacket.class);
         this.registerPacket(ProtocolInfo.PLAYER_BET_STACK_PACKET, PlayerBetStackPacket.class);
+        this.registerPacket(ProtocolInfo.PLAY_SOUND_PACKET, PlaySoundPacket.class);
     }
 
 }
