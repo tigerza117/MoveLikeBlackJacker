@@ -23,6 +23,7 @@ public class MainController extends GameApplication {
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setWidth(1920);
+        settings.setFullScreenFromStart(true);
         settings.setHeightFromRatio(16/9.0);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(false);
@@ -74,12 +75,14 @@ public class MainController extends GameApplication {
     @Override
     protected void onPreInit() {
         super.onPreInit();
-        getPrimaryStage().setWidth(1280);
-        getPrimaryStage().setHeight(720);
-        OptionsModal.getHD_btn().setEffect(OptionsModal.getGlow());
-        getPrimaryStage().setMaxWidth(1920);
-        getPrimaryStage().setMaxHeight(1080);
-        getPrimaryStage().setFullScreen(false);
+        //getPrimaryStage().setWidth(1920);
+        //getPrimaryStage().setHeight(1080);
+        getPrimaryStage().setFullScreen(true);
+        //OptionsModal.getFullHD_btn().setEffect(OptionsModal.getGlow());
+        OptionsModal.setFullScreenCheck("0");
+        //getPrimaryStage().setMaxWidth(1920);
+        //getPrimaryStage().setMaxHeight(1080);
+        //getPrimaryStage().setFullScreen(false);
         getPrimaryStage().centerOnScreen();
     }
 

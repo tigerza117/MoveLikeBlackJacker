@@ -46,6 +46,7 @@ public class OptionsModal extends SubScene {
 
         fullScreen = new CheckBox();
         fullScreen.getStyleClass().add("big-check-box");
+        fullScreen.setSelected(true);
 
         fullHD_btn = OptionsBtn.create("options/full_hd", () -> {
             if(!fullScreen.isSelected()) {
@@ -89,18 +90,21 @@ public class OptionsModal extends SubScene {
                 getPrimaryStage().setWidth(1920);
                 getPrimaryStage().setHeight(1080);
                 fullScreen.setSelected(false);
+                getPrimaryStage().centerOnScreen();
             }
             else if(fullScreenCheck == "2" && !fullScreen.isSelected()){
                 getPrimaryStage().setFullScreen(false);
                 getPrimaryStage().setWidth(1280);
                 getPrimaryStage().setHeight(720);
                 fullScreen.setSelected(false);
+                getPrimaryStage().centerOnScreen();
             }
             else if(fullScreenCheck == "3" && !fullScreen.isSelected()){
                 getPrimaryStage().setFullScreen(false);
                 getPrimaryStage().setWidth(640);
                 getPrimaryStage().setHeight(480);
                 fullScreen.setSelected(false);
+                getPrimaryStage().centerOnScreen();
             }
             else if(fullScreen.isSelected()){
                 getPrimaryStage().setFullScreen(fullScreen.isSelected());
@@ -108,6 +112,7 @@ public class OptionsModal extends SubScene {
                 HD_btn.setEffect(null);
                 SD_btn.setEffect(null);
                 fullScreenCheck = "0";
+                getPrimaryStage().centerOnScreen();
             }
             else if(!fullScreen.isSelected()){
                 fullScreenCheck = "2";
@@ -115,6 +120,7 @@ public class OptionsModal extends SubScene {
                 getPrimaryStage().setWidth(1280);
                 getPrimaryStage().setHeight(720);
                 HD_btn.setEffect(glow);
+                getPrimaryStage().centerOnScreen();
             }
             close();
         });
@@ -216,5 +222,9 @@ public class OptionsModal extends SubScene {
 
     public static DropShadow getGlow() {
         return glow;
+    }
+
+    public static void setFullScreenCheck(String fullScreenCheck) {
+        OptionsModal.fullScreenCheck = fullScreenCheck;
     }
 }
