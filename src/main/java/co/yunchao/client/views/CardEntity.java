@@ -26,7 +26,7 @@ public class CardEntity extends Group {
                 .interpolator(Interpolators.LINEAR.EASE_OUT())
                 .duration(Duration.seconds(1))
                 .translate(this)
-                .from(new Point2D(-(getLayoutX() - 990), -(getLayoutY() + getBoundsInLocal().getHeight())))
+                .from(new Point2D(50, -500))
                 .to(new Point2D(0, 0));
         setVisible(true);
         animation.buildAndPlay();
