@@ -198,13 +198,23 @@ public class GameController extends Game {
                 }
                 break;
             }
-            case ProtocolInfo.PLAY_SOUND_PACKET:
+            case ProtocolInfo.PLAY_SOUND_PACKET: {
                 PlaySoundPacket playSoundPacket = (PlaySoundPacket) packet;
                 play(playSoundPacket.name);
                 break;
-            case ProtocolInfo.STOP_SOUND_PACKET:
+            }
+            case ProtocolInfo.STOP_SOUND_PACKET: {
                 getAudioPlayer().stopAllSounds();
                 break;
+            }
+            case ProtocolInfo.SET_SCORE_PACKET: {
+                SetScorePacket setScorePacket = (SetScorePacket) packet;
+                PlayerController player = players.get(setScorePacket.playerId);
+                if (player != null) {
+                    player.getSeat().setScore(setScorePacket.text, setScorePacket.colorType);
+                }
+                break;
+            }
             default:
                 System.out.println("Unknown packet");
         }

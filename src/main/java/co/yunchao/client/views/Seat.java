@@ -1,5 +1,6 @@
 package co.yunchao.client.views;
 
+import co.yunchao.base.enums.ScoreColorType;
 import co.yunchao.client.controllers.PlayerController;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
@@ -157,5 +158,9 @@ public class Seat extends Group {
 
     public void updateBalance() {
         balance.setText(player.getBalance() + "$");
+    }
+
+    public void setScore(String text, ScoreColorType colorType) {
+
     }
 }
