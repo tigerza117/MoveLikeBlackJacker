@@ -202,6 +202,9 @@ public class GameController extends Game {
                 PlaySoundPacket playSoundPacket = (PlaySoundPacket) packet;
                 play(playSoundPacket.name);
                 break;
+            case ProtocolInfo.STOP_SOUND_PACKET:
+                getAudioPlayer().stopAllSounds();
+                break;
             default:
                 System.out.println("Unknown packet");
         }

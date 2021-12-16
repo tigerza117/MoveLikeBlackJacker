@@ -16,5 +16,5 @@ public interface ProtocolInfo {
     byte CHIP_SPAWN_PACKET = 0x13;
     byte CHIP_DE_SPAWN_PACKET = 0x14;
     byte PLAY_SOUND_PACKET = 0x15;
-    byte STOP_SOUND_PACKET = 0x15;
+    byte STOP_SOUND_PACKET = 0x16;
 }

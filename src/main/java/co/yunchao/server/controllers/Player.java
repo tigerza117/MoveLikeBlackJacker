@@ -208,9 +208,13 @@ public class Player extends co.yunchao.base.models.Player {
     }
 
     public void pickUpCard() {
+        pickUpCard(true);
+    }
+
+    public void pickUpCard(boolean flip) {
         var inv = getInventory();
         var card = getGame().getDeck().pickTopCard();
-        card.setFlip(true);
+        card.setFlip(flip);
         inv.putCard(card);
         if (inv.isBlackJack()) {
             setState(PlayerInGameState.WINING);

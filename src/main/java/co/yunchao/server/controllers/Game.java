@@ -177,7 +177,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             if (this.tick >= 8) {
                                 boolean allReady = true;
                                 for (Player player : players.values()) {
-                                    if (!player.isReady()) {
+                                    if (!player.isReady() && !player.isDealer()) {
                                         allReady = false;
                                     }
                                 }
@@ -201,7 +201,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                 }
                             }
                             if (dealer.getInventory().getCards().size() < 2) {
-                                dealer.pickUpCard();
+                                boolean isFlip = i == 0;
+                                dealer.pickUpCard(isFlip);
                             }
                             Thread.sleep(1000);
                         }
@@ -214,11 +215,10 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         }
                         break;
                     case IN_GAME:
+                        this.maxTick = 15;
                         for (Player player : clonedPlayer) {
                             if (!player.isDealer() && player.isOnline()) {
                                 this.tick = 15;
-                                this.maxTick = 15;
-                                broadcastStopSound();
                                 player.playSound("Interface_Select.wav");
                                 setPlayerTurn(player.getId());
                                 while (this.tick != 0) {
@@ -250,25 +250,22 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                         }
                                         continue;
                                     }
-                                    try {
-                                        broadcastGameState();
-                                        Thread.sleep(1000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
+                                    broadcastGameState();
+                                    Thread.sleep(1000);
                                 }
                             }
                         }
+                        Thread.sleep(1000);
                         setPlayerTurn(dealer.getId());
+                        dealer.getInventory().toggleFlipCard(dealer.getInventory().getCards().get(1));
+                        Thread.sleep(1000);
                         while (dealer.getInventory().getPoint() < 17) {
                             dealer.pickUpCard();
                             Thread.sleep(1000);
-                            dealer.getInventory().getCards().forEach(card -> {
-                                System.out.println(card.getName());
-                            });
                         }
                         setState(GameState.PAY_OUT);
                         setPlayerTurn(UUID.randomUUID());
+                        Thread.sleep(1000);
                         break;
                     case PAY_OUT:
                         for (Player player : clonedPlayer) {
