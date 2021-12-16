@@ -199,6 +199,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             if (!player.isDealer() && player.isOnline()) {
                                 this.tick = 15;
                                 this.maxTick = 15;
+                                player.playSound("Interface_Select.wav");
+                                setPlayerTurn(player.getId());
                                 while (this.tick != 0) {
                                     if (this.tick == 7) {
                                         broadcastSound("7s_Countdown.wav");
@@ -217,8 +219,6 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                             break;
                                         case HIT:
                                         case READY:
-                                            player.playSound("Interface_Select.wav");
-                                            setPlayerTurn(player.getId());
                                             this.tick--;
                                             if (player.isDealer()) {
                                                 this.tick = 0;
@@ -274,6 +274,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                             break;
                                         default:
                                             ratio = 0;
+                                            player.playSound("Player_Lose.wav");
                                     }
                                 }
 
