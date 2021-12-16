@@ -93,9 +93,16 @@ public class OptionsModal extends SubScene {
                 getPrimaryStage().setFullScreen(false);
                 fullScreen.setSelected(false);
             }
-            else{
+            else if(fullScreen.isSelected()){
                 getPrimaryStage().setFullScreen(fullScreen.isSelected());
                 fullScreenCheck = "0";
+            }
+            else if(!fullScreen.isSelected()){
+                fullScreenCheck = "2";
+                getPrimaryStage().setWidth(1280);
+                getPrimaryStage().setHeight(720);
+                getPrimaryStage().setFullScreen(false);
+                fullScreen.setSelected(false);
             }
             close();
         });
