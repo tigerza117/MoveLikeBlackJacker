@@ -48,11 +48,6 @@ public class Seat extends Group {
         textEachScore.setWrappingWidth(scorePane.getWidth());
         textEachScore.setTextAlignment(TextAlignment.CENTER);
 
-        balance.setText("");
-        balance.setTranslateX(41);
-        balance.setTranslateY(435);
-        balance.setVisible(false);
-
         textureIcon.setTranslateX(43);
         textureIcon.setTranslateY(295);
         textureIcon.setVisible(false);
@@ -67,6 +62,13 @@ public class Seat extends Group {
         textName.setWrappingWidth(textureIcon.getWidth()+50);
         textName.setTextAlignment(TextAlignment.CENTER);
         textName.setVisible(false);
+
+        balance.setText("");
+        balance.setTranslateX(textureIcon.getTranslateX() - 50);
+        balance.setTranslateY(435);
+        balance.setWrappingWidth(textureIcon.getWidth() + 100);
+        balance.setTextAlignment(TextAlignment.CENTER);
+        balance.setVisible(false);
 
         getChildren().addAll(textName, textureIcon, textBetTotal, balance, scorePane, textEachScore);
     }
