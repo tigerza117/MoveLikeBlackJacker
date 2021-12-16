@@ -25,7 +25,7 @@ public class MainController extends GameApplication {
         settings.setHeightFromRatio(16/9.0);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(false);
-        settings.setIntroEnabled(false);
+        settings.setIntroEnabled(true);
         settings.setFullScreenAllowed(true);
         settings.setDeveloperMenuEnabled(true);
         settings.setScaleAffectedOnResize(true);
