@@ -80,8 +80,8 @@ public class MainController extends GameApplication {
         getPrimaryStage().setFullScreen(true);
         //OptionsModal.getFullHD_btn().setEffect(OptionsModal.getGlow());
         OptionsModal.setFullScreenCheck("0");
-        //getPrimaryStage().setMaxWidth(1920);
-        //getPrimaryStage().setMaxHeight(1080);
+        getPrimaryStage().setMaxWidth(1920);
+        getPrimaryStage().setMaxHeight(1080);
         //getPrimaryStage().setFullScreen(false);
         getPrimaryStage().centerOnScreen();
     }
