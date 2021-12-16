@@ -4,8 +4,10 @@ import com.almasb.fxgl.scene.Scene;
 import com.almasb.fxgl.scene.SubScene;
 import javafx.animation.FadeTransition;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
@@ -13,12 +15,17 @@ import org.jetbrains.annotations.NotNull;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class OptionsModal extends SubScene {
+    DropShadow glow;
     FadeTransition fade;
-    CheckBox fullScreen = new CheckBox();
+    CheckBox fullScreen;
+    Node fullHD_btn;
+    Node HD_btn;
+    Node SD_btn;
+    Node saveBtn;
     static Slider masterVol = new Slider(0, 100, 50);
     static Slider mscVol = new Slider(0, 100, 50);
     static Slider sfxVol = new Slider(0, 100, 50);
-    static String resoCheck = "2";
+    static String fullScreenCheck = "2";
 
     public OptionsModal(){
         Rectangle shadow = new Rectangle();
@@ -27,47 +34,60 @@ public class OptionsModal extends SubScene {
         shadow.setFill(Color.BLACK);
         shadow.setOpacity(0.65);
 
+        glow = new DropShadow();
+        glow.setRadius(40);
+        glow.setOffsetX(0.0);
+        glow.setOffsetY(0.0);
+        glow.setColor(Color.rgb(239, 184, 32));
+        glow.setSpread(.6);
+
         var banner = texture("options/option_pane.png", getGameScene().getAppWidth(), 684);
         banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
 
-
-
-        CheckBox fullScreen = new CheckBox();
+        fullScreen = new CheckBox();
         fullScreen.getStyleClass().add("big-check-box");
 
-
-        var fullHD_btn = Button.create("options/full_hd", () -> {
+        fullHD_btn = Button.create("options/full_hd", () -> {
             System.out.println("FULL HD RESOLUTION SELECTED!");
-            resoCheck = "1";
+            fullHD_btn.setEffect(glow);
+            HD_btn.setEffect(null);
+            SD_btn.setEffect(null);
+            fullScreenCheck = "1";
         });
-        var HD_btn = Button.create("options/hd_btn", () -> {
+        HD_btn = Button.create("options/hd_btn", () -> {
             System.out.println("HD RESOLUTION SELECTED!");
-            resoCheck = "2";
+            HD_btn.setEffect(glow);
+            fullHD_btn.setEffect(null);
+            SD_btn.setEffect(null);
+            fullScreenCheck = "2";
         });
-        var SD_btn = Button.create("options/sd_btn", () -> {
+        SD_btn = Button.create("options/sd_btn", () -> {
             System.out.println("SD RESOLUTION SELECTED!");
-            resoCheck = "3";
+            SD_btn.setEffect(glow);
+            fullHD_btn.setEffect(null);
+            HD_btn.setEffect(null);
+            fullScreenCheck = "3";
         });
-        var saveBtn = Button.create("options/save_btn", () -> {
+        saveBtn = Button.create("options/save_btn", () -> {
             System.out.println("master vol. : " + (int) masterVol.getValue());
             System.out.println("music vol. : " + (int) mscVol.getValue());
             System.out.println("sfx vol. : " + (int) sfxVol.getValue());
             System.out.println("Full screen toggle : " + fullScreen.isSelected());
             getSettings().globalMusicVolumeProperty().setValue((masterVol.getValue()/100)*(mscVol.getValue()/100));
             getSettings().globalSoundVolumeProperty().setValue((masterVol.getValue()/100)*(sfxVol.getValue()/100));
-            if(resoCheck == "1" && !fullScreen.isSelected()){
+            if(fullScreenCheck.equals("1") && !fullScreen.isSelected()){
                 getPrimaryStage().setWidth(1920);
                 getPrimaryStage().setHeight(1080);
                 getPrimaryStage().setFullScreen(false);
                 fullScreen.setSelected(false);
             }
-            else if(resoCheck == "2" && !fullScreen.isSelected()){
+            else if(fullScreenCheck.equals("2") && !fullScreen.isSelected()){
                 getPrimaryStage().setWidth(1280);
                 getPrimaryStage().setHeight(720);
                 getPrimaryStage().setFullScreen(false);
                 fullScreen.setSelected(false);
             }
-            else if(resoCheck == "3" && !fullScreen.isSelected()){
+            else if(fullScreenCheck.equals("3") && !fullScreen.isSelected()){
                 getPrimaryStage().setWidth(640);
                 getPrimaryStage().setHeight(480);
                 getPrimaryStage().setFullScreen(false);
@@ -75,17 +95,14 @@ public class OptionsModal extends SubScene {
             }
             else{
                 getPrimaryStage().setFullScreen(fullScreen.isSelected());
-                resoCheck = "0";
+                fullScreenCheck = "0";
             }
             close();
         });
 
         fullHD_btn.setTranslateX(100);
-        fullHD_btn.setTranslateY(-242);
-        HD_btn.setTranslateX(340);
-        HD_btn.setTranslateY(-230);
-        SD_btn.setTranslateX(550);
-        SD_btn.setTranslateY(-230);
+        HD_btn.setTranslateX(330);
+        SD_btn.setTranslateX(540);
 
         fullScreen.setTranslateY((getAppHeight()/2.0) - 120);
         fullScreen.setTranslateX((getAppWidth()/2.0) - 200);
@@ -120,6 +137,7 @@ public class OptionsModal extends SubScene {
         sliders.setTranslateX(110);
 
         Group options = new Group(fullHD_btn, HD_btn, SD_btn);
+        options.setTranslateY(-230);
 
         fullScreen.getStylesheets().add("/css/style.css");
 
@@ -152,7 +170,7 @@ public class OptionsModal extends SubScene {
             fade.setOnFinished(null);
         });
     }
-
+    
     public static Slider getMasterVol() {
         return masterVol;
     }
