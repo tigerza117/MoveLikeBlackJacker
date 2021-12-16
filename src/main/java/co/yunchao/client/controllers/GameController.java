@@ -108,25 +108,30 @@ public class GameController extends Game {
             case ProtocolInfo.PLAYER_LEAVE_PACKET: {
                 PlayerLeavePacket playerLeavePacket = (PlayerLeavePacket) packet;
                 PlayerController player = players.get(playerLeavePacket.id);
-                player.close();
+                if (player != null) {
+                    player.close();
+                }
                 break;
             }
             case ProtocolInfo.PLAYER_METADATA_PACKET: {
                 PlayerMetadataPacket playerMetadataPacket = (PlayerMetadataPacket) packet;
                 PlayerController player = players.get(playerMetadataPacket.id);
-                player.setState(playerMetadataPacket.state);
-                player.setBalance(playerMetadataPacket.chips);
-                player.setName(playerMetadataPacket.name);
-                player.setCurrentBetStage(playerMetadataPacket.currentBetStage);
-                if (player.getId().equals(playerController.getId())) {
-                    view.update();
+                if (player != null) {
+                    player.setState(playerMetadataPacket.state);
+                    player.setBalance(playerMetadataPacket.chips);
+                    player.setName(playerMetadataPacket.name);
+                    player.setCurrentBetStage(playerMetadataPacket.currentBetStage);
+                    if (player.getId().equals(playerController.getId())) {
+                        view.update();
+                    }
                 }
                 break;
             }
             case ProtocolInfo.GAME_METADATA_PACKET: {
                 GameMetadataPacket gameMetadataPacket = (GameMetadataPacket) packet;
-                this.setState(gameMetadataPacket.state);
+                setState(gameMetadataPacket.state);
                 setId(gameMetadataPacket.id);
+                setPlayerTurn(gameMetadataPacket.currentPlayerTurn);
                 view.getBetSection().setProgress((gameMetadataPacket.tick * 1.0) / (gameMetadataPacket.maxTick * 1.0));
                 if (!alreadyRender) {
                     this.alreadyRender = true;
@@ -148,37 +153,47 @@ public class GameController extends Game {
             case ProtocolInfo.CARD_TOGGLE_FLIP_PACKET: {
                 CardToggleFlipPacket cardToggleFlipPacket = (CardToggleFlipPacket) packet;
                 CardController card = cards.get(cardToggleFlipPacket.id);
-                card.toggleFlip();
+                if (card != null) {
+                    card.toggleFlip();
+                }
                 break;
             }
             case ProtocolInfo.CARD_SPAWN_PACKET: {
                 CardSpawnPacket cardSpawnPacket = (CardSpawnPacket) packet;
                 PlayerController player = players.get(cardSpawnPacket.playerId);
                 var card = new CardController(cardSpawnPacket.id ,cardSpawnPacket.number, cardSpawnPacket.suit, cardSpawnPacket.flip, player.getSeat());
-                cards.put(card.getId(), card);
-                card.spawn();
+                if (card != null) {
+                    cards.put(card.getId(), card);
+                    card.spawn();
+                }
                 break;
             }
             case ProtocolInfo.CARD_DE_SPAWN_PACKET: {
                 CardDeSpawnPacket cardDeSpawnPacket = (CardDeSpawnPacket) packet;
                 CardController card = cards.get(cardDeSpawnPacket.id);
-                card.deSpawn();
-                cards.remove(card.getId());
+                if (card != null) {
+                    card.deSpawn();
+                    cards.remove(card.getId());
+                }
                 break;
             }
             case ProtocolInfo.CHIP_SPAWN_PACKET: {
                 ChipSpawnPacket chipSpawnPacket = (ChipSpawnPacket) packet;
                 PlayerController player = players.get(chipSpawnPacket.playerId);
-                var chip = new ChipController(chipSpawnPacket.id, chipSpawnPacket.type, player.getSeat());
-                chips.put(chip.getId(), chip);
-                chip.spawn();
+                if (player != null) {
+                    var chip = new ChipController(chipSpawnPacket.id, chipSpawnPacket.type, player.getSeat());
+                    chips.put(chip.getId(), chip);
+                    chip.spawn();
+                }
                 break;
             }
             case ProtocolInfo.CHIP_DE_SPAWN_PACKET: {
                 ChipDeSpawnPacket chipDeSpawnPacket = (ChipDeSpawnPacket) packet;
                 ChipController chip = chips.get(chipDeSpawnPacket.id);
-                chip.deSpawn();
-                chips.remove(chip.getId());
+                if (chip != null) {
+                    chip.deSpawn();
+                    chips.remove(chip.getId());
+                }
                 break;
             }
             default:
