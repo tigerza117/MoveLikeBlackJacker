@@ -207,7 +207,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                 }
                             }
 
-                            boolean isFlip = i == 0 && dealer.getInventory().getCards().size() == 1;
+                            boolean isFlip = i == 0 && dealer.getInventory().getCards().size() == 0;
                             if (dealer.getInventory().getCards().size() < 2) {
                                 dealer.pickUpCard(isFlip);
                             }
