@@ -39,6 +39,7 @@ public class Network {
         this.registerPacket(ProtocolInfo.PLAYER_JOIN_PACKET, PlayerJoinPacket.class);
         this.registerPacket(ProtocolInfo.PLAYER_LEAVE_PACKET, PlayerLeavePacket.class);
         this.registerPacket(ProtocolInfo.PLAYER_METADATA_PACKET, PlayerMetadataPacket.class);
+        this.registerPacket(ProtocolInfo.PLAYER_BET_STACK_PACKET, PlayerBetStackPacket.class);
     }
 
 }

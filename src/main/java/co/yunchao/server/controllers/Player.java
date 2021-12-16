@@ -62,6 +62,8 @@ public class Player extends co.yunchao.base.models.Player {
                 PlayerActionPacket actionPacket = (PlayerActionPacket) packet;
                 if (getGame() != null) {
                     switch (actionPacket.action) {
+                        case CLEAR_BET:
+                            clearBet();
                         case CONFIRM_BET:
                             confirmBet();
                         case STAND:
@@ -81,7 +83,7 @@ public class Player extends co.yunchao.base.models.Player {
             case ProtocolInfo.PLAYER_BET_STACK_PACKET:
                 PlayerBetStackPacket playerBetStackPacket = (PlayerBetStackPacket) packet;
                 if (getGame() != null) {
-                    stackCurrentBetStage(playerBetStackPacket.type);
+                    stackCurrentBetStage(playerBetStackPacket.type, playerBetStackPacket.amount);
                 }
                 break;
             default:
@@ -129,7 +131,6 @@ public class Player extends co.yunchao.base.models.Player {
     @Override
     public void confirmBet() {
         if (canConfirmBet()) {
-            this.setBalance(getBalance() - getCurrentBetStage());
             setState(PlayerInGameState.READY);
             log("Confirm bet success " + getCurrentBetStage() + "$");
         }
@@ -161,12 +162,20 @@ public class Player extends co.yunchao.base.models.Player {
     }
 
     @Override
-    public void stackCurrentBetStage(ChipType chipType) {
-        int amount = chipType.getAmount();
-        if (canStackCurrentBetStage(amount)) {
-            getInventory().putChip(new Chip(chipType));
-            setCurrentBetStage(getCurrentBetStage() + amount);
-            log("stack bet " + amount + "$ total bet " + getCurrentBetStage() + "$");
+    public void clearBet() {
+        getInventory().clearChips();
+        setBalance(getBalance() + getCurrentBetStage());
+    }
+
+    @Override
+    public void stackCurrentBetStage(ChipType chipType, int amount) {
+        int total = chipType.getAmount() * amount;
+        if (canStackCurrentBetStage(total)) {
+            for (int i = 0; i < amount; i++) {
+                getInventory().putChip(new Chip(chipType));
+            }
+            setCurrentBetStage(getCurrentBetStage() + total);
+            log("stack bet " + total + "$ total bet " + getCurrentBetStage() + "$");
         }
     }
 

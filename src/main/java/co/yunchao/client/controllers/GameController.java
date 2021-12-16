@@ -91,20 +91,18 @@ public class GameController extends Game {
                 PlayerController player = playerController;
                 player.setGameController(this);
                 play("Sparkle_Pop_01.wav");
-                System.out.println("Player " + playerJoinPacket.id + " has been join the game.");
-                if (playerJoinPacket.id != playerController.getId()) {
+                if (!playerJoinPacket.id.equals(playerController.getId())) {
                     player = new PlayerController(playerJoinPacket.id, playerJoinPacket.name, playerJoinPacket.isDealer);
                 }
                 if (!player.isDealer()) {
                     player.setOffset(new Offset(playerJoinPacket.offsetX, playerJoinPacket.offsetY));
-                    System.out.println("Offset " + player.getOffset().getX() + ":" + player.getOffset().getY());
                     player.sit(new Seat(player.getOffset()));
                 } else {
                     Seat seat = new Seat(new Offset(876, 40));
                     seat.setIsDealer(true);
                     player.sit(seat);
                 }
-
+                System.out.println("Player " + player.getName() + " has been join the game.");
                 players.put(player.getId(), player);
                 break;
             }
@@ -138,7 +136,6 @@ public class GameController extends Game {
                 }
                 players.forEach((uuid, player) -> {
                     if (!player.isDealer()) {
-                        System.out.println(gameMetadataPacket.currentPlayerTurn.equals(player.getId()) + "");
                         if (gameMetadataPacket.currentPlayerTurn.equals(player.getId())) {
                             player.getSeat().myTurn();
                         } else {

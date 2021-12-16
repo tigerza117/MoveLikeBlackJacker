@@ -14,7 +14,7 @@ public class ChipController extends Chip {
     public ChipController(UUID id, ChipType type, Seat seat) {
         super(id, type);
         this.seat = seat;
-        this.view = new ChipEntity(type.name());
+        this.view = new ChipEntity(type.name().toLowerCase());
         seat.addChipBet(view);
     }
 

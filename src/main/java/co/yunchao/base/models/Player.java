@@ -74,6 +74,7 @@ public abstract class Player{
 
     public void setCurrentBetStage(int currentBetStage) {
         this.currentBetStage = currentBetStage;
+        setBalance(getBalance() - currentBetStage);
     }
 
     public void setGame(Game game) {
@@ -145,7 +146,11 @@ public abstract class Player{
     }
 
     public boolean canStackCurrentBetStage(int amount) {
-        return getBalance() - (getCurrentBetStage() + amount) >= 0;
+        return isIdle() && getBalance() - (getCurrentBetStage() + amount) >= 0 && (getCurrentBetStage() + amount <= 2000);
+    }
+
+    public void stackCurrentBetStage(ChipType chipType) {
+        stackCurrentBetStage(chipType, 1);
     }
 
     public abstract void handler(DataPacket packet);
@@ -164,5 +169,7 @@ public abstract class Player{
 
     public abstract void doubleDown();
 
-    public abstract void stackCurrentBetStage(ChipType chipType);
+    public abstract void clearBet();
+
+    public abstract void stackCurrentBetStage(ChipType chipType, int amount);
 }
