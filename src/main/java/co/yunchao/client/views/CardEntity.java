@@ -24,7 +24,7 @@ public class CardEntity extends Group {
         play("Cards_Action.wav");
         var animation = animationBuilder(getGameScene())
                 .interpolator(Interpolators.LINEAR.EASE_OUT())
-                .duration(Duration.seconds(1))
+                .duration(Duration.seconds(0.3))
                 .translate(this)
                 .from(new Point2D(50, -500))
                 .to(new Point2D(0, 0));
