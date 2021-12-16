@@ -48,26 +48,32 @@ public class OptionsModal extends SubScene {
         fullScreen.getStyleClass().add("big-check-box");
 
         fullHD_btn = OptionsBtn.create("options/full_hd", () -> {
-            System.out.println("FULL HD RESOLUTION SELECTED!");
-            fullHD_btn.setEffect(glow);
-            HD_btn.setEffect(null);
-            SD_btn.setEffect(null);
-            fullScreenCheck = "1";
-            fullHD_btn.effectProperty().setValue(glow);
+            if(!fullScreen.isSelected()) {
+                System.out.println("FULL HD RESOLUTION SELECTED!");
+                fullHD_btn.setEffect(glow);
+                HD_btn.setEffect(null);
+                SD_btn.setEffect(null);
+                fullScreenCheck = "1";
+                fullHD_btn.effectProperty().setValue(glow);
+            }
         });
         HD_btn = OptionsBtn.create("options/hd_btn", () -> {
-            System.out.println("HD RESOLUTION SELECTED!");
-            HD_btn.setEffect(glow);
-            fullHD_btn.setEffect(null);
-            SD_btn.setEffect(null);
-            fullScreenCheck = "2";
+            if(!fullScreen.isSelected()) {
+                System.out.println("HD RESOLUTION SELECTED!");
+                HD_btn.setEffect(glow);
+                fullHD_btn.setEffect(null);
+                SD_btn.setEffect(null);
+                fullScreenCheck = "2";
+            }
         });
         SD_btn = OptionsBtn.create("options/sd_btn", () -> {
-            System.out.println("SD RESOLUTION SELECTED!");
-            SD_btn.setEffect(glow);
-            fullHD_btn.setEffect(null);
-            HD_btn.setEffect(null);
-            fullScreenCheck = "3";
+            if(!fullScreen.isSelected()) {
+                System.out.println("SD RESOLUTION SELECTED!");
+                SD_btn.setEffect(glow);
+                fullHD_btn.setEffect(null);
+                HD_btn.setEffect(null);
+                fullScreenCheck = "3";
+            }
         });
 
 
@@ -78,22 +84,22 @@ public class OptionsModal extends SubScene {
             System.out.println("Full screen toggle : " + fullScreen.isSelected());
             getSettings().globalMusicVolumeProperty().setValue((masterVol.getValue()/100)*(mscVol.getValue()/100));
             getSettings().globalSoundVolumeProperty().setValue((masterVol.getValue()/100)*(sfxVol.getValue()/100));
-            if(fullScreenCheck.equals("1") && !fullScreen.isSelected()){
+            if(fullScreenCheck == "1" && !fullScreen.isSelected()){
+                getPrimaryStage().setFullScreen(false);
                 getPrimaryStage().setWidth(1920);
                 getPrimaryStage().setHeight(1080);
-                getPrimaryStage().setFullScreen(false);
                 fullScreen.setSelected(false);
             }
-            else if(fullScreenCheck.equals("2") && !fullScreen.isSelected()){
+            else if(fullScreenCheck == "2" && !fullScreen.isSelected()){
+                getPrimaryStage().setFullScreen(false);
                 getPrimaryStage().setWidth(1280);
                 getPrimaryStage().setHeight(720);
-                getPrimaryStage().setFullScreen(false);
                 fullScreen.setSelected(false);
             }
-            else if(fullScreenCheck.equals("3") && !fullScreen.isSelected()){
+            else if(fullScreenCheck == "3" && !fullScreen.isSelected()){
+                getPrimaryStage().setFullScreen(false);
                 getPrimaryStage().setWidth(640);
                 getPrimaryStage().setHeight(480);
-                getPrimaryStage().setFullScreen(false);
                 fullScreen.setSelected(false);
             }
             else if(fullScreen.isSelected()){
@@ -105,10 +111,9 @@ public class OptionsModal extends SubScene {
             }
             else if(!fullScreen.isSelected()){
                 fullScreenCheck = "2";
+                getPrimaryStage().setFullScreen(false);
                 getPrimaryStage().setWidth(1280);
                 getPrimaryStage().setHeight(720);
-                getPrimaryStage().setFullScreen(false);
-                fullScreen.setSelected(false);
                 HD_btn.setEffect(glow);
             }
             close();

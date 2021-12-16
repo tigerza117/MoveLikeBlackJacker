@@ -2,6 +2,7 @@ package co.yunchao.client.views;
 
 import com.almasb.fxgl.app.scene.IntroScene;
 import javafx.scene.CacheHint;
+import javafx.scene.Cursor;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -16,6 +17,7 @@ public class Intro extends IntroScene {
 
     @Override
     public void startIntro() {
+        getContentRoot().setCursor(Cursor.NONE);
         try {
             var file = getClass().getClassLoader().getResource("video/intro.mp4");
             if (file != null) {
