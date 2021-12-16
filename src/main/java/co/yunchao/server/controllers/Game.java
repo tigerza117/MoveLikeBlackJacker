@@ -277,7 +277,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                         break;
                     case PAY_OUT:
                         for (Player player : clonedPlayer) {
-                            if (!player.isDealer() && !player.isSkip()) {
+                            if (!player.isDealer() && !player.isSkip() && !player.isIdle()) {
                                 var result = player.getResult(dealer);
                                 var ratio = 0.0;
 

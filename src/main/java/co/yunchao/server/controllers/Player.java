@@ -225,6 +225,7 @@ public class Player extends co.yunchao.base.models.Player {
         } else if(inv.isBust()) {
             setState(PlayerInGameState.BUST);
             setScore("Busted", ScoreColorType.RED);
+            playSound("Player_Lose");
         } else {
             if (isDealer() && inv.getCards().size() == 2) {
                 setScore(inv.getCards().get(0).getPoint() + " + ?");
