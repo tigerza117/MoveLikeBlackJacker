@@ -142,7 +142,7 @@ public abstract class Player {
 
     public boolean canStackCurrentBetStage(int amount) {
         var totalAfter = getCurrentBetStage() + amount;
-        return isIdle() && ((getBalance() - amount) >= 0) && (totalAfter <= 2000) && getGame() != null && getGame().isInBet() && isMyTurn();
+        return isIdle() && ((getBalance() - amount) >= 0) && (totalAfter <= 2000) && getGame() != null && getGame().isInBet();
     }
 
     public boolean isMyTurn() {

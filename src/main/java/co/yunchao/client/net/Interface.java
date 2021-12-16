@@ -57,7 +57,7 @@ public class Interface {
 
     public void putPacket(DataPacket packet) {
         try {
-            channel.writeAndFlush(packet).sync();
+            channel.writeAndFlush(packet, channel.voidPromise()).sync();
         } catch (InterruptedException e) {
             System.out.println("Fail to send packet");
         }

@@ -91,13 +91,7 @@ public class Player extends co.yunchao.base.models.Player {
 
     @Override
     public void putPacket(DataPacket packet) {
-        if (channel != null) {
-            try {
-                channel.writeAndFlush(packet).sync();
-            } catch (InterruptedException e) {
-                System.out.println("Fail to send packet");
-            }
-        }
+        channel.writeAndFlush(packet, channel.voidPromise());
     }
 
     @Override
