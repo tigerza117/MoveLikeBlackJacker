@@ -14,6 +14,10 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class OptionsModal extends SubScene {
     FadeTransition fade;
+    CheckBox fullScreen = new CheckBox();
+    static Slider masterVol = new Slider(0, 100, 50);
+    static Slider mscVol = new Slider(0, 100, 50);
+    static Slider sfxVol = new Slider(0, 100, 50);
 
     public OptionsModal(){
         Rectangle shadow = new Rectangle();
@@ -28,13 +32,8 @@ public class OptionsModal extends SubScene {
 
 
         CheckBox fullScreen = new CheckBox();
-        Slider masterVol = new Slider(0, 100, 0);
-        Slider mscVol = new Slider(0, 100, 0);
-        Slider sfxVol = new Slider(0, 100, 0);
         fullScreen.getStyleClass().add("big-check-box");
 
-        mscVol.valueProperty().bindBidirectional(getSettings().globalMusicVolumeProperty());
-        sfxVol.valueProperty().bindBidirectional(getSettings().globalSoundVolumeProperty());
 
         var fullHD_btn = Button.create("options/full_hd", () -> {
             System.out.println("FULL HD RESOLUTION SELECTED!");
@@ -50,6 +49,8 @@ public class OptionsModal extends SubScene {
             System.out.println("music vol. : " + (int) mscVol.getValue());
             System.out.println("sfx vol. : " + (int) sfxVol.getValue());
             System.out.println("Full screen toggle : " + fullScreen.isSelected());
+            getSettings().globalMusicVolumeProperty().setValue((masterVol.getValue()/100)*(mscVol.getValue()/100));
+            getSettings().globalSoundVolumeProperty().setValue((masterVol.getValue()/100)*(sfxVol.getValue()/100));
             close();
         });
 
@@ -124,5 +125,17 @@ public class OptionsModal extends SubScene {
             getSceneService().popSubScene();
             fade.setOnFinished(null);
         });
+    }
+
+    public static Slider getMasterVol() {
+        return masterVol;
+    }
+
+    public static Slider getMscVol() {
+        return mscVol;
+    }
+
+    public static Slider getSfxVol() {
+        return sfxVol;
     }
 }

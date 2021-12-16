@@ -36,7 +36,12 @@ public class MainMenu extends FXGLMenu {
     public void onCreate() {
         super.onCreate();
         Music music = getAssetLoader().load(AssetType.MUSIC, "main_menu_bg.mp3");
+        getSettings().globalSoundVolumeProperty().setValue((OptionsModal.getMasterVol().getValue()/100)*(OptionsModal.getSfxVol().getValue()/100));
+        getSettings().globalMusicVolumeProperty().setValue((OptionsModal.getMasterVol().getValue()/100)*(OptionsModal.getMscVol().getValue()/100));
         getAudioPlayer().loopMusic(music);
+
+        System.out.println(OptionsModal.getMasterVol().getValue() + " " + OptionsModal.getMscVol().getValue());
+
         getContentRoot().getChildren().add(group);
     }
 
