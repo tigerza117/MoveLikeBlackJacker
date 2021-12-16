@@ -74,7 +74,7 @@ public class OptionsModal extends SubScene {
                 fullScreen.setSelected(false);
             }
             else{
-                getPrimaryStage().setFullScreen(true);
+                getPrimaryStage().setFullScreen(fullScreen.isSelected());
                 resoCheck = "0";
             }
             close();
