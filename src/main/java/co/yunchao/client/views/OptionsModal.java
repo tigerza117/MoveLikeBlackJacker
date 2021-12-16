@@ -15,12 +15,12 @@ import org.jetbrains.annotations.NotNull;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class OptionsModal extends SubScene {
-    DropShadow glow;
+    static DropShadow glow;
     FadeTransition fade;
     CheckBox fullScreen;
-    Node fullHD_btn;
-    Node HD_btn;
-    Node SD_btn;
+    static Node fullHD_btn;
+    static Node HD_btn;
+    static Node SD_btn;
     Node saveBtn;
     static Slider masterVol = new Slider(0, 100, 50);
     static Slider mscVol = new Slider(0, 100, 50);
@@ -53,6 +53,7 @@ public class OptionsModal extends SubScene {
             HD_btn.setEffect(null);
             SD_btn.setEffect(null);
             fullScreenCheck = "1";
+            fullHD_btn.effectProperty().setValue(glow);
         });
         HD_btn = Button.create("options/hd_btn", () -> {
             System.out.println("HD RESOLUTION SELECTED!");
@@ -68,6 +69,8 @@ public class OptionsModal extends SubScene {
             HD_btn.setEffect(null);
             fullScreenCheck = "3";
         });
+
+
         saveBtn = Button.create("options/save_btn", () -> {
             System.out.println("master vol. : " + (int) masterVol.getValue());
             System.out.println("music vol. : " + (int) mscVol.getValue());
@@ -95,6 +98,9 @@ public class OptionsModal extends SubScene {
             }
             else if(fullScreen.isSelected()){
                 getPrimaryStage().setFullScreen(fullScreen.isSelected());
+                fullHD_btn.setEffect(null);
+                HD_btn.setEffect(null);
+                SD_btn.setEffect(null);
                 fullScreenCheck = "0";
             }
             else if(!fullScreen.isSelected()){
@@ -103,6 +109,7 @@ public class OptionsModal extends SubScene {
                 getPrimaryStage().setHeight(720);
                 getPrimaryStage().setFullScreen(false);
                 fullScreen.setSelected(false);
+                HD_btn.setEffect(glow);
             }
             close();
         });
@@ -188,5 +195,21 @@ public class OptionsModal extends SubScene {
 
     public static Slider getSfxVol() {
         return sfxVol;
+    }
+
+    public static Node getFullHD_btn() {
+        return fullHD_btn;
+    }
+
+    public static Node getHD_btn() {
+        return HD_btn;
+    }
+
+    public static Node getSD_btn() {
+        return SD_btn;
+    }
+
+    public static DropShadow getGlow() {
+        return glow;
     }
 }

@@ -2,6 +2,7 @@ package co.yunchao.client.controllers;
 
 import co.yunchao.client.net.NetworkEngine;
 import co.yunchao.client.views.Intro;
+import co.yunchao.client.views.OptionsModal;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.*;
@@ -73,6 +74,7 @@ public class MainController extends GameApplication {
         super.onPreInit();
         getPrimaryStage().setWidth(1280);
         getPrimaryStage().setHeight(720);
+        OptionsModal.getHD_btn().setEffect(OptionsModal.getGlow());
         getPrimaryStage().setMaxWidth(1920);
         getPrimaryStage().setMaxHeight(1080);
         getPrimaryStage().setFullScreen(false);
