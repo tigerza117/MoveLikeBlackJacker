@@ -15,6 +15,8 @@ public class Player extends co.yunchao.base.models.Player {
     private Server server;
     private Channel channel;
     private final Inventory inventory;
+    private String currentScore;
+    private ScoreColorType currentColorType;
 
     public Player(UUID uuid, String name, Channel channel, Server server) {
         this(uuid, name, false);
@@ -260,9 +262,17 @@ public class Player extends co.yunchao.base.models.Player {
         setCurrentBetStage(0);
         getInventory().clearCards();
         getInventory().clearChips();
+        setScore("");
     }
 
     public void sendData(Player player) {
+        {
+            SetScorePacket packet = new SetScorePacket();
+            packet.playerId = getId();
+            packet.text = currentScore;
+            packet.colorType = currentColorType;
+            player.putPacket(packet);
+        }
         getInventory().getCards().forEach(card -> {
             CardSpawnPacket packet = new CardSpawnPacket();
             packet.playerId = getId();
@@ -313,6 +323,8 @@ public class Player extends co.yunchao.base.models.Player {
 
     public void setScore(String text, ScoreColorType colorType) {
         Game game = getGame();
+        currentScore = text;
+        currentColorType = colorType;
         if (game != null) {
             SetScorePacket packet = new SetScorePacket();
             packet.playerId = getId();

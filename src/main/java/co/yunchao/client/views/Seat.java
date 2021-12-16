@@ -22,7 +22,6 @@ public class Seat extends Group {
     private final Text textBetTotal;
     private final Text balance;
     private final Texture textureIcon;
-    private final Texture textureDealerScore;
     private final Texture scorePane;
     private final Text textEachScore;
     private boolean isDealer = false;
@@ -35,7 +34,6 @@ public class Seat extends Group {
         this.cardEntities = new ArrayList<>();
         this.chipEntityBet = new ArrayList<>();
         this.textureIcon = FXGL.texture("bet_section/player_icon.png");
-        this.textureDealerScore = FXGL.texture("bet_section/dealer_score.png");
         this.balance = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 22);
         this.textEachScore = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 16);
         this.scorePane = FXGL.texture("bet_section/score_pane.png");
@@ -43,15 +41,12 @@ public class Seat extends Group {
         setTranslateX(player.getOffset().getX());
         setTranslateY(player.getOffset().getY());
 
-        scorePane.setTranslateX(0);
-        scorePane.setTranslateY(0);
         scorePane.setVisible(false);
 
         textEachScore.setText("");
         textEachScore.setTranslateY(25);
         textEachScore.setWrappingWidth(scorePane.getWidth());
         textEachScore.setTextAlignment(TextAlignment.CENTER);
-        textEachScore.setVisible(false);
 
         balance.setText("");
         balance.setTranslateX(41);
@@ -73,10 +68,7 @@ public class Seat extends Group {
         textName.setTextAlignment(TextAlignment.CENTER);
         textName.setVisible(false);
 
-        textureDealerScore.setVisible(false);
-
-        getChildren().addAll(textName, textureIcon, textureDealerScore
-                , textBetTotal, balance, scorePane, textEachScore);
+        getChildren().addAll(textName, textureIcon, textBetTotal, balance, scorePane, textEachScore);
     }
 
     public void addCard(CardEntity cardEntity) {
@@ -110,16 +102,12 @@ public class Seat extends Group {
     }
 
     public void sit() {
-
         if (!isDealer) {
             textName.setVisible(true);
             textBetTotal.setVisible(true);
             textureIcon.setVisible(true);
             balance.setVisible(true);
-            scorePane.setVisible(true);
-            textEachScore.setVisible(true);
         }
-
         getGameScene().getContentRoot().getChildren().add(this);
     }
 
@@ -141,16 +129,6 @@ public class Seat extends Group {
         textBetTotal.setText(text);
     }
 
-    public void setScore(String text) {
-        textEachScore.setText(text);
-        textureDealerScore.setVisible(true);
-    }
-
-    public void clearScore() {
-        textEachScore.setText("");
-        textureDealerScore.setVisible(false);
-    }
-
     public void myTurn() {
         DropShadow playerGlow = new DropShadow();
         playerGlow.setRadius(80);
@@ -170,5 +148,8 @@ public class Seat extends Group {
     }
 
     public void setScore(String text, ScoreColorType colorType) {
+        textEachScore.setText(text);
+        textEachScore.setStyle("-fx-text-inner-color: " + colorType.name().toLowerCase() + ";");
+        scorePane.setVisible(!text.isBlank());
     }
 }
