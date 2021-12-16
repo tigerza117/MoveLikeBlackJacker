@@ -282,7 +282,7 @@ public class Player extends co.yunchao.base.models.Player {
         });
         getInventory().getChips().forEach(chip -> {
             ChipSpawnPacket packet = new ChipSpawnPacket();
-            packet.playerId = player.getId();
+            packet.playerId = getId();
             packet.id = chip.getId();
             packet.type = chip.getType();
             player.putPacket(packet);
