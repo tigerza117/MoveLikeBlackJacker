@@ -2,6 +2,7 @@ package co.yunchao.server.controllers;
 
 import co.yunchao.base.enums.ChipType;
 import co.yunchao.base.enums.Result;
+import co.yunchao.base.enums.ScoreColorType;
 import co.yunchao.base.models.Chip;
 import co.yunchao.base.models.Inventory;
 import co.yunchao.net.packets.*;
@@ -218,11 +219,16 @@ public class Player extends co.yunchao.base.models.Player {
         inv.putCard(card);
         if (inv.isBlackJack()) {
             setState(PlayerInGameState.WINING);
-            playSound("Game_Win_3.wav");
-            log("is wining");
+            setScore("BlackJack");
         } else if(inv.isBust()) {
             setState(PlayerInGameState.BUST);
-            log("is bust");
+            setScore("Bust", ScoreColorType.RED);
+        } else {
+            if (isDealer() && inv.getCards().size() == 2) {
+                setScore(inv.getCards().get(0).getPoint() + " + ?");
+            } else {
+                setScore(inv.getPoint() + "");
+            }
         }
     }
 
@@ -299,6 +305,21 @@ public class Player extends co.yunchao.base.models.Player {
 
     public Server getServer() {
         return server;
+    }
+
+    public void setScore(String text) {
+        setScore(text, ScoreColorType.GOLD);
+    }
+
+    public void setScore(String text, ScoreColorType colorType) {
+        Game game = getGame();
+        if (game != null) {
+            SetScorePacket packet = new SetScorePacket();
+            packet.playerId = getId();
+            packet.text = text;
+            packet.colorType = colorType;
+            game.putPacket(packet);
+        }
     }
 }
 

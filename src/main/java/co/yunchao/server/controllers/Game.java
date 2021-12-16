@@ -1,5 +1,6 @@
 package co.yunchao.server.controllers;
 
+import co.yunchao.base.enums.ScoreColorType;
 import co.yunchao.base.models.Deck;
 import co.yunchao.base.enums.GameState;
 import co.yunchao.base.enums.Result;
@@ -199,7 +200,12 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                     player.pickUpCard();
                                     Thread.sleep(1000);
                                 }
+                                if (player.isWining()) {
+                                    Thread.sleep(1000);
+                                    player.playSound("Game_Win_3.wav");
+                                }
                             }
+
                             if (dealer.getInventory().getCards().size() < 2) {
                                 boolean isFlip = i == 0;
                                 dealer.pickUpCard(isFlip);
@@ -207,6 +213,8 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                             Thread.sleep(1000);
                         }
                         if (dealer.isWining()) {
+                            Thread.sleep(1000);
+                            dealer.getInventory().toggleFlipCard(dealer.getInventory().getCards().get(1));
                             setState(GameState.PAY_OUT);
                         } else {
                             setState(GameState.IN_GAME);
@@ -228,7 +236,6 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                     System.out.println(player.getName() + "[" + player.getInventory().getPoint() + "] Turn > " + player.getState());
                                     switch (player.getState()) {
                                         case BUST:
-                                            player.playSound("Player_Lose.wav");
                                         case SKIP:
                                         case IDLE:
                                         case WINING:
@@ -273,7 +280,6 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                 var result = player.getResult(dealer);
                                 var ratio = 0.0;
                                 if (!result.equals(Result.LOSE) && !player.isBust()) {
-                                    System.out.println(player.getName() + " " + result.name() + " Wining");
                                     switch (result) {
                                         case BLACKJACK:
                                             ratio = 2.5;
@@ -286,6 +292,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
                                         case HIGH_POINT:
                                             ratio = 2;
                                             player.playSound("Small_Win.wav");
+                                            player.setScore("High score - " + player.getInventory().getPoint());
                                             break;
                                         default:
                                             ratio = 0;
@@ -294,6 +301,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
 
                                 if (ratio == 0 && !player.isBust()) {
                                     player.playSound("Player_Lose.wav");
+                                    player.setScore("Lose - " + player.getInventory().getPoint());
                                 }
 
                                 player.getReward(ratio);
