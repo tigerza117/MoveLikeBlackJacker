@@ -37,18 +37,31 @@ public class OptionsModal extends SubScene {
 
         var fullHD_btn = Button.create("options/full_hd", () -> {
             System.out.println("FULL HD RESOLUTION SELECTED!");
+            getPrimaryStage().setWidth(1920);
+            getPrimaryStage().setHeight(1080);
+            getPrimaryStage().setFullScreen(false);
+            fullScreen.setSelected(false);
         });
         var HD_btn = Button.create("options/hd_btn", () -> {
             System.out.println("HD RESOLUTION SELECTED!");
+            getPrimaryStage().setWidth(1280);
+            getPrimaryStage().setHeight(720);
+            getPrimaryStage().setFullScreen(false);
+            fullScreen.setSelected(false);
         });
         var SD_btn = Button.create("options/sd_btn", () -> {
             System.out.println("SD RESOLUTION SELECTED!");
+            getPrimaryStage().setWidth(640);
+            getPrimaryStage().setHeight(480);
+            getPrimaryStage().setFullScreen(false);
+            fullScreen.setSelected(false);
         });
         var saveBtn = Button.create("options/save_btn", () -> {
             System.out.println("master vol. : " + (int) masterVol.getValue());
             System.out.println("music vol. : " + (int) mscVol.getValue());
             System.out.println("sfx vol. : " + (int) sfxVol.getValue());
             System.out.println("Full screen toggle : " + fullScreen.isSelected());
+            getPrimaryStage().setFullScreen(fullScreen.isSelected());
             getSettings().globalMusicVolumeProperty().setValue((masterVol.getValue()/100)*(mscVol.getValue()/100));
             getSettings().globalSoundVolumeProperty().setValue((masterVol.getValue()/100)*(sfxVol.getValue()/100));
             close();
