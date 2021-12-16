@@ -91,7 +91,7 @@ public class Player extends co.yunchao.base.models.Player {
 
     @Override
     public void putPacket(DataPacket packet) {
-        channel.writeAndFlush(packet, channel.voidPromise());
+        channel.writeAndFlush(packet);
     }
 
     @Override
