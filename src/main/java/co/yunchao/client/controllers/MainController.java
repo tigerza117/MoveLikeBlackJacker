@@ -10,6 +10,7 @@ import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGL.getPrimaryStage;
 
 public class MainController extends GameApplication {
 
@@ -79,20 +80,19 @@ public class MainController extends GameApplication {
         getPrimaryStage().setMaxWidth(1920);
         getPrimaryStage().setMaxHeight(1080);
         getPrimaryStage().setFullScreen(false);
+        getPrimaryStage().centerOnScreen();
     }
 
     @Override
     protected void initInput() {
         // Press F to trigger loading scene
-        onKeyDown(KeyCode.F, () -> {
-            getGameController().gotoLoading(() -> {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-        });
+        onKeyDown(KeyCode.F, () -> getGameController().gotoLoading(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }));
     }
 
     @Override
