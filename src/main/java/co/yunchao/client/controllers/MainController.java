@@ -10,7 +10,6 @@ import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.almasb.fxgl.dsl.FXGL.getPrimaryStage;
 
 public class MainController extends GameApplication {
 
@@ -18,13 +17,13 @@ public class MainController extends GameApplication {
     private MainMenuController mainMenuController;
     private LoadingController loadingController;
     private StartupController startupController;
-    private MainController mainController = this;
+    private final MainController mainController = this;
 
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setWidth(1920);
         settings.setFullScreenFromStart(true);
-        settings.setHeightFromRatio(16/9.0);
+        settings.setHeightFromRatio(16 / 9.0);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(false);
         settings.setIntroEnabled(true);

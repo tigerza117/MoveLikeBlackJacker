@@ -3,7 +3,8 @@ package co.yunchao.client.controllers;
 import co.yunchao.client.views.Startup;
 import com.almasb.fxgl.app.scene.StartupScene;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 
 public class StartupController {
     private final StartupScene view;

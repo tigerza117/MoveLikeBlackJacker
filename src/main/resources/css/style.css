@@ -1,13 +1,15 @@
 .big-check-box > .box {
-    -fx-padding: .8em ;
+    -fx-padding: .8em;
     -fx-background-color: transparent;
     -fx-border-color: #EFEFEF;
     -fx-border-radius: 5px;
     -fx-border-width: 3px;
 }
+
 .big-check-box > .box > .mark {
     -fx-padding: 1.5em;
 }
+
 .big-check-box:selected .mark {
     -fx-background-color: white;
 }
@@ -17,13 +19,14 @@
     -fx-border-color: transparent;
     -fx-border-width: 3px;
 }
+
 @font-face {
     src: url("./assets/ui/fonts/GRADUATE.ttf");
 }
 
 .text-area {
-    -fx-background-color: rgba(53,89,119,0.0);
-    -fx-border-color: rgba(53,89,119,0.0);
+    -fx-background-color: rgba(53, 89, 119, 0.0);
+    -fx-border-color: rgba(53, 89, 119, 0.0);
     -fx-font-size: 20px;
     -fx-text-fill: #fff;
     -fx-font-family: Graduate;
@@ -38,37 +41,36 @@
     -fx-text-alignment: center;
 }
 
-.text-area .scroll-pane .viewport{
+.text-area .scroll-pane .viewport {
     -fx-background-color: transparent;
 }
 
-.text-area .scroll-pane .content{
+.text-area .scroll-pane .content {
     -fx-background-color: transparent;
 }
 
-.text-field{
-    -fx-background-color: rgba(53,89,119,0.0);
-    -fx-border-color: rgba(53,89,119,0.0);
+.text-field {
+    -fx-background-color: rgba(53, 89, 119, 0.0);
+    -fx-border-color: rgba(53, 89, 119, 0.0);
     -fx-font-size: 40px;
     -fx-text-fill: #09213D;
     -fx-font-family: Graduate;
     -fx-prompt-text-fill: gray;
 }
 
-.progress-bar{
+.progress-bar {
     -fx-box-border: transparent;
 }
 
-.progress-bar .bar{
+.progress-bar .bar {
     -fx-box-border: transparent;
     -fx-background-radius: 25px;
-    -fx-background-color:
-            -fx-box-border,
-            linear-gradient(to right, #AE1010, #EFB820);
+    -fx-background-color: -fx-box-border,
+    linear-gradient(to right, #AE1010, #EFB820);
 }
 
 .progress-bar > .track {
     -fx-control-inner-background: transparent;
-    -fx-background-insets:  0, 1;
+    -fx-background-insets: 0, 1;
     -fx-background-color: transparent;
 }

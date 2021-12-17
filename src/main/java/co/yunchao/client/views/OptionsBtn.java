@@ -14,7 +14,7 @@ public class OptionsBtn {
     }
 
     protected static Node create(String file, String music, Runnable action) {
-        var bg = texture(file+".png");
+        var bg = texture(file + ".png");
 
         var btn = new StackPane(bg);
 
@@ -24,7 +24,7 @@ public class OptionsBtn {
             action.run();
         });
 
-        btn.setOnMouseEntered( e -> btn.setCursor(CursorCall.getCursorClick()));
+        btn.setOnMouseEntered(e -> btn.setCursor(CursorCall.getCursorClick()));
 
         btn.setCache(true);
         btn.setCacheHint(CacheHint.SPEED);

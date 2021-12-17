@@ -8,7 +8,7 @@ public class Chip {
     private UUID id;
     private final ChipType type;
 
-    public Chip(UUID id,ChipType type) {
+    public Chip(UUID id, ChipType type) {
         this(type);
         this.id = id;
     }

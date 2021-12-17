@@ -1,6 +1,6 @@
 package co.yunchao.net.packets;
 
-import co.yunchao.base.enums.*;
+import co.yunchao.base.enums.ChipType;
 import io.netty.buffer.ByteBuf;
 
 import java.util.UUID;

@@ -13,7 +13,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class LeaveModal extends SubScene {
     FadeTransition fade;
 
-    public LeaveModal(Runnable runnable){
+    public LeaveModal(Runnable runnable) {
 
         Rectangle shadow = new Rectangle();
         shadow.setHeight(getAppHeight());
@@ -22,7 +22,7 @@ public class LeaveModal extends SubScene {
         shadow.setOpacity(0.65);
 
         var quitPane = texture("enter_leave/leave_pane.png", getAppWidth(), 290);
-        quitPane.setLayoutY((getAppHeight() / 2.0)-(quitPane.getHeight() / 2));
+        quitPane.setLayoutY((getAppHeight() / 2.0) - (quitPane.getHeight() / 2));
 
         var yesBtn = Button.create("enter_leave/yes_btn", runnable);
         var noBtn = Button.create("enter_leave/no_btn", this::close);
@@ -30,8 +30,8 @@ public class LeaveModal extends SubScene {
 
         Group leaveMenu = new Group(yesBtn, noBtn);
 
-        leaveMenu.setLayoutY((getAppHeight() / 2.0)+(leaveMenu.getBoundsInLocal().getHeight() / 3.5));
-        leaveMenu.setLayoutX((getAppWidth() / 2.0)-(leaveMenu.getBoundsInLocal().getWidth() / 2));
+        leaveMenu.setLayoutY((getAppHeight() / 2.0) + (leaveMenu.getBoundsInLocal().getHeight() / 3.5));
+        leaveMenu.setLayoutX((getAppWidth() / 2.0) - (leaveMenu.getBoundsInLocal().getWidth() / 2));
 
         Group group = new Group(shadow, quitPane, leaveMenu);
         fade = SubSceneAnimation.fade(group);

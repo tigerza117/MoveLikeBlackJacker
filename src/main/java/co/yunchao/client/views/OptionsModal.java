@@ -27,7 +27,7 @@ public class OptionsModal extends SubScene {
     static Slider sfxVol = new Slider(0, 100, 50);
     static String fullScreenCheck = "2";
 
-    public OptionsModal(){
+    public OptionsModal() {
         Rectangle shadow = new Rectangle();
         shadow.setHeight(getAppHeight());
         shadow.setWidth(getAppWidth());
@@ -42,14 +42,14 @@ public class OptionsModal extends SubScene {
         glow.setSpread(.6);
 
         var banner = texture("options/option_pane.png", getGameScene().getAppWidth(), 684);
-        banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
+        banner.setLayoutY((getAppHeight() / 2.0) - (banner.getHeight() / 2));
 
         fullScreen = new CheckBox();
         fullScreen.getStyleClass().add("big-check-box");
         fullScreen.setSelected(true);
 
         fullHD_btn = OptionsBtn.create("options/full_hd", () -> {
-            if(!fullScreen.isSelected()) {
+            if (!fullScreen.isSelected()) {
                 System.out.println("FULL HD RESOLUTION SELECTED!");
                 fullHD_btn.setEffect(glow);
                 HD_btn.setEffect(null);
@@ -59,7 +59,7 @@ public class OptionsModal extends SubScene {
             }
         });
         HD_btn = OptionsBtn.create("options/hd_btn", () -> {
-            if(!fullScreen.isSelected()) {
+            if (!fullScreen.isSelected()) {
                 System.out.println("HD RESOLUTION SELECTED!");
                 HD_btn.setEffect(glow);
                 fullHD_btn.setEffect(null);
@@ -68,7 +68,7 @@ public class OptionsModal extends SubScene {
             }
         });
         SD_btn = OptionsBtn.create("options/sd_btn", () -> {
-            if(!fullScreen.isSelected()) {
+            if (!fullScreen.isSelected()) {
                 System.out.println("SD RESOLUTION SELECTED!");
                 SD_btn.setEffect(glow);
                 fullHD_btn.setEffect(null);
@@ -83,38 +83,34 @@ public class OptionsModal extends SubScene {
             System.out.println("music vol. : " + (int) mscVol.getValue());
             System.out.println("sfx vol. : " + (int) sfxVol.getValue());
             System.out.println("Full screen toggle : " + fullScreen.isSelected());
-            getSettings().globalMusicVolumeProperty().setValue((masterVol.getValue()/100)*(mscVol.getValue()/100));
-            getSettings().globalSoundVolumeProperty().setValue((masterVol.getValue()/100)*(sfxVol.getValue()/100));
-            if(fullScreenCheck == "1" && !fullScreen.isSelected()){
+            getSettings().globalMusicVolumeProperty().setValue((masterVol.getValue() / 100) * (mscVol.getValue() / 100));
+            getSettings().globalSoundVolumeProperty().setValue((masterVol.getValue() / 100) * (sfxVol.getValue() / 100));
+            if (fullScreenCheck == "1" && !fullScreen.isSelected()) {
                 getPrimaryStage().setFullScreen(false);
                 getPrimaryStage().setWidth(1920);
                 getPrimaryStage().setHeight(1080);
                 fullScreen.setSelected(false);
                 getPrimaryStage().centerOnScreen();
-            }
-            else if(fullScreenCheck == "2" && !fullScreen.isSelected()){
+            } else if (fullScreenCheck == "2" && !fullScreen.isSelected()) {
                 getPrimaryStage().setFullScreen(false);
                 getPrimaryStage().setWidth(1280);
                 getPrimaryStage().setHeight(720);
                 fullScreen.setSelected(false);
                 getPrimaryStage().centerOnScreen();
-            }
-            else if(fullScreenCheck == "3" && !fullScreen.isSelected()){
+            } else if (fullScreenCheck == "3" && !fullScreen.isSelected()) {
                 getPrimaryStage().setFullScreen(false);
                 getPrimaryStage().setWidth(640);
                 getPrimaryStage().setHeight(480);
                 fullScreen.setSelected(false);
                 getPrimaryStage().centerOnScreen();
-            }
-            else if(fullScreen.isSelected()){
+            } else if (fullScreen.isSelected()) {
                 getPrimaryStage().setFullScreen(fullScreen.isSelected());
                 fullHD_btn.setEffect(null);
                 HD_btn.setEffect(null);
                 SD_btn.setEffect(null);
                 fullScreenCheck = "0";
                 getPrimaryStage().centerOnScreen();
-            }
-            else if(!fullScreen.isSelected()){
+            } else if (!fullScreen.isSelected()) {
                 fullScreenCheck = "2";
                 getPrimaryStage().setFullScreen(false);
                 getPrimaryStage().setWidth(1280);
@@ -129,8 +125,8 @@ public class OptionsModal extends SubScene {
         HD_btn.setTranslateX(330);
         SD_btn.setTranslateX(540);
 
-        fullScreen.setTranslateY((getAppHeight()/2.0) - 120);
-        fullScreen.setTranslateX((getAppWidth()/2.0) - 200);
+        fullScreen.setTranslateY((getAppHeight() / 2.0) - 120);
+        fullScreen.setTranslateX((getAppWidth() / 2.0) - 200);
 
         masterVol.setTranslateY(-40);
         masterVol.setPrefWidth(630);
@@ -151,12 +147,12 @@ public class OptionsModal extends SubScene {
         sfxText.setLayoutY(120);
 
         var separateLine = texture("options/separate_line.png");
-        separateLine.setLayoutX((getAppWidth()/2.0)-250);
+        separateLine.setLayoutX((getAppWidth() / 2.0) - 250);
         separateLine.setLayoutY(310);
 
         Group text = new Group(resolutionText, fullScreenText, masText, mscText, sfxText);
-        text.setLayoutY((getAppHeight() / 3.0)+(text.getBoundsInLocal().getHeight() / 1.8));
-        text.setLayoutX((getAppWidth() / 4.0)-(text.getBoundsInLocal().getWidth() / 2.0));
+        text.setLayoutY((getAppHeight() / 3.0) + (text.getBoundsInLocal().getHeight() / 1.8));
+        text.setLayoutX((getAppWidth() / 4.0) - (text.getBoundsInLocal().getWidth() / 2.0));
 
         Group sliders = new Group(masterVol, mscVol, sfxVol);
         sliders.setTranslateX(110);
@@ -166,14 +162,14 @@ public class OptionsModal extends SubScene {
 
         fullScreen.getStylesheets().add("/css/style.css");
 
-        saveBtn.setLayoutY((getAppHeight() / 2.0)+(saveBtn.getBoundsInLocal().getHeight() / 2)+180);
-        saveBtn.setLayoutX((getAppWidth() / 2.0)-(saveBtn.getBoundsInLocal().getWidth() / 3));
+        saveBtn.setLayoutY((getAppHeight() / 2.0) + (saveBtn.getBoundsInLocal().getHeight() / 2) + 180);
+        saveBtn.setLayoutX((getAppWidth() / 2.0) - (saveBtn.getBoundsInLocal().getWidth() / 3));
 
-        options.setLayoutY((getAppHeight() / 2.0)+(options.getBoundsInLocal().getHeight() / 3));
-        options.setLayoutX((getAppWidth() / 2.0)-(options.getBoundsInLocal().getWidth() / 2));
+        options.setLayoutY((getAppHeight() / 2.0) + (options.getBoundsInLocal().getHeight() / 3));
+        options.setLayoutX((getAppWidth() / 2.0) - (options.getBoundsInLocal().getWidth() / 2));
 
-        sliders.setLayoutY((getAppHeight() / 2.0)+(options.getBoundsInLocal().getHeight() / 3));
-        sliders.setLayoutX((getAppWidth() / 2.0)-(options.getBoundsInLocal().getWidth() / 2));
+        sliders.setLayoutY((getAppHeight() / 2.0) + (options.getBoundsInLocal().getHeight() / 3));
+        sliders.setLayoutX((getAppWidth() / 2.0) - (options.getBoundsInLocal().getWidth() / 2));
 
         Group group = new Group(shadow, banner, options, text, fullScreen, sliders, saveBtn, separateLine);
         fade = SubSceneAnimation.fade(group);
@@ -195,7 +191,7 @@ public class OptionsModal extends SubScene {
             fade.setOnFinished(null);
         });
     }
-    
+
     public static Slider getMasterVol() {
         return masterVol;
     }

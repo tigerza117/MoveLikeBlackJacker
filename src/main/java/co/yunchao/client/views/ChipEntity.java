@@ -2,7 +2,8 @@ package co.yunchao.client.views;
 
 import javafx.scene.Group;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGL.play;
+import static com.almasb.fxgl.dsl.FXGL.texture;
 
 public class ChipEntity extends Group {
     public ChipEntity(String name) {

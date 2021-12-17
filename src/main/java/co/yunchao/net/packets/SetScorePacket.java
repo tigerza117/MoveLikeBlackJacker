@@ -27,7 +27,7 @@ public class SetScorePacket extends DataPacket {
     @Override
     public void decode(ByteBuf buf) {
         this.playerId = UUID.fromString(readString(buf));
-        this.text =  readString(buf);
+        this.text = readString(buf);
         this.colorType = ScoreColorType.values()[buf.readInt()];
     }
 }

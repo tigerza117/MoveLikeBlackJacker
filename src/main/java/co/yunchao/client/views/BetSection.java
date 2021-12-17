@@ -123,9 +123,9 @@ public class BetSection extends Group {
         maxBtn.setTranslateX(143);
         clearBtn.setTranslateX(286);
         progress.setTranslateY(35);
-        progress.setTranslateX((getAppWidth()/2.0)+190);
+        progress.setTranslateX((getAppWidth() / 2.0) + 190);
         timeText.setTranslateY(25);
-        timeText.setTranslateX((getAppWidth()/2.0)+515);
+        timeText.setTranslateX((getAppWidth() / 2.0) + 515);
 
         timerGroup.getChildren().addAll(timeText, progress);
         chipSection.getChildren().addAll(textureChipSection, chip1BetBtn, chip2BetBtn, chip3BetBtn);

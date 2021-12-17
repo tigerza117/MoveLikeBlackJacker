@@ -28,7 +28,7 @@ public class PlayModal extends SubScene {
         var setName = new EnterNameAction();
 
         var banner = texture("enter_play/yellow_banner.png", getAppWidth(), 500);
-        banner.setLayoutY((getAppHeight() / 2.0)-(banner.getHeight() / 2));
+        banner.setLayoutY((getAppHeight() / 2.0) - (banner.getHeight() / 2));
 
         var orSep = texture("enter_play/or_separate.png");
         orSep.setLayoutY(-180);
@@ -37,15 +37,15 @@ public class PlayModal extends SubScene {
         enterCodeBtn.setTranslateY(-50);
 
         var backBtn = Button.create("main/back_btn", this::close);
-        backBtn.setTranslateX((getAppWidth()/2.0) - (backBtn.getBoundsInLocal().getWidth() / 2.0));
-        backBtn.setTranslateY((getAppHeight()/2.0) + 220);
+        backBtn.setTranslateX((getAppWidth() / 2.0) - (backBtn.getBoundsInLocal().getWidth() / 2.0));
+        backBtn.setTranslateY((getAppHeight() / 2.0) + 220);
 
         codeField = new TextField("");
         codeField.setMaxWidth(300);
         codeField.setPromptText("join room");
         codeField.getStylesheets().add("/css/style.css");
         codeField.getStyleClass().add("text-field");
-        codeField.setLayoutY((getAppHeight() / 2.0) - ((codeField.getHeight() / 2)-92));
+        codeField.setLayoutY((getAppHeight() / 2.0) - ((codeField.getHeight() / 2) - 92));
         codeField.setAlignment(Pos.CENTER);
 
         var confirmBtn = Button.create("enter_name/confirm_btn", () -> {
@@ -54,11 +54,11 @@ public class PlayModal extends SubScene {
             getSceneService().pushSubScene(setName);
         });
 
-        confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-130));
-        confirmBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth()/2.0)-200));
+        confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2) - 130));
+        confirmBtn.setLayoutX((getAppWidth() / 2.0) - ((confirmBtn.getBoundsInLocal().getWidth() / 2.0) - 200));
         confirmBtn.setVisible(false);
 
-        codeField.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth()/2.0)+110));
+        codeField.setLayoutX((getAppWidth() / 2.0) - ((confirmBtn.getBoundsInLocal().getWidth() / 2.0) + 110));
 
         confirmBtn.setVisible(false);
         codeField.setOnKeyTyped(ev -> {
@@ -86,8 +86,8 @@ public class PlayModal extends SubScene {
 
         playMenu.getChildren().addAll(createBtn, orSep, enterCodeBtn);
 
-        playMenu.setLayoutY((getAppHeight() / 2.0)+(playMenu.getBoundsInLocal().getHeight() / 3));
-        playMenu.setLayoutX((getAppWidth() / 2.0)-((playMenu.getBoundsInLocal().getWidth() / 2)-10));
+        playMenu.setLayoutY((getAppHeight() / 2.0) + (playMenu.getBoundsInLocal().getHeight() / 3));
+        playMenu.setLayoutX((getAppWidth() / 2.0) - ((playMenu.getBoundsInLocal().getWidth() / 2) - 10));
 
         Group group = new Group(shadow, banner, playMenu, codeField, confirmBtn, backBtn);
         fade = SubSceneAnimation.fade(group);

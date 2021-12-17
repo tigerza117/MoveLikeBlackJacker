@@ -25,10 +25,10 @@ public class Seat extends Group {
     private final Texture scorePane;
     private final Text textEachScore;
     private boolean isDealer = false;
-    private PlayerController player;
+    private final PlayerController player;
 
     public Seat(PlayerController player) {
-        this.player= player;
+        this.player = player;
         this.textName = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 16);
         this.textBetTotal = FXGL.getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 28);
         this.cardEntities = new ArrayList<>();
@@ -57,9 +57,9 @@ public class Seat extends Group {
         textBetTotal.setTranslateX(143);
         textBetTotal.setVisible(false);
 
-        textName.setTranslateX(textureIcon.getTranslateX()-25);
+        textName.setTranslateX(textureIcon.getTranslateX() - 25);
         textName.setTranslateY(textureIcon.getTranslateY() + textureIcon.getHeight() + 25);
-        textName.setWrappingWidth(textureIcon.getWidth()+50);
+        textName.setWrappingWidth(textureIcon.getWidth() + 50);
         textName.setTextAlignment(TextAlignment.CENTER);
         textName.setVisible(false);
 

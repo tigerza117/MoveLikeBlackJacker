@@ -2,7 +2,7 @@ package co.yunchao.client.views;
 
 import com.almasb.fxgl.app.scene.LoadingScene;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGL.texture;
 
 public class Loading extends LoadingScene {
 

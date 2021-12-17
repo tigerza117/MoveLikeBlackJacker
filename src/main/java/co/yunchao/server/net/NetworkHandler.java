@@ -1,6 +1,8 @@
 package co.yunchao.server.net;
 
-import co.yunchao.net.packets.*;
+import co.yunchao.net.packets.DataPacket;
+import co.yunchao.net.packets.LoginPacket;
+import co.yunchao.net.packets.ProtocolInfo;
 import co.yunchao.server.controllers.Player;
 import co.yunchao.server.controllers.Server;
 import io.netty.channel.Channel;
@@ -10,7 +12,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import java.util.HashMap;
 
 public class NetworkHandler extends SimpleChannelInboundHandler<DataPacket> {
-    private final HashMap<Channel , Player> players = new HashMap<>();
+    private final HashMap<Channel, Player> players = new HashMap<>();
     private final Server server;
 
     NetworkHandler(Server server) {

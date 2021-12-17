@@ -1,6 +1,6 @@
 package co.yunchao.client.net;
 
-import co.yunchao.net.packets.*;
+import co.yunchao.net.packets.DataPacket;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import javafx.application.Platform;

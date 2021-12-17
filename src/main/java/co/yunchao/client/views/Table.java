@@ -32,7 +32,7 @@ public class Table extends Group {
 
         room_id = FXGL.getUIFactoryService().newText("ARCTIC505", Color.BLACK, FontType.GAME, 22);
         room_id.setLayoutY(85);
-        room_id.setWrappingWidth(roomID.getWidth()+60);
+        room_id.setWrappingWidth(roomID.getWidth() + 60);
         room_id.setTextAlignment(TextAlignment.CENTER);
 
         getChildren().addAll(bg, roomID, room_id);

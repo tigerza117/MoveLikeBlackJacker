@@ -1,6 +1,5 @@
 package co.yunchao.net.handler;
 
-import co.yunchao.net.Network;
 import co.yunchao.net.packets.DataPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

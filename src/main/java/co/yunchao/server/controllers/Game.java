@@ -1,9 +1,7 @@
 package co.yunchao.server.controllers;
 
-import co.yunchao.base.enums.ScoreColorType;
-import co.yunchao.base.models.Deck;
 import co.yunchao.base.enums.GameState;
-import co.yunchao.base.enums.Result;
+import co.yunchao.base.models.Deck;
 import co.yunchao.base.models.Offset;
 import co.yunchao.net.packets.*;
 
@@ -16,7 +14,7 @@ public class Game extends co.yunchao.base.models.Game implements Runnable {
     private final Player dealer;
     private int tick = 20;
     private int maxTick = 5;
-    private boolean isRunning = true;
+    private final boolean isRunning = true;
     private int maxPlayer;
 
     private final Queue<Offset> seatOffset = new LinkedList<>(List.of(

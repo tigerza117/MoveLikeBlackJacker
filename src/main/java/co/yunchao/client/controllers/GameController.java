@@ -83,7 +83,8 @@ public class GameController extends Game {
             case ProtocolInfo.DISCONNECT_PACKET: {
                 DisconnectPacket disconnectPacket = (DisconnectPacket) packet;
                 getGameController().gotoMainMenu();
-                if (disconnectPacket.showDialog) getSceneService().pushSubScene(new DisconnectedModal(disconnectPacket.message));
+                if (disconnectPacket.showDialog)
+                    getSceneService().pushSubScene(new DisconnectedModal(disconnectPacket.message));
                 break;
             }
             case ProtocolInfo.PLAYER_JOIN_PACKET: {
@@ -165,7 +166,7 @@ public class GameController extends Game {
             case ProtocolInfo.CARD_SPAWN_PACKET: {
                 CardSpawnPacket cardSpawnPacket = (CardSpawnPacket) packet;
                 PlayerController player = players.get(cardSpawnPacket.playerId);
-                var card = new CardController(cardSpawnPacket.id ,cardSpawnPacket.number, cardSpawnPacket.suit, cardSpawnPacket.flip, player.getSeat());
+                var card = new CardController(cardSpawnPacket.id, cardSpawnPacket.number, cardSpawnPacket.suit, cardSpawnPacket.flip, player.getSeat());
                 cards.put(card.getId(), card);
                 card.spawn();
                 break;

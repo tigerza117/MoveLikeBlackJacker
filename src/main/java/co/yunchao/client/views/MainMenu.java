@@ -36,8 +36,8 @@ public class MainMenu extends FXGLMenu {
     public void onCreate() {
         super.onCreate();
         Music music = getAssetLoader().load(AssetType.MUSIC, "main_menu_bg.mp3");
-        getSettings().globalSoundVolumeProperty().setValue((OptionsModal.getMasterVol().getValue()/100)*(OptionsModal.getSfxVol().getValue()/100));
-        getSettings().globalMusicVolumeProperty().setValue((OptionsModal.getMasterVol().getValue()/100)*(OptionsModal.getMscVol().getValue()/100));
+        getSettings().globalSoundVolumeProperty().setValue((OptionsModal.getMasterVol().getValue() / 100) * (OptionsModal.getSfxVol().getValue() / 100));
+        getSettings().globalMusicVolumeProperty().setValue((OptionsModal.getMasterVol().getValue() / 100) * (OptionsModal.getMscVol().getValue() / 100));
         getAudioPlayer().loopMusic(music);
 
         getContentRoot().getChildren().add(group);
@@ -67,12 +67,12 @@ public class MainMenu extends FXGLMenu {
 
         int i = 0;
         for (Node n : group.getChildren()) {
-            n.setLayoutY((n.getBoundsInLocal().getHeight() * (i*1.2)));
+            n.setLayoutY((n.getBoundsInLocal().getHeight() * (i * 1.2)));
             i++;
         }
 
-        group.setLayoutY((getAppHeight() / 3.0)+(group.getBoundsInLocal().getHeight() / 2));
-        group.setLayoutX((getAppWidth() / 2.0)-(group.getBoundsInLocal().getWidth() / 2));
+        group.setLayoutY((getAppHeight() / 3.0) + (group.getBoundsInLocal().getHeight() / 2));
+        group.setLayoutX((getAppWidth() / 2.0) - (group.getBoundsInLocal().getWidth() / 2));
 
         return group;
     }

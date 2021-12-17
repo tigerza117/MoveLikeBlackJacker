@@ -16,7 +16,7 @@ public class Button {
     }
 
     protected static Node create(String file, String music, Runnable action) {
-        var bg = texture(file+".png");
+        var bg = texture(file + ".png");
 
         var btn = new StackPane(bg);
 
@@ -36,12 +36,12 @@ public class Button {
         linearTransition.setCycleCount(1);
         linearTransition.setAutoReverse(true);
 
-        btn.setOnMouseEntered( e -> {
+        btn.setOnMouseEntered(e -> {
             linearTransition.playFromStart();
             btn.setCursor(CursorCall.getCursorClick());
         });
 
-        btn.setOnMouseExited( e -> {
+        btn.setOnMouseExited(e -> {
             linearTransition.setRate(-1);
             linearTransition.play();
         });

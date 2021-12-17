@@ -2,7 +2,7 @@ package co.yunchao.base.models;
 
 import co.yunchao.base.enums.CardSuit;
 
-import java.io.*;
+import java.io.Serializable;
 import java.util.UUID;
 
 public class Card implements Serializable {
@@ -16,12 +16,12 @@ public class Card implements Serializable {
     private final int HIGH_ACE_POINT = 11;
     private final int LOW_ACE_POINT = 1;
 
-    public Card(UUID id ,int number, CardSuit suit) {
+    public Card(UUID id, int number, CardSuit suit) {
         this(number, suit);
         this.id = id;
     }
 
-    public Card(int number, CardSuit suit){
+    public Card(int number, CardSuit suit) {
         this.id = UUID.randomUUID();
         this.number = number;
         switch (number) {

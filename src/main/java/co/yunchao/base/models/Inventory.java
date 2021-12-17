@@ -81,20 +81,20 @@ public class Inventory {
     public int getPoint() {
         ArrayList<Card> aceStack = new ArrayList<>();
         int points = 0;
-        for (Card card: this.cards) {
+        for (Card card : this.cards) {
             if (card.getPoint() == 101) {
                 aceStack.add(card);
             } else {
                 points += card.getPoint();
             }
         }
-        for (Object obj: aceStack.toArray()) {
+        for (Object obj : aceStack.toArray()) {
             Card card = (Card) obj;
             if (points + 11 + (aceStack.size() - 1) > 21) {
-                points+=aceStack.size();
+                points += aceStack.size();
                 break;
             } else {
-                points+=11;
+                points += 11;
             }
             aceStack.remove(card);
         }

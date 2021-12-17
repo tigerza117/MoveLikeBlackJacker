@@ -1,7 +1,6 @@
 package co.yunchao.client.views;
 
 import com.almasb.fxgl.app.scene.IntroScene;
-import javafx.scene.CacheHint;
 import javafx.scene.Cursor;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;

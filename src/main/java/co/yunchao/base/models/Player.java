@@ -17,18 +17,18 @@ public abstract class Player {
     private boolean isOnline = true;
     private Offset offset;
 
-    public Player(UUID id, String name, boolean isDealer){
-        this(id, name, isDealer, new Offset(0,0));
+    public Player(UUID id, String name, boolean isDealer) {
+        this(id, name, isDealer, new Offset(0, 0));
     }
 
-    public Player(UUID id, String name, boolean isDealer, Offset offset){
+    public Player(UUID id, String name, boolean isDealer, Offset offset) {
         this.id = id;
         this.name = name;
         this.isDealer = isDealer;
         this.offset = offset;
     }
 
-    public void setBalance(int chip){
+    public void setBalance(int chip) {
         this.balance = chip;
     }
 
@@ -133,7 +133,7 @@ public abstract class Player {
     }
 
     public boolean canDoubleDown() {
-        return isReady() && getGame() != null  && game.isInGame() && isMyTurn() && (getBalance() - getCurrentBetStage() >= 0);
+        return isReady() && getGame() != null && game.isInGame() && isMyTurn() && (getBalance() - getCurrentBetStage() >= 0);
     }
 
     public boolean canConfirmBet() {

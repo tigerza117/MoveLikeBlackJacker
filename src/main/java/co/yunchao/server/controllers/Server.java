@@ -3,7 +3,7 @@ package co.yunchao.server.controllers;
 import java.util.*;
 
 public class Server implements Runnable {
-    private final HashMap<String ,Game> games;
+    private final HashMap<String, Game> games;
     private final Queue<Player> queue;
     private final ArrayList<Player> players;
 
@@ -15,20 +15,19 @@ public class Server implements Runnable {
 
     private boolean paused = false;
 
-    private synchronized void checkPaused(){
-        try{
-            while(paused){
+    private synchronized void checkPaused() {
+        try {
+            while (paused) {
                 this.wait();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public synchronized void pauseThread(){
+    public synchronized void pauseThread() {
         this.paused = !this.paused;
-        if(!this.paused) this.notify();
+        if (!this.paused) this.notify();
     }
 
     @Override

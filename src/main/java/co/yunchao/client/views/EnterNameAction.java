@@ -16,7 +16,7 @@ public class EnterNameAction extends SubScene {
     FadeTransition fade;
     private ConfirmAction onConfirm;
 
-    public EnterNameAction(){
+    public EnterNameAction() {
         Rectangle shadow = new Rectangle();
         shadow.setHeight(getAppHeight());
         shadow.setWidth(getAppWidth());
@@ -24,28 +24,28 @@ public class EnterNameAction extends SubScene {
         shadow.setOpacity(0.65);
 
         var namePane = texture("enter_name/name_pane.png", getAppWidth(), 306);
-        namePane.setLayoutY((getAppHeight() / 2.0)-(namePane.getHeight() / 2));
+        namePane.setLayoutY((getAppHeight() / 2.0) - (namePane.getHeight() / 2));
 
         var textField = texture("enter_name/text_field.png");
-        textField.setLayoutY((getAppHeight() / 2.0)-((textField.getHeight() / 2)-50));
-        textField.setLayoutX((getAppWidth()/2.0) - (textField.getWidth()/2.0));
+        textField.setLayoutY((getAppHeight() / 2.0) - ((textField.getHeight() / 2) - 50));
+        textField.setLayoutX((getAppWidth() / 2.0) - (textField.getWidth() / 2.0));
 
         var confirmBtn = Button.create("enter_name/confirm_btn", () -> onConfirm.confirm(nameField.getText()));
 
         var BackBtn = Button.create("main/back_btn", this::close);
 
-        confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-50));
-        confirmBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)-200));
-        BackBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2)-160));
-        BackBtn.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)+30));
+        confirmBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2) - 50));
+        confirmBtn.setLayoutX((getAppWidth() / 2.0) - ((confirmBtn.getBoundsInLocal().getWidth() / 2.0) - 200));
+        BackBtn.setLayoutY((getAppHeight() / 2.0) - ((confirmBtn.getBoundsInLocal().getHeight() / 2) - 160));
+        BackBtn.setLayoutX((getAppWidth() / 2.0) - ((confirmBtn.getBoundsInLocal().getWidth() / 2.0) + 30));
 
         nameField = new TextField("");
         nameField.setPromptText("your name");
         nameField.setMaxWidth(380);
         nameField.getStylesheets().add("css/style.css");
         nameField.getStyleClass().add("text-field");
-        nameField.setLayoutY((getAppHeight() / 2.0) - ((nameField.getHeight() / 2)-14));
-        nameField.setLayoutX((getAppWidth()/2.0) - ((confirmBtn.getBoundsInLocal().getWidth() /2.0)+200));
+        nameField.setLayoutY((getAppHeight() / 2.0) - ((nameField.getHeight() / 2) - 14));
+        nameField.setLayoutX((getAppWidth() / 2.0) - ((confirmBtn.getBoundsInLocal().getWidth() / 2.0) + 200));
 
         confirmBtn.setVisible(false);
         nameField.setOnKeyTyped(ev -> {

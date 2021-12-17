@@ -1,12 +1,16 @@
 package co.yunchao.client.controllers;
 
 import co.yunchao.client.listener.MainMenuListener;
-import co.yunchao.client.views.*;
+import co.yunchao.client.views.LeaveModal;
+import co.yunchao.client.views.MainMenu;
+import co.yunchao.client.views.OptionsModal;
+import co.yunchao.client.views.PlayModal;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 
 import java.util.UUID;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGL.getGameController;
+import static com.almasb.fxgl.dsl.FXGL.getSceneService;
 
 public class MainMenuController implements MainMenuListener {
     private final MainMenu view;

@@ -1,12 +1,12 @@
 package co.yunchao.server.controllers;
 
 import co.yunchao.base.enums.ChipType;
+import co.yunchao.base.enums.PlayerInGameState;
 import co.yunchao.base.enums.Result;
 import co.yunchao.base.enums.ScoreColorType;
 import co.yunchao.base.models.Chip;
 import co.yunchao.base.models.Inventory;
 import co.yunchao.net.packets.*;
-import co.yunchao.base.enums.PlayerInGameState;
 import io.netty.channel.Channel;
 
 import java.util.UUID;
@@ -116,7 +116,7 @@ public class Player extends co.yunchao.base.models.Player {
 
     @Override
     public void skip() {
-        if(!isReady()){
+        if (!isReady()) {
             if (!isDealer()) {
                 if (getCurrentBetStage() > 0) {
                     confirmBet();
@@ -141,7 +141,7 @@ public class Player extends co.yunchao.base.models.Player {
 
     @Override
     public void hit() {
-        if (canHit()){
+        if (canHit()) {
             setState(PlayerInGameState.HIT);
             this.pickUpCard();
             log("Hit success");
@@ -222,7 +222,7 @@ public class Player extends co.yunchao.base.models.Player {
         if (inv.isBlackJack()) {
             setState(PlayerInGameState.WINING);
             setScore("BlackJack");
-        } else if(inv.isBust()) {
+        } else if (inv.isBust()) {
             setState(PlayerInGameState.BUST);
             setScore("Busted", ScoreColorType.RED);
             playSound("Player_Lose.wav");

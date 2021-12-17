@@ -2,7 +2,8 @@ package co.yunchao.base.models;
 
 import co.yunchao.base.enums.CardSuit;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Deck {
     private final ArrayList<Card> cards;
@@ -12,7 +13,7 @@ public class Deck {
     }
 
     public Card pickTopCard() {
-        Card card = cards.get(cards.size()-1);
+        Card card = cards.get(cards.size() - 1);
         cards.remove(card);
         return card;
     }
