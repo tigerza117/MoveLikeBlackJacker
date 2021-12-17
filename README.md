@@ -4,10 +4,10 @@
     <img src="https://cdn.discordapp.com/attachments/915957941365010473/919925207886598144/Asset_1.png" width="200" height="200">
 </p>
 
-##<p align="center">Legendary Blackjack</p>
+<b><p align="center">Legendary Blackjack</p></b>
 **<p align="center">Legendary Blackjack is a Multiplayer Blackjack game that we've made with Java.</p>**
 
-##**Contributor**
+**Contributor**
 <b>IT KMITL 18<b/><br/>
 1. Mr. Noppawan Pakinsee 63070092<br/>
 2. Mr. Peerawit Kongkitkul 63070126<br/>
