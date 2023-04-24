@@ -32,6 +32,7 @@ public class Server implements Runnable {
 
     @Override
     public synchronized void run() {
+        System.out.println("Started");
         try {
             while (true) {
                 checkPaused();

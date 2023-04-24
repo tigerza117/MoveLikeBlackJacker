@@ -5,7 +5,6 @@ import com.almasb.fxgl.app.GameApplication;
 
 public class Application {
 
-
     public static void main(String[] args) {
         GameApplication.launch(MainController.class, args);
     }
